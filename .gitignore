@@ -1,2 +1,11 @@
 #ignorar archivo token.txt
 token.txt
+
+#ingnorar carpeta build
+build/
+
+#ignorar carpeta dist
+dist/
+
+#ignorar archivos de cache de python
+*.pyc
