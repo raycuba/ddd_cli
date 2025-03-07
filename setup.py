@@ -5,8 +5,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='ddd-cli',
-    version='1.3.9',
-    description='CLI para agregar soporte DDD a proyectos Django',
+    version='1.3.10',
+    description='CLI para agregar soporte DDD a proyectos Django/Python',
     long_description=long_description,
     long_description_content_type="text/markdown",      
     author='Ragnar Bermúdez La O',
@@ -19,8 +19,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            #'manage.py = django.core.management:execute_from_command_line',
-            'ddd = ddd.management.commands.ddd:main',
+            'ddd = ddd.management.cli:CLI().run',  # Registra el comando `ddd`
         ],
     },
 )
