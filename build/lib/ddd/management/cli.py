@@ -9,7 +9,7 @@ from ddd.management.commands.create_view import CreateViewCommand
 
 class CLI:
     def __init__(self):
-        self.parser = argparse.ArgumentParser(description="CLI para soporte DDD en proyectos Python")
+        self.parser = argparse.ArgumentParser(description="CLI para soporte DDD en proyectos Python/Django")
         self.subparsers = self.parser.add_subparsers(dest="subcommand", help="Subcomandos disponibles")
 
         # Registro de subcomandos
