@@ -1,14 +1,15 @@
 from .utils import *
+from colorama import Fore, Style
 
 class CreateServiceCommand:
     def __init__(self, subparsers):
-        parser = subparsers.add_parser("create-service", help='Crea un nuevo servicio')
-        parser.add_argument("app_path", type=str, help='El path relativo de la app dentro del proyecto (por ejemplo, "apps/app1")')
-        parser.add_argument("service_name", type=str, help='El nombre del servicio')  
-        parser.add_argument("entity_name", type=str, help='El nombre de la entidad')
-        parser.add_argument("--class-format", action="store_true", help="Crea un archivo con formato de clase")
-        parser.add_argument("--include-crud", action="store_true", help="Incluye métodos CRUD en el servicio")
-        parser.add_argument("--split", action="store_true", help='Crea un archivo separado para este servicio')
+        parser = subparsers.add_parser("create-service", help='Create a new service')
+        parser.add_argument("app_path", type=str, help='The relative path of the app within the project (for example, "apps/app1")')
+        parser.add_argument("service_name", type=str, help='The name of the service')  
+        parser.add_argument("entity_name", type=str, help='The name of the entity')
+        parser.add_argument("--class-format", action="store_true", help="Create a file with class format")
+        parser.add_argument("--include-crud", action="store_true", help="Include CRUD methods in the service")
+        parser.add_argument("--split", action="store_true", help='Create a separate file for this service')
         parser.set_defaults(func=self.execute)         
 
     def execute(self, args):
@@ -26,12 +27,12 @@ class CreateServiceCommand:
             # Crear archivos __init__.py
             create__init__files(services_dir)
         except OSError as e:
-            print(f"No se pudo crear el directorio '{services_dir}': {e}")
+            print(Fore.RED + f"Failed to create directory '{services_dir}': {e}" + Style.RESET_ALL)
             return
         
         #si split y ya existe el archivo mostrar error
         if split and os.path.exists(services_path):
-            print(f"El archivo '{services_path}' ya existe. No se puede crear un archivo separado.")
+            print(Fore.RED + f"The file '{services_path}' already exists. A separate file cannot be created." + Style.RESET_ALL)
             return
 
         # Escribir imports en el archivo 

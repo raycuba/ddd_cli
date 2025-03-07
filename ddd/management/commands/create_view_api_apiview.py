@@ -1,10 +1,11 @@
 from .utils import *
+from colorama import Fore, Style
 
 class CreateViewApiApiViewCommand:
     def __init__(self, subparsers):
-        parser = subparsers.add_parser('create-view-api-apiview', help='Crea una view para api basada en ApiView')
-        parser.add_argument('app_path', type=str, help='El path relativo de la app dentro del proyecto (por ejemplo, "apps/app1")')
-        parser.add_argument('entity_name', type=str, help='El nombre de la entidad')     
+        parser = subparsers.add_parser('create-view-api-apiview', help='Create a view for api based on ApiView')
+        parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
+        parser.add_argument('entity_name', type=str, help='The name of the entity')     
         parser.set_defaults(func=self.execute)     
 
     def execute(self, args):
@@ -22,12 +23,12 @@ class CreateViewApiApiViewCommand:
             # Crear archivos __init__.py
             create__init__files(views_dir)
         except OSError as e:
-            print(f"No se pudo crear el directorio '{views_dir}': {e}")
+            print(Fore.RED + f"Failed to create directory '{views_dir}': {e}" + Style.RESET_ALL)
             return    
         
         #si ya existe el archivo mostrar error
         if os.path.exists(views_path):
-            print(f"El archivo '{views_path}' ya existe.")
+            print(Fore.RED + f"File '{views_path}' already exists." + Style.RESET_ALL)
             return
         
         #convertir app_path (ej: apps/ap1) a app_name (ej: apps.app1)

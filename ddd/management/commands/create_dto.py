@@ -1,12 +1,13 @@
 from .utils import *
+from colorama import Fore, Style
 
 class CreateDTOCommand:
     def __init__(self, subparsers):
-        parser = subparsers.add_parser('create-dto', help='Crea un nuevo DTO')
-        parser.add_argument('app_path', type=str, help='El path relativo de la app dentro del proyecto (por ejemplo, "apps/app1")')
-        parser.add_argument('dto_name', type=str, help='El nombre del DTO')
+        parser = subparsers.add_parser('create-dto', help='Create a new DTO')
+        parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
+        parser.add_argument('dto_name', type=str, help='The name of the DTO')
         parser.add_argument(
-            '--split', action='store_true', help='Crea un archivo separado para este DTO'
+            '--split', action='store_true', help='Create a separate file for this DTO'
         )        
         parser.set_defaults(func=self.execute) 
 
@@ -25,12 +26,12 @@ class CreateDTOCommand:
             # Crear archivos __init__.py
             create__init__files(dtos_dir)
         except OSError as e:
-            print(f"No se pudo crear el directorio '{dtos_dir}': {e}")
+            print(Fore.RED + f"Failed to create directory '{dtos_dir}': {e}" + Style.RESET_ALL)
             return
         
         #si split y ya existe el archivo mostrar error
         if split and os.path.exists(dtos_path):
-            print(f"El archivo '{dtos_path}' ya existe. No se puede crear un archivo separado.")
+            print(Fore.RED + f"File '{dtos_path}' already exists. Cannot create separate file." + Style.RESET_ALL)
             return
 
         # Escribir imports en el archivo 

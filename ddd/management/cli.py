@@ -9,8 +9,8 @@ from ddd.management.commands.create_view import CreateViewCommand
 
 class CLI:
     def __init__(self):
-        self.parser = argparse.ArgumentParser(description="CLI para soporte DDD en proyectos Python/Django")
-        self.subparsers = self.parser.add_subparsers(dest="subcommand", help="Subcomandos disponibles")
+        self.parser = argparse.ArgumentParser(description="CLI for DDD support in Python/Django projects")
+        self.subparsers = self.parser.add_subparsers(dest="subcommand", help="Available subcommands")
 
         # Registro de subcomandos
         CreateEntityCommand(self.subparsers)

@@ -1,12 +1,13 @@
 from .utils import *
+from colorama import Fore, Style
 
 class CreateRepositoryCommand:
     def __init__(self, subparsers):
-        parser = subparsers.add_parser("create-repository", help='Crea un nuevo repositorio')
-        parser.add_argument('app_path', type=str, help='El path relativo de la app dentro del proyecto (por ejemplo, "apps/app1")')
-        parser.add_argument('entity_name', type=str, help='El nombre de la entidad')
+        parser = subparsers.add_parser("create-repository", help='Create a new repository')
+        parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
+        parser.add_argument('entity_name', type=str, help='The name of the entity')
         parser.add_argument(
-            '--include-crud', action='store_true', help='Incluye métodos CRUD en el repositorio'
+            '--include-crud', action='store_true', help='Include CRUD methods in the repository'
         )
         parser.set_defaults(func=self.execute)
 
@@ -27,12 +28,12 @@ class CreateRepositoryCommand:
                 # Crear archivos __init__.py
                 create__init__files(repository_dir)
             except OSError as e:
-                print(f"No se pudo crear el directorio '{repository_dir}': {e}")
+                print(Fore.RED + f"Failed to create directory '{repository_dir}': {e}" + Style.RESET_ALL)
                 return    
             
             #si ya existe el archivo mostrar error
             if os.path.exists(repository_path):
-                print(f"El archivo '{repository_path}' ya existe.")
+                print(Fore.RED + f"The file '{repository_path}' already exists." + Style.RESET_ALL)
                 return
             
             #renderizar class

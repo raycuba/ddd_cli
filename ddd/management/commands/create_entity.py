@@ -1,11 +1,12 @@
 from .utils import *
+from colorama import Fore, Style
 
 class CreateEntityCommand:
     def __init__(self, subparsers):
-        parser = subparsers.add_parser("create-entity", help="Crea una nueva entidad")
-        parser.add_argument("app_path", type=str, help='El path relativo de la app dentro del proyecto. Por ejemplo, "apps/app1"')
-        parser.add_argument("entity_name", type=str, help="El nombre de la entidad")
-        parser.add_argument("--split", action="store_true", help="Crea un archivo separado para esta entidad")
+        parser = subparsers.add_parser("create-entity", help="Create a new entity")
+        parser.add_argument("app_path", type=str, help='The relative path of the app within the project (for example, "apps/app1")')
+        parser.add_argument("entity_name", type=str, help="The name of the entity")
+        parser.add_argument("--split", action="store_true", help="Create a separate file for this entity")
         parser.set_defaults(func=self.execute)     
 
     def execute(self, args):
@@ -23,12 +24,12 @@ class CreateEntityCommand:
             # Crear archivos __init__.py
             create__init__files(entities_dir)
         except OSError as e:
-            print(f"No se pudo crear el directorio '{entities_dir}': {e}")
+            print(Fore.RED + f"Failed to create directory '{entities_dir}': {e}" + Style.RESET_ALL)
             return
         
         #si split y ya existe el archivo mostrar error
         if split and os.path.exists(entities_path):
-            print(f"El archivo '{entities_path}' ya existe. No se puede crear un archivo separado.")
+            print(Fore.RED + f"File '{entities_path}' already exists. Cannot create separate file." + Style.RESET_ALL)
             return
 
         # Escribir imports en el archivo 
