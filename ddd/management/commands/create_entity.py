@@ -1,4 +1,4 @@
-from utils import *
+from .utils import *
 
 class CreateEntityCommand:
     def __init__(self, subparsers):
@@ -9,6 +9,43 @@ class CreateEntityCommand:
         parser.set_defaults(func=self.execute)     
 
     def execute(self, args):
-        print(f"Creando entidad '{args.entity_name}' en '{args.app_path}'")
-        if args.split:
-            print("Creando la entidad en un archivo separado...")
+        self.create_entity(args.app_path, args.entity_name, args.split)
+
+    def create_entity(self, app_path, entity_name, split=False, **kwargs):
+        """Crea una nueva entidad"""
+        entities_dir = os.path.join(app_path, 'domain') if not split else os.path.join(app_path, 'domain', 'entities')
+        entities_path = os.path.join(entities_dir, 'entities.py') if not split else os.path.join(entities_dir, entity_name.lower() + '_entity.py')
+
+        # Crear directorios si no existen
+        try:
+            os.makedirs(entities_dir, exist_ok=True)
+            
+            # Crear archivos __init__.py
+            create__init__files(entities_dir)
+        except OSError as e:
+            print(f"No se pudo crear el directorio '{entities_dir}': {e}")
+            return
+        
+        #si split y ya existe el archivo mostrar error
+        if split and os.path.exists(entities_path):
+            print(f"El archivo '{entities_path}' ya existe. No se puede crear un archivo separado.")
+            return
+
+        # Escribir imports en el archivo 
+        # si no existe el archivo template_imports
+        if not os.path.exists(entities_path):
+            #renderizar imports
+            rendered_content_imports = renderTemplate(templateName = 'entity', fileName='imports.txt', render_params={'entity_name':entity_name})
+
+            # Escribir imports en el archivo
+            with open(entities_path, 'w') as f:
+                f.write(rendered_content_imports + '\n')
+            print(f"Imports of Entity '{entity_name}' created at {entities_path}")
+
+        #renderizar class
+        rendered_content_class = renderTemplate(templateName = 'entity', fileName='class.txt', render_params={'entity_name':entity_name})
+
+        # Escribir class en el archivo
+        with open(entities_path, 'a') as f:
+            f.write('\n' + rendered_content_class + '\n')
+        print(f"Class of Entity '{entity_name}' created at {entities_path}")            

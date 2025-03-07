@@ -19,7 +19,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'ddd = ddd.management.cli:CLI().run',  # Registra el comando `ddd`
+            'ddd = ddd.management.cli:main',  # Registra el comando `ddd`
         ],
     },
 )

@@ -1,2 +1,2 @@
 [console_scripts]
-ddd = ddd.management.commands.ddd:main
+ddd = ddd.management.cli:main
