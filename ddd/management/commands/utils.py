@@ -1,14 +1,18 @@
 import os
+from pathlib import Path
 from jinja2 import Template
 
 def renderTemplate(templateName: str, fileName:str, render_params: dict) -> str:
-    '''
-    return content
-    '''
-
+    """
+    Renderiza una plantilla con los parámetros proporcionados.
+    """
     # Construir la ruta absoluta de la plantilla
-    templates_dir = os.path.join(os.path.dirname(__file__), '..', 'templates', templateName)
-    templates_dir = os.path.normpath(templates_dir)  # Normalizar la ruta 
+    templates_dir = Path(__file__).resolve().parent.parent / "templates" / templateName
+    template_path = templates_dir / fileName
+
+    # Verificar si el archivo existe
+    if not template_path.exists():
+        raise FileNotFoundError(f"Template file {template_path} not found")
 
     # Cargar la plantilla imports
     template_imports = os.path.join(templates_dir, fileName)
