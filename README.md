@@ -1,8 +1,8 @@
 # DDD CLI
 
-Este paquete agrega comandos personalizados a Django para facilitar la implementación de una arquitectura Domain-Driven Design (DDD).
+This package adds custom commands to Django to make it easier to implement a Domain-Driven Design (DDD) architecture.
 
-## Comandos disponibles
+## Available commands
 
 - `ddd create-entity <app_path> <entity_name> [--split]`
 - `ddd create-service <app_path> <entity_name> <service_name> [--class-format] [--include-crud] [--split]`
@@ -12,5 +12,5 @@ Este paquete agrega comandos personalizados a Django para facilitar la implement
 - `ddd create-view-api-viewset <app_path> <entity_name>`
 - `ddd create-view <app_path> <entity_name>`
 
-## Mostrar ayuda
+## Show help
 - `ddd --help`
