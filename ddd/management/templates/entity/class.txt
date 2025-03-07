@@ -39,8 +39,8 @@ class {{ entity_name.capitalize() }}Entity:
         return self.__dict__
 
     @staticmethod
-    def from_dict(data: dict) -> "{{ entity_name.capitalize() }}":
+    def from_dict(data: dict) -> "{{ entity_name.capitalize() }}Entity":
         """
         Crea una instancia de la entidad a partir de un diccionario.
         """
-        return {{ entity_name.capitalize() }}(**data)
+        return {{ entity_name.capitalize() }}Entity(**data)
