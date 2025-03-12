@@ -6,10 +6,11 @@ from ddd.management.commands.create_dto import CreateDTOCommand
 from ddd.management.commands.create_view_api_apiview import CreateViewApiApiViewCommand
 from ddd.management.commands.create_view_api_viewset import CreateViewApiViewSetCommand
 from ddd.management.commands.create_view import CreateViewCommand
+from .version import version
 
 class CLI:
     def __init__(self):
-        self.parser = argparse.ArgumentParser(description="CLI for DDD support in Python/Django projects")
+        self.parser = argparse.ArgumentParser(description=f"CLI for DDD support in Python/Django projects v{version}")
         self.subparsers = self.parser.add_subparsers(dest="subcommand", help="Available subcommands")
 
         # Registro de subcomandos

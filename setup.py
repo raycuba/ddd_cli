@@ -1,11 +1,12 @@
 from setuptools import setup, find_packages
+from ddd.management.version import version
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name='ddd-cli',
-    version='1.3.26',
+    version=version,
     description='CLI for adding DDD support to Python/Django projects',
     long_description=long_description,
     long_description_content_type="text/markdown",      
