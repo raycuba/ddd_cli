@@ -1,23 +1,22 @@
-def create_{{ entity_name.lower() }}Service(repository, **kwargs):
+def create_{{ entity_name.lower() }}_service(repository, data) -> dict:
     """
     Crea una nueva instancia de {{ entity_name.lower() }}.
 
     :param repository: Repositorio que maneja la persistencia de {{ entity_name.lower() }}.
-    :param kwargs: Diccionario con los datos necesarios para crear la instancia.
-        nota: puedes sustituir **kwargs por un DTO    
+    :param data: Diccionario o DTO con los datos necesarios para crear la instancia.
     :return: La entidad creada.
     :raises ValueError: Si las reglas de negocio no se cumplen.
     """
     # Validación de reglas de negocio
-    if repository.exists_by_field("unique_field", kwargs.get("unique_field")):
-        raise ValueError("An instance with this unique_field already exists.")
+    if repository.exists_by_field("id", data.id):
+        raise ValueError("An instance with this id already exists.")
 
     # Creación en el repositorio
-    entity = repository.create(**kwargs)
-    return entity
+    entity = repository.create(data)
+    return entity.to_dict()
 
 
-def retrieve_{{ entity_name.lower() }}Service(repository, entity_id):
+def retrieve_{{ entity_name.lower() }}_service(repository, entity_id) -> dict:
     """
     Recupera una instancia de {{ entity_name.lower() }} por su ID.
 
@@ -29,17 +28,16 @@ def retrieve_{{ entity_name.lower() }}Service(repository, entity_id):
     entity = repository.get_by_id(entity_id)
     if not entity:
         raise ValueError(f"No {{ entity_name.lower() }} found with ID {entity_id}.")
-    return entity
+    return entity.to_dict()
 
 
-def update_{{ entity_name.lower() }}Service(repository, entity_id, **kwargs):
+def update_{{ entity_name.lower() }}_service(repository, entity_id, data) -> dict:
     """
     Actualiza una instancia existente de {{ entity_name.lower() }}.
 
     :param repository: Repositorio que maneja la persistencia de {{ entity_name.lower() }}.
     :param entity_id: ID de la instancia a actualizar.
-    :param kwargs: Diccionario con los datos a actualizar.
-        nota: puedes sustituir **kwargs por un DTO    
+    :param data: Diccionario o DTO con los datos a actualizar.
     :return: La entidad actualizada.
     :raises ValueError: Si no se encuentra la instancia o las reglas de negocio no se cumplen.
     """
@@ -49,11 +47,11 @@ def update_{{ entity_name.lower() }}Service(repository, entity_id, **kwargs):
         raise ValueError(f"No {{ entity_name.lower() }} found with ID {entity_id}.")
 
     # Actualización en el repositorio
-    updated_entity = repository.update(entity_id, **kwargs)
-    return updated_entity
+    updated_entity = repository.update(entity_id, data)
+    return updated_entity.to_dict()
 
 
-def delete_{{ entity_name.lower() }}Service(repository, entity_id):
+def delete_{{ entity_name.lower() }}_service(repository, entity_id) -> bool:
     """
     Elimina una instancia de {{ entity_name.lower() }}.
 
@@ -69,3 +67,5 @@ def delete_{{ entity_name.lower() }}Service(repository, entity_id):
 
     # Eliminación en el repositorio
     repository.delete(entity_id)
+
+    return True

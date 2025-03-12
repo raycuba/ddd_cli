@@ -1,4 +1,4 @@
-class {{ service_name.capitalize() }}_{{ entity_name.capitalize() }}Service:
+class {{ service_name.capitalize() }}_{{ entity_name.capitalize() }}_service:
     """
     Servicio de aplicación para manejar la lógica de negocio de {{ service_name.lower() }} en la entidad {{ entity_name.capitalize() }}.
     
@@ -17,7 +17,7 @@ class {{ service_name.capitalize() }}_{{ entity_name.capitalize() }}Service:
         """
         self.repository = repository
 
-    def validate(self, **kwargs) -> None:
+    def validate(self, data) -> None:
         """
         Valida los datos antes de ejecutar la lógica de negocio para la entidad {{ entity_name.capitalize() }}.
         
@@ -27,32 +27,30 @@ class {{ service_name.capitalize() }}_{{ entity_name.capitalize() }}Service:
         - Dependencias externas.
         - Coordinación entre entidades.
         
-        :param kwargs: Datos para validar.
-            nota: puedes sustituir **kwargs por un DTO        
+        :param data: Diccionario o DTO para validar.   
         :raise ValueError: Si los datos no son válidos.
         """
         # Implementa validaciones específicas relacionadas con {{ entity_name.capitalize() }}
         # Por ejemplo:
-        # if kwargs.get("name") and len(kwargs.get("name")) < 10:
+        # if data.name and len(data.name) < 10:
         #   raise ValueError("The name must have at least 10 characters")
         # TODO: Agrega las validaciones aquí.
         pass
 
-    def execute(self, **kwargs) -> dict:
+    def execute(self, data) -> dict:
         """
         Método principal para ejecutar la lógica de negocio para {{ service_name.lower() }} en la entidad {{ entity_name.capitalize() }}.
         
-        :param kwargs: Argumentos dinámicos para ejecutar la lógica.
-            nota: puedes sustituir **kwargs por un DTO        
+        :param data: Diccionario o DTO con Argumentos dinámicos para ejecutar la lógica.    
         :return: Un diccionario con los resultados de la operación.
         """
 
         #validaciones
-        self.validate(**kwargs)
+        self.validate(data)
 
         # Implementa la lógica del servicio específico para la entidad {{ entity_name.capitalize() }}
         # Por ejemplo:
-        # result = self.repository.get_by_id(kwargs.get("id"))
+        # result = self.repository.get_by_id(data.id)
         # TODO: Agrega la lógica de negocio aquí.
         raise NotImplementedError("Debes implementar la lógica de negocio para {{ service_name.lower() }} en {{ entity_name.capitalize() }}.")        
 

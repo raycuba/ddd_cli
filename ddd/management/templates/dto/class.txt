@@ -12,6 +12,9 @@ class {{ dto_name.capitalize() }}Dto:
     name: str  # Nombre obligatorio
     description: Optional[str] = None  # Descripción opcional
 
+    def __post_init__(self):
+        self.validate()       
+
     def validate(self) -> None:
         """
         Valida los datos del DTO.

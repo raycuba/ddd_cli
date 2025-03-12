@@ -7,10 +7,13 @@ class {{ entity_name.capitalize() }}Entity:
     con {{ entity_name.lower() }} en el sistema.
     """
 
-    id: UUID = field(default_factory=uuid4)  # Identificador único generado automáticamente
+    uuid: UUID = field(default_factory=uuid4)  # Identificador único generado automáticamente
     name: str  # Nombre obligatorio
     description: Optional[str] = None  # Descripción opcional
     created_at: Optional[str] = None  # Fecha de creación (puede ser ISO 8601)
+
+    def __post_init__(self):
+        self.validate()   
 
     def validate(self) -> None:
         """
@@ -28,7 +31,8 @@ class {{ entity_name.capitalize() }}Entity:
         """
         Actualiza los atributos de la entidad con valores nuevos.
         """
-        for key, value in kwargs.items():
+        # Actualizar cada campo proporcionado en 'data'
+        for key, value in data.items():
             if hasattr(self, key):
                 setattr(self, key, value)
 

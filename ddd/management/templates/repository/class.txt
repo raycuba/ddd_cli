@@ -1,8 +1,11 @@
 from typing import List, Optional
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db.models import Q
-from {{ app_name.lower() }}.models import {{ entity_name.capitalize() }}
+
+# importa las entidades utilizadas aqui
+from ..models import {{ entity_name.capitalize() }}
 from .mappers import Mapper
+from ..domain.entities import {{ entity_name.capitalize() }}Entity
 
 class {{ entity_name.capitalize() }}Repository:
     """
@@ -26,7 +29,7 @@ class {{ entity_name.capitalize() }}Repository:
         # Aplicar filtros si se proporcionan
         if filters:
             if "nombre" in filters and filters["nombre"] != "":
-            instance_list = instance_list.filter(nombre__icontains=filters["nombre"])        
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])        
         
         return {{ entity_name.capitalize() }}.objects.all()    
 
@@ -75,7 +78,7 @@ class {{ entity_name.capitalize() }}Repository:
         # Aplicar filtros si se proporcionan
         if filters:
             if "nombre" in filters and filters["nombre"] != "":
-            instance_list = instance_list.filter(nombre__icontains=filters["nombre"])            
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])            
 
         return instance_list.count()            
 
@@ -118,13 +121,14 @@ class {{ entity_name.capitalize() }}Repository:
         try:
             instance = {{ entity_name.capitalize() }}.objects.get(id=id)
 
-            # Actualizar campos
+            # Actualizar cada campo proporcionado en 'data'
             for key, value in data.items():
-                setattr(instance, key, value)
+                if hasattr(instance, key):
+                    setattr(instance, key, value)
 
-            # Validar antes de guardar
-            instance.full_clean()
-            instance.save()
+            # Validar la instancia antes de guardar
+            instance.full_clean()  # Esto ejecuta las validaciones del modelo
+            instance.save()  # Guarda los cambios en la base de datos
             
             return Mapper.model_to_entity(instance, {{ entity_name.capitalize() }}Entity)
 
@@ -147,7 +151,7 @@ class {{ entity_name.capitalize() }}Repository:
             instance = {{ entity_name.capitalize() }}.objects.get(id=id)
             instance.delete()
             return True
-            
+
         except {{ entity_name.capitalize() }}.DoesNotExist:
             raise ObjectDoesNotExist(f"No {{ entity_name.lower() }} found with ID {id}")
 
