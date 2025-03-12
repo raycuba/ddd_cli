@@ -6,15 +6,12 @@ class CreateRepositoryCommand:
         parser = subparsers.add_parser("create-repository", help='Create a new repository')
         parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument('entity_name', type=str, help='The name of the entity')
-        parser.add_argument(
-            '--include-crud', action='store_true', help='Include CRUD methods in the repository'
-        )
         parser.set_defaults(func=self.execute)
 
     def execute(self, args):
-        self.create_repository(args.app_path, args.entity_name, args.include_crud)
+        self.create_repository(args.app_path, args.entity_name)
 
-    def create_repository(self, app_path, entity_name, include_crud, **kwargs):
+    def create_repository(self, app_path, entity_name, **kwargs):
             """Crea un nuevo repositorio"""
             repository_dir = os.path.join(app_path, 'infrastructure')
             repository_path = os.path.join(repository_dir, entity_name.lower() + '_repository.py')
@@ -42,8 +39,7 @@ class CreateRepositoryCommand:
             readWriteTemplate(templateName = 'repository', fileName='mappers.txt', render_params={}, repository_path=mappers_path, failIfError=False)
             
             #renderizar class
-            readWriteTemplate(templateName = 'repository', fileName='class.txt', render_params={'entity_name':entity_name, 'include_crud':include_crud, 'app_name':app_name}, repository_path=repository_path, failIfError=True)
-            # rendered_content_class = renderTemplate(templateName = 'repository', fileName='class.txt', render_params={'entity_name':entity_name, 'include_crud':include_crud, 'app_name':app_name})
+            readWriteTemplate(templateName = 'repository', fileName='class.txt', render_params={'entity_name':entity_name, 'app_name':app_name}, repository_path=repository_path, failIfError=True)
 
             # # Escribir class en el archivo
             # with open(repository_path, 'w') as f:

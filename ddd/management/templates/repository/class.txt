@@ -80,8 +80,6 @@ class {{ entity_name.capitalize() }}Repository:
 
         return instance_list.count()            
 
-    {% if include_crud %}
-
     @staticmethod
     def create(data) -> {{ entity_name.capitalize() }}Entity:
         """
@@ -153,5 +151,4 @@ class {{ entity_name.capitalize() }}Repository:
         except {{ entity_name.capitalize() }}.DoesNotExist:
             raise ObjectDoesNotExist(f"No {{ entity_name.lower() }} found with ID {id}")
 
-    {% endif %}
 
