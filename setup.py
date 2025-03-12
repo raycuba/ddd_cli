@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='ddd-cli',
-    version='1.3.25',
+    version='1.3.26',
     description='CLI for adding DDD support to Python/Django projects',
     long_description=long_description,
     long_description_content_type="text/markdown",      

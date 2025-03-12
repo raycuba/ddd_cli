@@ -30,8 +30,6 @@ class {{ entity_name.capitalize() }}Repository:
         if filters:
             if "nombre" in filters and filters["nombre"] != "":
                 instance_list = instance_list.filter(nombre__icontains=filters["nombre"])        
-        
-        return {{ entity_name.capitalize() }}.objects.all()    
 
         # Convertir a entidades usando el Mapper genérico
         return [Mapper.model_to_entity(instance, {{ entity_name.capitalize() }}Entity) for instance in instance_list]        
