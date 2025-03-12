@@ -18,6 +18,7 @@ class CreateRepositoryCommand:
             """Crea un nuevo repositorio"""
             repository_dir = os.path.join(app_path, 'infrastructure')
             repository_path = os.path.join(repository_dir, entity_name.lower() + '_repository.py')
+            mappers_path = os.path.join(repository_dir, 'mappers.py')
 
             app_name = app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
 
@@ -27,6 +28,7 @@ class CreateRepositoryCommand:
 
                 # Crear archivos __init__.py
                 create__init__files(repository_dir)
+
             except OSError as e:
                 print(Fore.RED + f"Failed to create directory '{repository_dir}': {e}" + Style.RESET_ALL)
                 return    
@@ -36,10 +38,14 @@ class CreateRepositoryCommand:
                 print(Fore.RED + f"The file '{repository_path}' already exists." + Style.RESET_ALL)
                 return
             
+            # Crear archivo de mappers.py        
+            readWriteTemplate(templateName = 'repository', fileName='mappers.txt', render_params={}, repository_path=mappers_path, failIfError=False)
+            
             #renderizar class
-            rendered_content_class = renderTemplate(templateName = 'repository', fileName='class.txt', render_params={'entity_name':entity_name, 'include_crud':include_crud, 'app_name':app_name})
+            readWriteTemplate(templateName = 'repository', fileName='class.txt', render_params={'entity_name':entity_name, 'include_crud':include_crud, 'app_name':app_name}, repository_path=repository_path, failIfError=True)
+            # rendered_content_class = renderTemplate(templateName = 'repository', fileName='class.txt', render_params={'entity_name':entity_name, 'include_crud':include_crud, 'app_name':app_name})
 
-            # Escribir class en el archivo
-            with open(repository_path, 'w') as f:
-                f.write('\n' + rendered_content_class + '\n')
+            # # Escribir class en el archivo
+            # with open(repository_path, 'w') as f:
+            #     f.write('\n' + rendered_content_class + '\n')
             print(f"Class Repository of Entity '{entity_name}' created at {repository_path}")

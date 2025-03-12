@@ -21,6 +21,7 @@ ddd/management/templates/dto/imports.txt
 ddd/management/templates/entity/class.txt
 ddd/management/templates/entity/imports.txt
 ddd/management/templates/repository/class.txt
+ddd/management/templates/repository/mappers.txt
 ddd/management/templates/service/class.txt
 ddd/management/templates/service/class_crud.txt
 ddd/management/templates/service/function.txt

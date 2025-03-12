@@ -1,4 +1,4 @@
-class {{ service_name.capitalize() }}:
+class {{ entity_name.capitalize() }}Service:
     """
     Servicio para manejar las operaciones CRUD relacionadas con {{ entity_name.lower() }}.
 
@@ -9,19 +9,23 @@ class {{ service_name.capitalize() }}:
         - delete_{{ entity_name.lower() }}: Elimina una instancia de {{ entity_name.lower() }}.
     """
 
+    #Si necesitas mantener un estado de lista de entidades
+    {{ entity_name.capitalize() }}_list = []    
+
     def __init__(self, repository):
         """
         Inicializa el servicio con el repositorio correspondiente.
 
         :param repository: Repositorio que maneja la persistencia de {{ entity_name.lower() }}.
         """
-        self.repository = repository
+        self.repository = repository    
 
     def create_{{ entity_name.lower() }}(self, **kwargs):
         """
         Crea una nueva instancia de {{ entity_name.lower() }}.
 
         :param kwargs: Diccionario con los datos necesarios para crear la instancia.
+            nota: puedes sustituir **kwargs por un DTO
         :return: La entidad creada.
         :raises ValueError: Si las reglas de negocio no se cumplen.
         """
@@ -52,6 +56,7 @@ class {{ service_name.capitalize() }}:
 
         :param entity_id: ID de la instancia a actualizar.
         :param kwargs: Diccionario con los datos a actualizar.
+            nota: puedes sustituir **kwargs por un DTO        
         :return: La entidad actualizada.
         :raises ValueError: Si no se encuentra la instancia o las reglas de negocio no se cumplen.
         """

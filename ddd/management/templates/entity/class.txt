@@ -32,6 +32,8 @@ class {{ entity_name.capitalize() }}Entity:
             if hasattr(self, key):
                 setattr(self, key, value)
 
+        self.validate()
+
     def to_dict(self) -> dict:
         """
         Convierte la entidad a un diccionario.

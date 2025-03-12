@@ -1,6 +1,8 @@
+from typing import List, Optional
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db.models import Q
 from {{ app_name.lower() }}.models import {{ entity_name.capitalize() }}
+from .mappers import Mapper
 
 class {{ entity_name.capitalize() }}Repository:
     """
@@ -9,11 +11,30 @@ class {{ entity_name.capitalize() }}Repository:
     Este repositorio incluye:
     - Validación de existencia de registros.
     - Control de unicidad.
-    - Métodos CRUD básicos.
+    - Métodos básicos.
     """
 
     @staticmethod
-    def get_by_id(id):
+    def get_all(filters: Optional[dict] = None) -> List[{{ entity_name.capitalize() }}Entity]:
+        """
+        Obtiene todos los registros de la entidad.
+        :return: Lista de registros de la entidad.
+        """
+
+        instance_list = {{ entity_name.capitalize() }}.objects.all()    
+
+        # Aplicar filtros si se proporcionan
+        if filters:
+            if "nombre" in filters and filters["nombre"] != "":
+            instance_list = instance_list.filter(nombre__icontains=filters["nombre"])        
+        
+        return {{ entity_name.capitalize() }}.objects.all()    
+
+        # Convertir a entidades usando el Mapper genérico
+        return [Mapper.model_to_entity(instance, {{ entity_name.capitalize() }}Entity) for instance in instance_list]        
+
+    @staticmethod
+    def get_by_id(id) -> {{ entity_name.capitalize() }}Entity:
         """
         Obtiene un registro por su ID.
         
@@ -22,23 +43,46 @@ class {{ entity_name.capitalize() }}Repository:
         """
 
         try:
-            return {{ entity_name.capitalize() }}.objects.get(id=id)
+            instance = {{ entity_name.capitalize() }}.objects.get(id=id)
+            return Mapper.model_to_entity(instance, {{ entity_name.capitalize() }}Entity)
+
         except {{ entity_name.capitalize() }}.DoesNotExist:
             return None
 
     @staticmethod
-    def get_all():
+    def exists_by_field(field_name, value) -> bool:
         """
-        Obtiene todos los registros de la entidad.
-        
-        :return: Lista de registros de la entidad.
+        Verifica si existe un registro con un valor específico para un campo dado.
+
+        :param field_name: Nombre del campo a buscar.
+        :param value: Valor del campo a verificar.
+        :return: True si existe un registro con el valor dado, False en caso contrario.
         """
-        
-        return {{ entity_name.capitalize() }}.objects.all()
+
+        return {{ entity_name.capitalize() }}.objects.filter(**{field_name: value}).exists()
+
+    @staticmethod
+    def count_all(filters: Optional[dict] = None) -> int:
+        """
+        Cuenta registros que cumplen con ciertas condiciones.
+
+        :param conditions: Condiciones de filtro como clave-valor.
+        :return: Número de registros que cumplen las condiciones.
+        """
+
+        instance_list = {{ entity_name.capitalize() }}.objects.all()    
+
+        # Aplicar filtros si se proporcionan
+        if filters:
+            if "nombre" in filters and filters["nombre"] != "":
+            instance_list = instance_list.filter(nombre__icontains=filters["nombre"])            
+
+        return instance_list.count()            
 
     {% if include_crud %}
+
     @staticmethod
-    def create(data):
+    def create(data) -> {{ entity_name.capitalize() }}Entity:
         """
         Crea un nuevo registro.
 
@@ -57,10 +101,10 @@ class {{ entity_name.capitalize() }}Repository:
         except ValidationError as e:
             raise ValidationError(f"Validation Error: {e.message_dict}")
         
-        return instance
+        return Mapper.model_to_entity(instance, {{ entity_name.capitalize() }}Entity)
 
     @staticmethod
-    def update(id, data):
+    def update(id, data) -> {{ entity_name.capitalize() }}Entity:
         """
         Actualiza un registro existente.
 
@@ -82,14 +126,16 @@ class {{ entity_name.capitalize() }}Repository:
             instance.full_clean()
             instance.save()
             
-            return instance
+            return Mapper.model_to_entity(instance, {{ entity_name.capitalize() }}Entity)
+
         except {{ entity_name.capitalize() }}.DoesNotExist:
             raise ObjectDoesNotExist(f"No {{ entity_name.lower() }} found with ID {id}")
+
         except ValidationError as e:
             raise ValidationError(f"Validation Error: {e.message_dict}")
 
     @staticmethod
-    def delete(id):
+    def delete(id) -> bool:
         """
         Elimina un registro por su ID.
 
@@ -100,40 +146,10 @@ class {{ entity_name.capitalize() }}Repository:
         try:
             instance = {{ entity_name.capitalize() }}.objects.get(id=id)
             instance.delete()
+            return True
+            
         except {{ entity_name.capitalize() }}.DoesNotExist:
             raise ObjectDoesNotExist(f"No {{ entity_name.lower() }} found with ID {id}")
+
     {% endif %}
 
-    @staticmethod
-    def exists_by_field(field_name, value):
-        """
-        Verifica si existe un registro con un valor específico para un campo dado.
-
-        :param field_name: Nombre del campo a buscar.
-        :param value: Valor del campo a verificar.
-        :return: True si existe un registro con el valor dado, False en caso contrario.
-        """
-
-        return {{ entity_name.capitalize() }}.objects.filter(**{field_name: value}).exists()
-
-    @staticmethod
-    def filter_by_conditions(**conditions):
-        """
-        Filtra registros de acuerdo a las condiciones especificadas.
-
-        :param conditions: Condiciones de filtro como clave-valor.
-        :return: QuerySet con los registros que cumplen las condiciones.
-        """
-
-        return {{ entity_name.capitalize() }}.objects.filter(**conditions)
-
-    @staticmethod
-    def count_by_conditions(**conditions):
-        """
-        Cuenta registros que cumplen con ciertas condiciones.
-
-        :param conditions: Condiciones de filtro como clave-valor.
-        :return: Número de registros que cumplen las condiciones.
-        """
-
-        return {{ entity_name.capitalize() }}.objects.filter(**conditions).count()
