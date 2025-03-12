@@ -5,7 +5,7 @@ class CreateServiceCommand:
     def __init__(self, subparsers):
         parser = subparsers.add_parser("create-service", help='Create a new service')
         parser.add_argument("app_path", type=str, help='The relative path of the app within the project (for example, "apps/app1")')
-        parser.add_argument("service_name", type=str, help='The name of the service or action to do with Entity')  
+        parser.add_argument("service_name", type=str, help='The name of the service or action to do with entity')  
         parser.add_argument("entity_name", type=str, help='The name of the entity')
         parser.add_argument("--class-format", action="store_true", help="Create a file with class format")   
         parser.add_argument("--include-crud", action="store_true", help="Include CRUD methods in the service instead service_name")
