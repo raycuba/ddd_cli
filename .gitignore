@@ -8,6 +8,7 @@ build/
 dist/
 
 #ignorar archivos de cache de python en todos los directorios y subdirectorios
+*.pyc
 __pycache__/
 
 

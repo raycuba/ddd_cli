@@ -36,10 +36,10 @@ class CreateRepositoryCommand:
                 return
             
             # Crear archivo de mappers.py        
-            readWriteTemplate(templateName = 'repository', fileName='mappers.txt', render_params={}, repository_path=mappers_path, failIfError=False)
+            readWriteTemplate(templateName = 'repository', fileName='mappers.py', render_params={}, repository_path=mappers_path, failIfError=False)
             
             #renderizar class
-            readWriteTemplate(templateName = 'repository', fileName='class.txt', render_params={'entity_name':entity_name, 'app_name':app_name}, repository_path=repository_path, failIfError=True)
+            readWriteTemplate(templateName = 'repository', fileName='class.py', render_params={'entity_name':entity_name, 'app_name':app_name}, repository_path=repository_path, failIfError=True)
 
             # # Escribir class en el archivo
             # with open(repository_path, 'w') as f:

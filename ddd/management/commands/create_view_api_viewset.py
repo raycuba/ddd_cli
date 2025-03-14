@@ -36,7 +36,7 @@ class CreateViewApiViewSetCommand:
         app_name = app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
 
         #renderizar view
-        rendered_content_class = renderTemplate(templateName = 'api', fileName='viewset_views.txt', render_params={'app_name':app_name, 'entity_name':entity_name})
+        rendered_content_class = renderTemplate(templateName = 'api', fileName='viewset_views.py', render_params={'app_name':app_name, 'entity_name':entity_name})
 
         # Escribir class en el archivo
         with open(views_path, 'w') as f:

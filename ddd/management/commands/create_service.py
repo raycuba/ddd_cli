@@ -37,7 +37,7 @@ class CreateServiceCommand:
         # si no existe el archivo template_imports
         if not os.path.exists(services_path):
             #renderizar imports
-            rendered_content_imports = renderTemplate(templateName = 'service', fileName='imports.txt', render_params={'entity_name':entity_name})
+            rendered_content_imports = renderTemplate(templateName = 'service', fileName='imports.py', render_params={'entity_name':entity_name})
 
             # Escribir imports en el archivo
             with open(services_path, 'w') as f:
@@ -46,11 +46,11 @@ class CreateServiceCommand:
 
         if class_format:
             #renderizar class con crud
-            rendered_content_class = renderTemplate(templateName = 'service', fileName='class_crud.txt', render_params={'entity_name':entity_name})
+            rendered_content_class = renderTemplate(templateName = 'service', fileName='class_crud.py', render_params={'entity_name':entity_name})
 
         else:
             #renderizar funcion con crud
-            rendered_content_class = renderTemplate(templateName = 'service', fileName='function_crud.txt', render_params={'entity_name':entity_name})
+            rendered_content_class = renderTemplate(templateName = 'service', fileName='function_crud.py', render_params={'entity_name':entity_name})
       
 
         # Escribir class en el archivo

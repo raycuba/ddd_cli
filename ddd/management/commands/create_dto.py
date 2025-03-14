@@ -38,7 +38,7 @@ class CreateDTOCommand:
         # si no existe el archivo template_imports
         if not os.path.exists(dtos_path):
             #renderizar imports
-            rendered_content_imports = renderTemplate(templateName = 'dto', fileName='imports.txt', render_params={'dto_name':dto_name})
+            rendered_content_imports = renderTemplate(templateName = 'dto', fileName='imports.py', render_params={'dto_name':dto_name})
 
             # Escribir imports en el archivo
             with open(dtos_path, 'w') as f:
@@ -46,7 +46,7 @@ class CreateDTOCommand:
             print(f"Imports of Dto '{dto_name}' created at {dtos_path}")
 
         #renderizar class
-        rendered_content_class = renderTemplate(templateName = 'dto', fileName='class.txt', render_params={'dto_name':dto_name})
+        rendered_content_class = renderTemplate(templateName = 'dto', fileName='class.py', render_params={'dto_name':dto_name})
 
         # Escribir class en el archivo
         with open(dtos_path, 'a') as f:

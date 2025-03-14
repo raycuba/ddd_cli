@@ -1,10 +1,10 @@
 @dataclass
-class {{ entity_name.capitalize() }}Entity:
+class [[ entity_name.capitalize() ]]Entity:
     """
-    Entidad del dominio para {{ entity_name.lower() }}.
+    Entidad del dominio para [[ entity_name.lower() ]].
 
     Esta clase representa la lógica de negocio central y las reglas asociadas 
-    con {{ entity_name.lower() }} en el sistema.
+    con [[ entity_name.lower() ]] en el sistema.
     """
 
     uuid: UUID = field(default_factory=uuid4)  # Identificador único generado automáticamente
@@ -27,7 +27,7 @@ class {{ entity_name.capitalize() }}Entity:
         if self.description and len(self.description) > 500:
             raise ValueError("La descripción no puede superar los 500 caracteres.")
 
-    def update(self, **kwargs) -> None:
+    def update(self, data:dict) -> None:
         """
         Actualiza los atributos de la entidad con valores nuevos.
         """
@@ -45,8 +45,8 @@ class {{ entity_name.capitalize() }}Entity:
         return self.__dict__
 
     @staticmethod
-    def from_dict(data: dict) -> "{{ entity_name.capitalize() }}Entity":
+    def from_dict(data: dict) -> "[[ entity_name.capitalize() ]]Entity":
         """
         Crea una instancia de la entidad a partir de un diccionario.
         """
-        return {{ entity_name.capitalize() }}Entity(**data)
+        return [[ entity_name.capitalize() ]]Entity(**data)

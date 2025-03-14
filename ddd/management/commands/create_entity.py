@@ -36,7 +36,7 @@ class CreateEntityCommand:
         # si no existe el archivo template_imports
         if not os.path.exists(entities_path):
             #renderizar imports
-            rendered_content_imports = renderTemplate(templateName = 'entity', fileName='imports.txt', render_params={'entity_name':entity_name})
+            rendered_content_imports = renderTemplate(templateName = 'entity', fileName='imports.py', render_params={'entity_name':entity_name})
 
             # Escribir imports en el archivo
             with open(entities_path, 'w') as f:
@@ -44,7 +44,7 @@ class CreateEntityCommand:
             print(f"Imports of Entity '{entity_name}' created at {entities_path}")
 
         #renderizar class
-        rendered_content_class = renderTemplate(templateName = 'entity', fileName='class.txt', render_params={'entity_name':entity_name})
+        rendered_content_class = renderTemplate(templateName = 'entity', fileName='class.py', render_params={'entity_name':entity_name})
 
         # Escribir class en el archivo
         with open(entities_path, 'a') as f:

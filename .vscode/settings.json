@@ -1,0 +1,7 @@
+
+{
+    "jinja2.variableStart": "[[",
+    "jinja2.variableEnd": "]]",
+    "jinja2.blockStart": "[%",
+    "jinja2.blockEnd": "%]"
+}

@@ -3,19 +3,19 @@ from rest_framework.response import Response
 from rest_framework import status
 
 # Importar servicios del dominio que contienen la lógica de negocio
-from {{ app_name.lower() }}.domain.services import (
-    create_{{ entity_name.lower() }},
-    retrieve_{{ entity_name.lower() }},
-    update_{{ entity_name.lower() }},
-    delete_{{ entity_name.lower() }}
+from [[ app_name.lower() ]].domain.services import (
+    create_[[ entity_name.lower() ]],
+    retrieve_[[ entity_name.lower() ]],
+    update_[[ entity_name.lower() ]],
+    delete_[[ entity_name.lower() ]]
 )
 
 # Importar el repositorio que maneja la interacción con la infraestructura
-from {{ app_name.lower() }}.infrastructure.{{ entity_name.lower() }}_repository import {{ entity_name.capitalize() }}Repository
+from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
 
-class {{ entity_name.capitalize() }}APIView(APIView):
+class [[ entity_name.capitalize() ]]APIView(APIView):
     """
-    API para manejar operaciones CRUD relacionadas con {{ entity_name.lower() }}.
+    API para manejar operaciones CRUD relacionadas con [[ entity_name.lower() ]].
 
     Este APIView interactúa con:
     - Servicios del dominio que encapsulan la lógica de negocio.
@@ -33,10 +33,10 @@ class {{ entity_name.capitalize() }}APIView(APIView):
             # Recuperar un registro específico por ID
             try:
                 # Instanciar el repositorio para acceder a los datos
-                repository = {{ entity_name.capitalize() }}Repository()
+                repository = [[ entity_name.capitalize() ]]Repository()
 
                 # Llamar al servicio de recuperación para una entidad específica
-                result = retrieve_{{ entity_name.lower() }}(repository=repository, id=id)
+                result = retrieve_[[ entity_name.lower() ]](repository=repository, id=id)
 
                 # Retornar la respuesta con un estado HTTP 200 OK
                 return Response(result, status=status.HTTP_200_OK)
@@ -46,10 +46,10 @@ class {{ entity_name.capitalize() }}APIView(APIView):
         else:
             # Recuperar todos los registros
             try:
-                repository = {{ entity_name.capitalize() }}Repository()
+                repository = [[ entity_name.capitalize() ]]Repository()
 
                 # Llamar al servicio para listar todas las entidades
-                result = retrieve_{{ entity_name.lower() }}(repository=repository)
+                result = retrieve_[[ entity_name.lower() ]](repository=repository)
 
                 # Retornar la respuesta con un estado HTTP 200 OK
                 return Response(result, status=status.HTTP_200_OK)
@@ -68,10 +68,10 @@ class {{ entity_name.capitalize() }}APIView(APIView):
 
         try:
             # Instanciar el repositorio
-            repository = {{ entity_name.capitalize() }}Repository()
+            repository = [[ entity_name.capitalize() ]]Repository()
 
             # Llamar al servicio de creación con los datos proporcionados
-            result = create_{{ entity_name.lower() }}(repository=repository, **data)
+            result = create_[[ entity_name.lower() ]](repository=repository, **data)
 
             # Retornar la respuesta con un estado HTTP 201 CREATED
             return Response(result, status=status.HTTP_201_CREATED)
@@ -90,10 +90,10 @@ class {{ entity_name.capitalize() }}APIView(APIView):
 
         try:
             # Instanciar el repositorio
-            repository = {{ entity_name.capitalize() }}Repository()
+            repository = [[ entity_name.capitalize() ]]Repository()
 
             # Llamar al servicio de actualización con el ID y los nuevos datos
-            result = update_{{ entity_name.lower() }}(repository=repository, id=id, **data)
+            result = update_[[ entity_name.lower() ]](repository=repository, id=id, **data)
 
             # Retornar la respuesta con un estado HTTP 200 OK
             return Response(result, status=status.HTTP_200_OK)
@@ -110,10 +110,10 @@ class {{ entity_name.capitalize() }}APIView(APIView):
         """
         try:
             # Instanciar el repositorio
-            repository = {{ entity_name.capitalize() }}Repository()
+            repository = [[ entity_name.capitalize() ]]Repository()
 
             # Llamar al servicio de eliminación con el ID proporcionado
-            result = delete_{{ entity_name.lower() }}(repository=repository, id=id)
+            result = delete_[[ entity_name.lower() ]](repository=repository, id=id)
 
             # Retornar una respuesta sin contenido con estado HTTP 204 NO CONTENT
             return Response(result, status=status.HTTP_204_NO_CONTENT)
