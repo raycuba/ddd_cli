@@ -1,6 +1,12 @@
 MANIFEST.in
 README.md
 setup.py
+app1/__init__.py
+app1/entity1_forms.py
+app1/entity1_urls.py
+app1/entity1_views.py
+app1/infrastructure/__init__.py
+app1/infrastructure/mappers.py
 ddd/__init__.py
 ddd/management/__init__.py
 ddd/management/cli.py
@@ -22,6 +28,7 @@ ddd/management/templates/entity/class.py
 ddd/management/templates/entity/imports.py
 ddd/management/templates/repository/class.py
 ddd/management/templates/repository/mappers.py
+ddd/management/templates/routers/web_urls.py
 ddd/management/templates/service/class_crud.py
 ddd/management/templates/service/function_crud.py
 ddd/management/templates/service/imports.py

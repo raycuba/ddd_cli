@@ -16,6 +16,7 @@ class CreateViewCommand:
         views_dir = app_path
         views_templates_dir = os.path.join(views_dir, 'templates')
 
+        urls_path = os.path.join(views_dir, entity_name.lower() + '_urls.py')
         views_path = os.path.join(views_dir, entity_name.lower() + '_views.py')
         forms_path = os.path.join(views_dir, entity_name.lower() + '_forms.py')
 
@@ -40,7 +41,6 @@ class CreateViewCommand:
             print(Fore.RED + f"The file '{forms_path}' already exists." + Style.RESET_ALL)
             return
         
-        web_test_path = os.path.join(views_templates_dir, 'web_test_' + entity_name.lower() + '.html')
         web_create_register_path = os.path.join(views_templates_dir, 'web_create_' + entity_name.lower() + '.html')
         web_edit_register_path = os.path.join(views_templates_dir, 'web_edit_' + entity_name.lower() + '.html')
         web_edit_save_register_path = os.path.join(views_templates_dir, 'web_edit_save_' + entity_name.lower() + '.html')
@@ -89,7 +89,14 @@ class CreateViewCommand:
             f.write('\n' + rendered_content_forms + '\n')
         print(f"Class Form of Entity '{entity_name}' created at {forms_path}")
 
+        #renderizar urls
+        readWriteTemplate(templateName='routers', fileName='web_urls.py',  render_params={'entity_name':entity_name}, repository_path=urls_path, failIfError=True)
+        print(f"Urls of Entity '{entity_name}' created at {urls_path}")
+
         #renderizar templates
+        readWriteTemplate(templateName='templates', fileName='web_list_registers.html',  render_params={'entity_name':entity_name}, repository_path=web_list_registers_path, failIfError=True)
+        print(f"Template web_list of Entity '{entity_name}' created at {web_list_registers_path}")
+
         readWriteTemplate(templateName='templates', fileName='web_create_register.html',  render_params={}, repository_path=web_create_register_path, failIfError=True)
         print(f"Template web_create of Entity '{entity_name}' created at {web_create_register_path}")
 
@@ -98,9 +105,6 @@ class CreateViewCommand:
 
         readWriteTemplate(templateName='templates', fileName='web_edit_save_register.html',  render_params={'entity_name':entity_name}, repository_path=web_edit_save_register_path, failIfError=True)
         print(f"Template web_edit_save of Entity '{entity_name}' created at {web_edit_save_register_path}")
-
-        readWriteTemplate(templateName='templates', fileName='web_list_registers.html',  render_params={'entity_name':entity_name}, repository_path=web_list_registers_path, failIfError=True)
-        print(f"Template web_list of Entity '{entity_name}' created at {web_list_registers_path}")
 
         readWriteTemplate(templateName='templates', fileName='web_view_register.html',  render_params={'entity_name':entity_name}, repository_path=web_view_register_path, failIfError=True)
         print(f"Template web_view of Entity '{entity_name}' created at {web_view_register_path}")

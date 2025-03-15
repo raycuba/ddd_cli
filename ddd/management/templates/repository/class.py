@@ -18,7 +18,7 @@ class [[ entity_name.capitalize() ]]Repository:
     """
 
     @staticmethod
-    def get_all(filters: Optional[dict] = None) -> List[[[ entity_name.capitalize() ]]Entity]:
+    def get_all(filters: Optional[dict] = None) -> List[ [[ entity_name.capitalize() ]]Entity ]:
         """
         Obtiene todos los registros de la entidad.
         :return: Lista de registros de la entidad.
