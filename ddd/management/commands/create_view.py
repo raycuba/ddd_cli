@@ -40,12 +40,12 @@ class CreateViewCommand:
         if os.path.exists(forms_path):
             print(Fore.RED + f"The file '{forms_path}' already exists." + Style.RESET_ALL)
             return
-        
-        web_create_register_path = os.path.join(views_templates_dir, 'web_create_' + entity_name.lower() + '.html')
-        web_edit_register_path = os.path.join(views_templates_dir, 'web_edit_' + entity_name.lower() + '.html')
-        web_edit_save_register_path = os.path.join(views_templates_dir, 'web_edit_save_' + entity_name.lower() + '.html')
-        web_list_registers_path = os.path.join(views_templates_dir, 'web_list_' + entity_name.lower() + '.html')
-        web_view_register_path = os.path.join(views_templates_dir, 'web_view_' + entity_name.lower() + '.html')        
+         
+        web_list_registers_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_list' + '.html')
+        web_create_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_create' + '.html')
+        web_edit_register_path = os.path.join(views_templates_dir, entity_name.lower() +'_web_edit' + '.html')
+        web_edit_save_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_edit_save' + '.html')
+        web_view_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_view' + '.html')        
         
         #si ya existe el archivo web_create_register mostrar error
         if os.path.exists(web_create_register_path):
