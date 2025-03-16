@@ -28,7 +28,7 @@ def [[ entity_name.lower() ]]_list(request):
     [[ entity_name.lower() ]]List = repository.get_all()
 
     # Step 2: Render the view with the data
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_list.html', {
+    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_list.html', {
         '[[ entity_name.lower() ]]List': [[ entity_name.lower() ]]List
     })
 
@@ -64,7 +64,7 @@ def [[ entity_name.lower() ]]_create(request):
         form = [[ entity_name.capitalize() ]]Form()
 
     # Render the template with the form
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_create.html', {'form': form})
+    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_create.html', {'form': form})
 
 
 def [[ entity_name.lower() ]]_edit(request, id=None): 
@@ -88,14 +88,14 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
 
     # Step 2: Initialize the form with the entity data
     form = [[ entity_name.capitalize() ]]EditForm(initial={
-        'id': [[ entity_name.lower() ]].id,
-        'title': [[ entity_name.lower() ]].title,
-        'content': [[ entity_name.lower() ]].content,
-        'public': [[ entity_name.lower() ]].public,
+        'id': [[ entity_name.lower() ]]['id'],
+        'title': [[ entity_name.lower() ]]['title'],
+        'content': [[ entity_name.lower() ]]['content'],
+        'public': [[ entity_name.lower() ]]['public'],
     })
 
     # Step 3: Render the template with the initialized form
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_edit.html', {'form': form})
+    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_edit.html', {'form': form})
 
     
 def [[ entity_name.lower() ]]_save(request):
@@ -174,13 +174,13 @@ def [[ entity_name.lower() ]]_edit_save(request, id=None):
     else:
         # Initialize the form with existing data
         form = [[ entity_name.capitalize() ]]Form(initial={
-            'title': [[ entity_name.lower() ]].title,
-            'content': [[ entity_name.lower() ]].content,
-            'public': [[ entity_name.lower() ]].public
+            'title': [[ entity_name.lower() ]]['title'],
+            'content': [[ entity_name.lower() ]]['content'],
+            'public': [[ entity_name.lower() ]]['public']
         })
 
     # Render the template with the form
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_edit.html', {'form': form})
+    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_edit_save.html', {'form': form})
 
 
 def [[ entity_name.lower() ]]_detail(request, id=None):
@@ -201,12 +201,12 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
 
     # Render details with a read-only form
     form = [[ entity_name.capitalize() ]]ViewForm(initial={
-        'title': [[ entity_name.lower() ]].title,
-        'content': [[ entity_name.lower() ]].content,
-        'public': [[ entity_name.lower() ]].public
+        'title': [[ entity_name.lower() ]]['title'],
+        'content': [[ entity_name.lower() ]]['content'],
+        'public': [[ entity_name.lower() ]]['public']
     })
 
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_detail.html', {'form': form})
+    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_detail.html', {'form': form})
 
 
 def [[ entity_name.lower() ]]_delete(request, id=None):

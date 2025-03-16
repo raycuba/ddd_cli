@@ -9,7 +9,7 @@ Django form based
 
     <form action="{% url '[[ entity_name.lower() ]]_list' %}" method="GET">
 
-        {% raw %}{% csrf_token %}{% endraw %}
+        {% csrf_token %}
 
         {{ form.as_p }}
 

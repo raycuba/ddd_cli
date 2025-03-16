@@ -41,11 +41,11 @@ class CreateViewCommand:
             print(Fore.RED + f"The file '{forms_path}' already exists." + Style.RESET_ALL)
             return
          
-        web_list_registers_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_list' + '.html')
+        web_list_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_list' + '.html')
         web_create_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_create' + '.html')
         web_edit_register_path = os.path.join(views_templates_dir, entity_name.lower() +'_web_edit' + '.html')
         web_edit_save_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_edit_save' + '.html')
-        web_view_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_view' + '.html')        
+        web_detail_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_detail' + '.html')        
         
         #si ya existe el archivo web_create_register mostrar error
         if os.path.exists(web_create_register_path):
@@ -62,14 +62,14 @@ class CreateViewCommand:
             print(Fore.RED + f"The file '{web_edit_save_register_path}' already exists." + Style.RESET_ALL)
             return
 
-        #si ya existe el archivo web_list_registers mostrar error
-        if os.path.exists(web_list_registers_path):
-            print(Fore.RED + f"The file '{web_list_registers_path}' already exists." + Style.RESET_ALL)
+        #si ya existe el archivo web_list_register mostrar error
+        if os.path.exists(web_list_register_path):
+            print(Fore.RED + f"The file '{web_list_register_path}' already exists." + Style.RESET_ALL)
             return
 
-        #si ya existe el archivo web_view_register mostrar error
-        if os.path.exists(web_view_register_path):
-            print(Fore.RED + f"The file '{web_view_register_path}' already exists." + Style.RESET_ALL)
+        #si ya existe el archivo web_detail_register mostrar error
+        if os.path.exists(web_detail_register_path):
+            print(Fore.RED + f"The file '{web_detail_register_path}' already exists." + Style.RESET_ALL)
             return                                      
         
         #convertir app_path (ej: apps/ap1) a app_name (ej: apps.app1)
@@ -94,8 +94,8 @@ class CreateViewCommand:
         print(f"Urls of Entity '{entity_name}' created at {urls_path}")
 
         #renderizar templates
-        readWriteTemplate(templateName='templates', fileName='web_list_registers.html',  render_params={'entity_name':entity_name}, repository_path=web_list_registers_path, failIfError=True)
-        print(f"Template web_list of Entity '{entity_name}' created at {web_list_registers_path}")
+        readWriteTemplate(templateName='templates', fileName='web_list_register.html',  render_params={'entity_name':entity_name}, repository_path=web_list_register_path, failIfError=True)
+        print(f"Template web_list of Entity '{entity_name}' created at {web_list_register_path}")
 
         readWriteTemplate(templateName='templates', fileName='web_create_register.html',  render_params={}, repository_path=web_create_register_path, failIfError=True)
         print(f"Template web_create of Entity '{entity_name}' created at {web_create_register_path}")
@@ -106,6 +106,6 @@ class CreateViewCommand:
         readWriteTemplate(templateName='templates', fileName='web_edit_save_register.html',  render_params={'entity_name':entity_name}, repository_path=web_edit_save_register_path, failIfError=True)
         print(f"Template web_edit_save of Entity '{entity_name}' created at {web_edit_save_register_path}")
 
-        readWriteTemplate(templateName='templates', fileName='web_view_register.html',  render_params={'entity_name':entity_name}, repository_path=web_view_register_path, failIfError=True)
-        print(f"Template web_view of Entity '{entity_name}' created at {web_view_register_path}")
+        readWriteTemplate(templateName='templates', fileName='web_detail_register.html',  render_params={'entity_name':entity_name}, repository_path=web_detail_register_path, failIfError=True)
+        print(f"Template web_detail of Entity '{entity_name}' created at {web_detail_register_path}")
 
