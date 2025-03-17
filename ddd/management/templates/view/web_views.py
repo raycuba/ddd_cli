@@ -48,7 +48,7 @@ def [[ entity_name.lower() ]]_create(request):
 
             try:
                 # Step 2: Call the creation service
-                create_[[ entity_name.lower() ]](repository=repository, **form_data)
+                create_[[ entity_name.lower() ]](repository=repository, data=form_data)
 
                 # Step 3: Display success message and redirect
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]].")
@@ -160,7 +160,7 @@ def [[ entity_name.lower() ]]_edit_save(request, id=None):
 
             try:
                 # Step 3: Call the update service
-                update_[[ entity_name.lower() ]](repository=repository, entity_id=id, **form_data)
+                update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data)
 
                 # Step 4: Display success message and redirect
                 messages.success(request, f"Successfully updated [[ entity_name.lower() ]].")
