@@ -1,14 +1,43 @@
 #ignorar archivo token.txt
 token.txt
 
-#ingnorar carpeta build
-build/
-
-#ignorar carpeta dist
-dist/
-
 #ignorar archivos de cache de python en todos los directorios y subdirectorios
 *.pyc
 __pycache__/
 
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales
+env/
+venv/
+
+# Configuración del sistema
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Archivos de build y distribución
+build/
+dist/
+*.egg-info/
+
+# Configuración de IDEs
+.idea/
+.vscode/
+
+# Archivos de log o temporales
+*.log
+*.tmp
+
+# Archivos de prueba
+.coverage
+htmlcov/
+
+# Dependencias no necesarias si usas un virtualenv
+*.bak
+*.old
+pip-wheel-metadata/
 
