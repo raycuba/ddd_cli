@@ -29,8 +29,8 @@ class [[ entity_name.capitalize() ]]Service:
         :raises ValueError: Si las reglas de negocio no se cumplen.
         """
         # Validación de reglas de negocio (opcional)
-        if self.repository.exists_by_field("id", data.id):
-            raise ValueError("An instance with this id already exists.")
+        if repository.exists_by_field("email", data['email']):
+        raise ValueError("An instance with this email already exists.")
 
         # Creación en el repositorio
         entity = self.repository.create(data)
