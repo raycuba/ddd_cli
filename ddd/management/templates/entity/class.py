@@ -6,8 +6,10 @@ class [[ entity_name.capitalize() ]]Entity:
     Esta clase representa la lógica de negocio central y las reglas asociadas 
     con [[ entity_name.lower() ]] en el sistema.
     """
+    #campos id
+    id: Optional[int] = None  # ID relacionado con la base de datos
+    uuid: Optional[UUID] = None
 
-    uuid: UUID = field(default_factory=uuid4)  # Identificador único generado automáticamente
     name: str  # Nombre obligatorio
     description: Optional[str] = None  # Descripción opcional
     created_at: Optional[str] = None  # Fecha de creación (puede ser ISO 8601)

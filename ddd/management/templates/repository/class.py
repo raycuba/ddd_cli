@@ -90,6 +90,10 @@ class [[ entity_name.capitalize() ]]Repository:
         :raises ValidationError: Si los datos no son válidos.
         """
 
+        # Eliminar las claves 'id' y 'uuid' si existen en el diccionario
+        data.pop('id', None)
+        data.pop('uuid', None)        
+
         # Crear el registro
         instance = [[ entity_name.capitalize() ]](**data)
 
@@ -113,6 +117,10 @@ class [[ entity_name.capitalize() ]]Repository:
         :raises ObjectDoesNotExist: Si no existe el registro con el ID dado.
         :raises ValidationError: Si los datos no son válidos.
         """
+
+        # Eliminar las claves 'id' y 'uuid' si existen en el diccionario
+        data.pop('id', None)
+        data.pop('uuid', None)
 
         try:
             instance = [[ entity_name.capitalize() ]].objects.get(id=id)

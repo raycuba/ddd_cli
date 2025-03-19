@@ -18,8 +18,8 @@ class CLI:
         CreateServiceCommand(self.subparsers)
         CreateRepositoryCommand(self.subparsers)
         CreateDTOCommand(self.subparsers)
-        CreateViewApiApiViewCommand(self.subparsers)
-        CreateViewApiViewSetCommand(self.subparsers)
+        # CreateViewApiApiViewCommand(self.subparsers)
+        # CreateViewApiViewSetCommand(self.subparsers)
         CreateViewCommand(self.subparsers)
 
     def run(self):

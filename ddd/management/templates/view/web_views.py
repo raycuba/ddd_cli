@@ -8,6 +8,7 @@ from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_nam
 
 # Import domain-specific services
 from [[ app_name.lower() ]].domain.services import (
+    list_[[ entity_name.lower() ]],
     create_[[ entity_name.lower() ]],
     retrieve_[[ entity_name.lower() ]],
     update_[[ entity_name.lower() ]],
@@ -25,7 +26,7 @@ def [[ entity_name.lower() ]]_list(request):
 
     # Step 1: Get data from the repository
     repository = [[ entity_name.capitalize() ]]Repository()
-    [[ entity_name.lower() ]]List = repository.get_all()
+    [[ entity_name.lower() ]]List = list_[[ entity_name.lower() ]](repository=repository)
 
     # Step 2: Render the view with the data
     return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_list.html', {

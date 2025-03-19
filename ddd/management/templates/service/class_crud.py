@@ -20,6 +20,19 @@ class [[ entity_name.capitalize() ]]Service:
         """
         self.repository = repository    
 
+    def list_[[ entity_name.lower() ]](self, filters: Optional[dict] = None) -> List[dict]:
+        """
+        Lista instancias de [[ entity_name.lower() ]].
+    
+        :param repository: Repositorio que maneja la persistencia de [[ entity_name.lower() ]].
+        :return: Lista de la entidad.
+        :raises ValueError: Si las reglas de negocio no se cumplen.
+        """
+    
+        entity_list = self.repository.get_all(filters)
+
+        return [entity.to_dict() for entity in entity_list]      
+
     def create_[[ entity_name.lower() ]](self, data) -> dict:
         """
         Crea una nueva instancia de [[ entity_name.lower() ]].
