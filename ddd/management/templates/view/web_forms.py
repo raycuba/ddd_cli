@@ -65,6 +65,7 @@ class [[ entity_name.capitalize() ]]EditForm(forms.Form):
     # ID
     id = forms.IntegerField(
         label='ID',
+        required=False,
         widget=forms.HiddenInput()
     )
 

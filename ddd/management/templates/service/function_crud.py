@@ -22,7 +22,7 @@ def create_[[ entity_name.lower() ]](repository, data) -> dict:
     :return: La entidad creada.
     :raises ValueError: Si las reglas de negocio no se cumplen.
     """
-    # Validación de reglas de negocio
+    # Validación de reglas de negocio (opcional)
     if repository.exists_by_field("email", data['email']):
         raise ValueError("An instance with this email already exists.")
 

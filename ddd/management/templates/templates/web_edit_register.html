@@ -13,7 +13,7 @@ Django form
         </div>
     {% endif %}
         
-    <form action="{% url '[[ entity_name.lower() ]]_save' %}" method="POST">
+    <form action="{% url '[[ entity_name.lower() ]]_save'  id=form.id.value  %}" method="POST">
 
         {% csrf_token %}
 

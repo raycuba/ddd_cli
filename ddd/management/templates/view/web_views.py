@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 
 # Import entity-specific forms
-from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]Form, [[ entity_name.capitalize() ]]ViewForm, [[ entity_name.capitalize() ]]EditForm
+from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]Form, [[ entity_name.capitalize() ]]EditForm, [[ entity_name.capitalize() ]]ViewForm
 
 # Import domain-specific services
 from [[ app_name.lower() ]].domain.services import (
@@ -43,6 +43,7 @@ def [[ entity_name.lower() ]]_create(request):
 
         # Step 1: Validate form data
         form = [[ entity_name.capitalize() ]]Form(request.POST)
+
         if form.is_valid():
             form_data = form.cleaned_data
             repository = [[ entity_name.capitalize() ]]Repository()
@@ -99,43 +100,46 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
     return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_edit.html', {'form': form})
 
     
-def [[ entity_name.lower() ]]_save(request):
+def [[ entity_name.lower() ]]_save(request, id=None):
     """
     Generic view to save changes to an existing [[ entity_name.lower() ]] instance.
     """
-    # Step 1: Retrieve the data submitted from the form
-    id = request.POST.get('id')
-    title = request.POST.get('title')
-    content = request.POST.get('content')
-    public = request.POST.get('public')
 
-    repository = [[ entity_name.capitalize() ]]Repository()
+    if request.method == "POST":
 
-    try:
-        # Step 2: Call the service to update the entity with the provided data
-        update_[[ entity_name.lower() ]](
-            repository=repository,
-            entity_id=id,
-            title=title,
-            content=content,
-            public=public
-        )
+        repository = [[ entity_name.capitalize() ]]Repository()    
 
-        # Step 3: Display a success message to the user
-        messages.success(request, f"Successfully updated [[ entity_name.lower() ]]: {id} - {title}")
+        # Step 1: Validate form data
+        form = [[ entity_name.capitalize() ]]EditForm(request.POST)
+        if form.is_valid():
+            form_data = form.cleaned_data    
 
-    except ValueError as e:
-        # Handle errors related to business rules or validations
-        messages.error(request, f"Error saving [[ entity_name.lower() ]]: {str(e)}")
+            try:
+                # Step 2: remove readonly parameters from data
+                form_data.pop('id', None)
 
-    # Step 4: Redirect to the list of [[ entity_name.lower() ]]s
-    return redirect('[[ entity_name.lower() ]]_list')
+                # Step 3: Call the update service
+                update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data)
+
+                # Step 4: Display a success message to the user
+                messages.success(request, f"Successfully updated [[ entity_name.lower() ]].")
+
+            except ValueError as e:
+                # Handle errors related to business rules or validations
+                messages.error(request, f"Error saving [[ entity_name.lower() ]]: {str(e)}")
+
+            # Step 5: Redirect to the list of [[ entity_name.lower() ]]s
+            return redirect('[[ entity_name.lower() ]]_list')
+
+        else:
+            messages.error(request, "There were errors in the form. Please correct them.")            
 
 
 def [[ entity_name.lower() ]]_edit_save(request, id=None):
     """
     Generic view to edit an existing [[ entity_name.lower() ]] instance using a service.
     """
+
     if id is None:
         # Redirect if ID is not present
         return redirect('[[ entity_name.lower() ]]_list')
@@ -154,16 +158,19 @@ def [[ entity_name.lower() ]]_edit_save(request, id=None):
     if request.method == "POST":
 
         # Step 2: Validate form data
-        form = [[ entity_name.capitalize() ]]Form(request.POST)
+        form = [[ entity_name.capitalize() ]]EditForm(request.POST)
 
         if form.is_valid():
             form_data = form.cleaned_data
 
             try:
-                # Step 3: Call the update service
+                # Step 3: remove readonly parameters from data
+                form_data.pop('id', None)
+
+                # Step 4: Call the update service
                 update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data)
 
-                # Step 4: Display success message and redirect
+                # Step 5: Display success message and redirect
                 messages.success(request, f"Successfully updated [[ entity_name.lower() ]].")
                 return redirect('[[ entity_name.lower() ]]_list')
 
@@ -172,9 +179,11 @@ def [[ entity_name.lower() ]]_edit_save(request, id=None):
         else:
             messages.error(request, "There were errors in the form. Please correct them.")
 
-    else:
+    # request.method == "GET":
+    else:  
         # Initialize the form with existing data
         form = [[ entity_name.capitalize() ]]Form(initial={
+            'id': [[ entity_name.lower() ]]['id'],            
             'title': [[ entity_name.lower() ]]['title'],
             'content': [[ entity_name.lower() ]]['content'],
             'public': [[ entity_name.lower() ]]['public']

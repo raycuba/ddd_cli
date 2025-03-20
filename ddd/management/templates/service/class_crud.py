@@ -71,6 +71,7 @@ class [[ entity_name.capitalize() ]]Service:
         :return: La entidad actualizada.
         :raises ValueError: Si no se encuentra la instancia o las reglas de negocio no se cumplen.
         """
+        # Recuperar la entidad
         entity = self.repository.get_by_id(entity_id)
         if not entity:
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}.")
@@ -87,6 +88,7 @@ class [[ entity_name.capitalize() ]]Service:
         :return: Ninguno.
         :raises ValueError: Si no se encuentra la instancia.
         """
+        # Recuperar la entidad
         entity = self.repository.get_by_id(entity_id)
         if not entity:
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}.")
