@@ -1,6 +1,6 @@
 Metadata-Version: 2.2
 Name: ddd-cli
-Version: 1.4.11
+Version: 1.4.14
 Summary: CLI for adding DDD support to Python/Django projects
 Author: Ragnar Bermúdez La O
 Author-email: ragnarbermudezlao@gmail.com

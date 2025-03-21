@@ -26,12 +26,16 @@ def create_[[ entity_name.lower() ]](repository, data) -> dict:
     if repository.exists_by_field("email", data['email']):
         raise ValueError("An instance with this email already exists.")
 
+    #validacion mediante entity
+    entity = [[ entity_name.capitalize() ]]Entity(**data)
+
     # Creación en el repositorio
-    entity = repository.create(data)
+    entity = repository.create(data=[[ entity_name.capitalize() ]]Entity.to_dict())
+
     return entity.to_dict()
 
 
-def retrieve_[[ entity_name.lower() ]](repository, entity_id) -> dict:
+def retrieve_[[ entity_name.lower() ]](repository, entity_id: int) -> dict:
     """
     Recupera una instancia de [[ entity_name.lower() ]] por su ID.
 
@@ -43,10 +47,11 @@ def retrieve_[[ entity_name.lower() ]](repository, entity_id) -> dict:
     entity = repository.get_by_id(entity_id)
     if not entity:
         raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}.")
+
     return entity.to_dict()
 
 
-def update_[[ entity_name.lower() ]](repository, entity_id, data) -> dict:
+def update_[[ entity_name.lower() ]](repository, entity_id: int, data) -> dict:
     """
     Actualiza una instancia existente de [[ entity_name.lower() ]].
 
@@ -61,12 +66,16 @@ def update_[[ entity_name.lower() ]](repository, entity_id, data) -> dict:
     if not entity:
         raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}.")
 
+    #actualizar la instancia para comprobar validaciones
+    entity.update(data)        
+
     # Actualización en el repositorio
     updated_entity = repository.update(entity_id, data)
+    
     return updated_entity.to_dict()
 
 
-def delete_[[ entity_name.lower() ]](repository, entity_id) -> bool:
+def delete_[[ entity_name.lower() ]](repository, entity_id: int) -> bool:
     """
     Elimina una instancia de [[ entity_name.lower() ]].
 

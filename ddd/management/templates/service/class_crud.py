@@ -28,7 +28,7 @@ class [[ entity_name.capitalize() ]]Service:
         :return: Lista de la entidad.
         :raises ValueError: Si las reglas de negocio no se cumplen.
         """
-    
+
         entity_list = self.repository.get_all(filters)
 
         return [entity.to_dict() for entity in entity_list]      
@@ -43,10 +43,14 @@ class [[ entity_name.capitalize() ]]Service:
         """
         # Validación de reglas de negocio (opcional)
         if repository.exists_by_field("email", data['email']):
-        raise ValueError("An instance with this email already exists.")
+            raise ValueError("An instance with this email already exists.")
+
+        #validacion mediante entity
+        entity = [[ entity_name.capitalize() ]]Entity(**data)            
 
         # Creación en el repositorio
-        entity = self.repository.create(data)
+        entity = self.repository.create(data=[[ entity_name.capitalize() ]]Entity.to_dict())
+
         return entity.to_dict()
 
     def retrieve_[[ entity_name.lower() ]](self, entity_id: int) -> dict:
@@ -60,6 +64,7 @@ class [[ entity_name.capitalize() ]]Service:
         entity = self.repository.get_by_id(entity_id)
         if not entity:
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}.")
+
         return entity.to_dict()
 
     def update_[[ entity_name.lower() ]](self, entity_id: int, data) -> dict:
@@ -76,8 +81,12 @@ class [[ entity_name.capitalize() ]]Service:
         if not entity:
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}.")
 
+        #actualizar la instancia para comprobar validaciones
+        entity.update(data)                     
+
         # Actualización en el repositorio
         updated_entity = self.repository.update(entity_id, data)
+        
         return updated_entity.to_dict()
 
     def delete_[[ entity_name.lower() ]](self, entity_id: int) -> bool:
