@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 
 # Import entity-specific forms
-from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]Form, [[ entity_name.capitalize() ]]EditForm, [[ entity_name.capitalize() ]]ViewForm
+from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]CreateForm, [[ entity_name.capitalize() ]]EditForm, [[ entity_name.capitalize() ]]ViewForm
 
 # Import domain-specific services
 from [[ app_name.lower() ]].domain.services import (
@@ -42,7 +42,7 @@ def [[ entity_name.lower() ]]_create(request):
     if request.method == "POST":
 
         # Step 1: Validate form data
-        form = [[ entity_name.capitalize() ]]Form(request.POST)
+        form = [[ entity_name.capitalize() ]]CreateForm(request.POST)
 
         if form.is_valid():
             form_data = form.cleaned_data
@@ -63,7 +63,7 @@ def [[ entity_name.lower() ]]_create(request):
             messages.error(request, "There were errors in the form. Please correct them.")
     else:
         # Empty form for GET requests
-        form = [[ entity_name.capitalize() ]]Form()
+        form = [[ entity_name.capitalize() ]]CreateForm()
 
     # Render the template with the form
     return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_create.html', {'form': form})
@@ -182,7 +182,7 @@ def [[ entity_name.lower() ]]_edit_save(request, id=None):
     # request.method == "GET":
     else:  
         # Initialize the form with existing data
-        form = [[ entity_name.capitalize() ]]Form(initial={
+        form = [[ entity_name.capitalize() ]EditForm(initial={
             'id': [[ entity_name.lower() ]]['id'],            
             'title': [[ entity_name.lower() ]]['title'],
             'content': [[ entity_name.lower() ]]['content'],
