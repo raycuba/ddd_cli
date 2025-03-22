@@ -66,15 +66,21 @@ class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]Bas
 
 class [[ entity_name.capitalize() ]]EditForm([[ entity_name.capitalize() ]]BaseForm):
     """
-    Form to edit an instance of [[ entity_name.lower() ]]. Agregamos un campo adicional para 'id'.
+    Form to edit an instance of [[ entity_name.lower() ]]. 
     """
+    #Agregamos un campo adicional para 'id' Oculto para el POST
     id = forms.IntegerField(
         label='ID',
         required=False,
         widget=forms.HiddenInput()
     )
 
-    
+    #impedimos que el title sea editable pero permitimos que se muestre siempre
+    title.widget.attrs.update({
+        'readonly': 'True'
+    })
+
+
 class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseForm):
     """
     Readonly form to view an instance of [[ entity_name.lower() ]]
