@@ -35,7 +35,6 @@ ddd/management/templates/templates/web_edit_register.html
 ddd/management/templates/templates/web_edit_save_register.html
 ddd/management/templates/templates/web_list_register.html
 ddd/management/templates/utils/get_value.py
-ddd/management/templates/utils/mappers.py
 ddd/management/templates/view/web_forms.py
 ddd/management/templates/view/web_views.py
 ddd_cli.egg-info/PKG-INFO

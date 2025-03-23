@@ -1,5 +1,5 @@
 from typing import List, Optional
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 
 # importa las entidades utilizadas aqui
@@ -87,7 +87,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
         :param data: Diccionario con los datos necesarios para crear el registro.
         :return: La instancia creada.
-        :raises ValidationError: Si los datos no son válidos.
+        :raises ValueError: Si los datos no son válidos.
         """
 
         # Eliminar las claves 'id' y 'uuid' si existen en el diccionario
@@ -101,8 +101,8 @@ class [[ entity_name.capitalize() ]]Repository:
         try:
             instance.full_clean()  # Validaciones del modelo
             instance.save()
-        except ValidationError as e:
-            raise ValidationError(f"Validation Error: {e.message_dict}")
+        except ValueError as e:
+            raise ValueError(f"Validation Error: {e.message_dict}")
         
         return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
 
@@ -115,7 +115,7 @@ class [[ entity_name.capitalize() ]]Repository:
         :param data: Diccionario con los datos a actualizar.
         :return: La instancia actualizada.
         :raises ObjectDoesNotExist: Si no existe el registro con el ID dado.
-        :raises ValidationError: Si los datos no son válidos.
+        :raises ValueError: Si los datos no son válidos.
         """
 
         # Eliminar las claves 'id' y 'uuid' si existen en el diccionario
@@ -139,8 +139,8 @@ class [[ entity_name.capitalize() ]]Repository:
         except [[ entity_name.capitalize() ]].DoesNotExist:
             raise ObjectDoesNotExist(f"No [[ entity_name.lower() ]] found with ID {id}")
 
-        except ValidationError as e:
-            raise ValidationError(f"Validation Error: {e.message_dict}")
+        except ValueError as e:
+            raise ValueError(f"Validation Error: {e.message_dict}")
 
     @staticmethod
     def delete(id) -> bool:

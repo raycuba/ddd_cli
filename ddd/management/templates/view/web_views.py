@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
-from django.core.exceptions import ValidationError
 
 # Import entity-specific forms
 from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]CreateForm, [[ entity_name.capitalize() ]]EditForm, [[ entity_name.capitalize() ]]ViewForm
@@ -56,7 +55,7 @@ def [[ entity_name.lower() ]]_create(request):
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]].")
                 return redirect('[[ entity_name.lower() ]]_list')
 
-            except ValidationError as e:
+            except ValueError as e:
                 # Handling domain-specific errors
                 form.add_error(None, str(e))
         else:
@@ -91,9 +90,8 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
     # Initialize the form with the entity data
     form = [[ entity_name.capitalize() ]]EditForm(initial={
         'id': [[ entity_name.lower() ]]['id'],
-        'title': [[ entity_name.lower() ]]['title'],
-        'content': [[ entity_name.lower() ]]['content'],
-        'public': [[ entity_name.lower() ]]['public'],
+        'name': [[ entity_name.lower() ]]['name'],
+        'email': [[ entity_name.lower() ]]['email']
     })
 
     # Render the template with the initialized form
@@ -124,12 +122,12 @@ def [[ entity_name.lower() ]]_save(request, id=None):
                 # Display a success message to the user
                 messages.success(request, f"Successfully updated [[ entity_name.lower() ]].")
 
+                # Redirect to the list of [[ entity_name.lower() ]]s
+                return redirect('[[ entity_name.lower() ]]_list')                
+
             except ValueError as e:
                 # Handle errors related to business rules or validations
                 messages.error(request, f"Error saving [[ entity_name.lower() ]]: {str(e)}")
-
-            # Redirect to the list of [[ entity_name.lower() ]]s
-            return redirect('[[ entity_name.lower() ]]_list')
 
         else:
             messages.error(request, "There were errors in the form. Please correct them.")            
@@ -174,7 +172,7 @@ def [[ entity_name.lower() ]]_edit_save(request, id=None):
                 messages.success(request, f"Successfully updated [[ entity_name.lower() ]].")
                 return redirect('[[ entity_name.lower() ]]_list')
 
-            except ValidationError as e:
+            except ValueError as e:
                 form.add_error(None, str(e))
         else:
             messages.error(request, "There were errors in the form. Please correct them.")
@@ -184,9 +182,8 @@ def [[ entity_name.lower() ]]_edit_save(request, id=None):
         # Initialize the form with existing data
         form = [[ entity_name.capitalize() ]EditForm(initial={
             'id': [[ entity_name.lower() ]]['id'],            
-            'title': [[ entity_name.lower() ]]['title'],
-            'content': [[ entity_name.lower() ]]['content'],
-            'public': [[ entity_name.lower() ]]['public']
+            'name': [[ entity_name.lower() ]]['name'],
+            'email': [[ entity_name.lower() ]]['email']
         })
 
     # Render the template with the form
@@ -211,9 +208,8 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
 
     # Render details with a read-only form
     form = [[ entity_name.capitalize() ]]ViewForm(initial={
-        'title': [[ entity_name.lower() ]]['title'],
-        'content': [[ entity_name.lower() ]]['content'],
-        'public': [[ entity_name.lower() ]]['public']
+        'name': [[ entity_name.lower() ]]['name'],
+        'email': [[ entity_name.lower() ]]['email']
     })
 
     return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_detail.html', {'form': form})

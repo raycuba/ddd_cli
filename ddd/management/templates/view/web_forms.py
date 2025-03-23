@@ -1,60 +1,132 @@
 from django import forms
 from django.core import validators
+from django.core.validators import (
+    MinLengthValidator,
+    MaxLengthValidator,
+    RegexValidator,
+    EmailValidator,
+    MinValueValidator,
+    MaxValueValidator,
+)
+
 
 class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     """
     Base Form
     """
 
-    # Title
-    title = forms.CharField(
-        label='Title',
-        max_length=40,
+    # Campo de texto (Nombre)
+    name = forms.CharField(
+        label="Name",
+        max_length=100,
         required=True,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Title',
-            'class': 'title_form_[[ entity_name.lower() ]]'
+            'class': 'form-control',
+            'placeholder': 'Enter your full name',
+            'minlength': '3',  # HTML5 validación
+            'maxlength': '100',  # HTML5 validación
         }),
         validators=[
-            validators.MinLengthValidator(4, 'The title is too short'),
-            validators.MaxLengthValidator(30, 'The title is too long'),
-            validators.RegexValidator(
-                '^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$',
-                'The title format is incorrect',
-                'invalid_title'
-            )
+            MinLengthValidator(3, "The name must be at least 3 characters."),
+            MaxLengthValidator(100, "The name must not exceed 100 characters."),
+            RegexValidator(r'^[A-Za-z\s]*$', "The name can only contain letters and spaces."),
         ]
     )
 
-    # Content
-    content = forms.CharField(
-        label='Content',
-        widget=forms.Textarea,
+    # Campo de correo electrónico
+    email = forms.EmailField(
+        label="Email",
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your email',
+        }),
         validators=[
-            validators.MinLengthValidator(4, 'The content is too short'),
-            validators.MaxLengthValidator(30, 'The content is too long'),
-            validators.RegexValidator(
-                '^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$',
-                'The content format is incorrect',
-                'invalid_content'
-            )
+            EmailValidator("Please enter a valid email address."),
         ]
     )
-    content.widget.attrs.update({
-        'placeholder': 'Content',
-        'class': 'content_form_[[ entity_name.lower() ]]',
-        'id': 'content_form'
-    })
 
-    # Published
-    public_options = [
-        (True, 'Yes'),
-        (False, 'No')
-    ]
-    public = forms.TypedChoiceField(
-        label='Published?',
-        choices=public_options
+    # Campo de contraseña
+    password = forms.CharField(
+        label="Password",
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Create a password',
+            'minlength': '8',
+        }),
+        validators=[
+            MinLengthValidator(8, "Password must be at least 8 characters long."),
+        ]
     )
+
+    # Campo numérico
+    age = forms.IntegerField(
+        label="Age",
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'min': '18',  # HTML5 validación
+            'max': '100',  # HTML5 validación
+            'placeholder': 'Enter your age',
+        }),
+        validators=[
+            MinValueValidator(18, "You must be at least 18 years old."),
+            MaxValueValidator(100, "The age must not exceed 100."),
+        ]
+    )
+
+    # Campo de fecha
+    birth_date = forms.DateField(
+        label="Birth Date",
+        required=True,
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',  # HTML5 tipo fecha
+        })
+    )
+
+    # Selección desplegable
+    country = forms.ChoiceField(
+        label="Country",
+        required=True,
+        choices=[
+            ('', 'Select your country'),
+            ('us', 'United States'),
+            ('es', 'Spain'),
+            ('mx', 'Mexico'),
+        ],
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        })
+    )
+
+    # Opciones de radio
+    gender = forms.ChoiceField(
+        label="Gender",
+        required=True,
+        choices=[
+            ('male', 'Male'),
+            ('female', 'Female'),
+            ('other', 'Other'),
+        ],
+        widget=forms.RadioSelect(attrs={
+            'class': 'form-check-input',
+        })
+    )
+
+    # Casillas de verificación
+    accept_terms = forms.BooleanField(
+        label="I accept the terms and conditions",
+        required=True,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        }),
+        error_messages={
+            'required': "You must accept the terms and conditions to proceed.",
+        }
+    )
+
 
 
 class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]BaseForm):
@@ -75,8 +147,8 @@ class [[ entity_name.capitalize() ]]EditForm([[ entity_name.capitalize() ]]BaseF
         widget=forms.HiddenInput()
     )
 
-    #impedimos que el title sea editable pero permitimos que se muestre siempre
-    title.widget.attrs.update({
+    #impedimos que el email sea editable pero permitimos que se muestre siempre
+    email.widget.attrs.update({
         'readonly': 'True'
     })
 
