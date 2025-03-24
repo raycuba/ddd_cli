@@ -15,7 +15,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     Base Form
     """
 
-    # Campo de texto (Nombre)
+    # Campo de texto y numeros (Nombre)
     name = forms.CharField(
         label="Name",
         max_length=100,
@@ -25,13 +25,33 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             'placeholder': 'Enter your full name',
             'minlength': '3',  # HTML5 validación
             'maxlength': '100',  # HTML5 validación
+            'pattern': '^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$',  # Expresión regular en el navegador
+            'title': 'The name must only contain letters, numbers, and spaces.'  # Mensaje de ayuda                          
         }),
         validators=[
             MinLengthValidator(3, "The name must be at least 3 characters."),
             MaxLengthValidator(100, "The name must not exceed 100 characters."),
-            RegexValidator(r'^[A-Za-z\s]*$', "The name can only contain letters and spaces."),
+            RegexValidator(r'^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$', 'The name must only contain letters, numbers, and spaces.'),
         ]
     )
+
+    # Campo de texto (Category)
+    category = forms.CharField(
+        label='Category',
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'minlength': '4',  # Mínima longitud en el navegador
+            'maxlength': '250',  # Máxima longitud en el navegador      
+            'pattern': '^[A-Za-z\s]*$',  # Expresión regular en el navegador           
+            'title': 'The name can only contain letters and spaces.'
+        }),
+        validators=[
+            MinLengthValidator(4, "The name must be at least 4 characters."),
+            MaxLengthValidator(250, "The name must not exceed 250 characters."),
+            RegexValidator(r'^[A-Za-z\s]*$', "The name can only contain letters and spaces."),
+        ]          
+    ) 
 
     # Campo de correo electrónico
     email = forms.EmailField(
@@ -97,8 +117,8 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             ('mx', 'Mexico'),
         ],
         widget=forms.Select(attrs={
-            'class': 'form-control',
-        })
+            'class': 'form-control form-select',
+        })  
     )
 
     # Opciones de radio
@@ -133,7 +153,10 @@ class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]Bas
     """
     Form to create a new instance of [[ entity_name.lower() ]]. Sin modificaciones adicionales.
     """
-    pass
+    #Permitimos que el email sea editable
+    [[ entity_name.capitalize() ]]BaseForm.base_fields['email'].widget.attrs.update({
+        'readonly': False,
+    })
 
 
 class [[ entity_name.capitalize() ]]EditForm([[ entity_name.capitalize() ]]BaseForm):
@@ -147,10 +170,13 @@ class [[ entity_name.capitalize() ]]EditForm([[ entity_name.capitalize() ]]BaseF
         widget=forms.HiddenInput()
     )
 
-    #impedimos que el email sea editable pero permitimos que se muestre siempre
-    email.widget.attrs.update({
-        'readonly': 'True'
-    })
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)     
+
+        #impedimos que el email sea editable 
+        self.email.widget.attrs.update({
+            'readonly': 'True'
+        })
 
 
 class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseForm):
