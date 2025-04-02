@@ -24,8 +24,13 @@ def [[ entity_name.lower() ]]_list(request):
     """
 
     # Get data from the repository
-    repository = [[ entity_name.capitalize() ]]Repository()
-    [[ entity_name.lower() ]]List = list_[[ entity_name.lower() ]](repository=repository)
+    try:
+        repository = [[ entity_name.capitalize() ]]Repository()
+        [[ entity_name.lower() ]]List = list_[[ entity_name.lower() ]](repository=repository)
+
+    except ValueError as e:
+        # Handling domain-specific errors
+        messages.error(request,  str(e))
 
     #  Render the view with the data
     return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_list.html', {
@@ -82,9 +87,9 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
         # Obtain service data
         [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
-    except ValueError:
-        # Handle case where the entity does not exist
-        messages.error(request, f"The [[ entity_name.lower() ]] with ID {id} does not exist.")
+    except ValueError as e:
+        # Handling domain-specific errors
+        messages.error(request,  str(e))
         return redirect('[[ entity_name.lower() ]]_list')
 
     # Initialize the form with the entity data
@@ -148,9 +153,9 @@ def [[ entity_name.lower() ]]_edit_save(request, id=None):
         # Obtain service data
         [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
-    except ValueError:
-        # Handle case where the entity does not exist
-        messages.error(request, f"The [[ entity_name.lower() ]] with ID {id} does not exist.")
+    except ValueError as e:
+        # Handling domain-specific errors
+        messages.error(request,  str(e))
         return redirect('[[ entity_name.lower() ]]_list')
 
     if request.method == "POST":
@@ -202,8 +207,9 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
         # Get entity data from the service
         [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
-    except ValueError:
-        messages.error(request, f"The [[ entity_name.lower() ]] with ID {id} does not exist.")
+    except ValueError as e:
+        # Handling domain-specific errors
+        messages.error(request,  str(e))
         return redirect('[[ entity_name.lower() ]]_list')
 
     # Render details with a read-only form
@@ -228,8 +234,9 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
         delete_[[ entity_name.lower() ]](repository=repository, entity_id=id)
         messages.success(request, f"Successfully deleted [[ entity_name.lower() ]].")
         
-    except ValueError:
-        messages.error(request, f"The [[ entity_name.lower() ]] with ID {id} does not exist.")
+    except ValueError as e:
+        # Handling domain-specific errors
+        messages.error(request,  str(e))
 
     return redirect('[[ entity_name.lower() ]]_list')
 
