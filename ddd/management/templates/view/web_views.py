@@ -23,6 +23,8 @@ def [[ entity_name.lower() ]]_list(request):
     Generic view to display a list of all [[ entity_name.lower() ]] instances.
     """
 
+    [[ entity_name.lower() ]]List = [] #inicialize list
+
     # Get data from the repository
     try:
         repository = [[ entity_name.capitalize() ]]Repository()
