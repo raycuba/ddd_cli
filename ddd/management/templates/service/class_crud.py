@@ -12,6 +12,7 @@ class [[ entity_name.capitalize() ]]Service:
     #Si necesitas mantener un estado de lista de entidades
     [[ entity_name.capitalize() ]]_list = []    
 
+
     def __init__(self, repository):
         """
         Inicializa el servicio con el repositorio correspondiente.
@@ -19,6 +20,7 @@ class [[ entity_name.capitalize() ]]Service:
         :param repository: Repositorio que maneja la persistencia de [[ entity_name.lower() ]].
         """
         self.repository = repository    
+
 
     def list_[[ entity_name.lower() ]](self, filters: Optional[dict] = None) -> List[dict]:
         """
@@ -33,6 +35,7 @@ class [[ entity_name.capitalize() ]]Service:
 
         return [entity.to_dict() for entity in entity_list]      
 
+
     def create_[[ entity_name.lower() ]](self, data) -> dict:
         """
         Crea una nueva instancia de [[ entity_name.lower() ]].
@@ -45,13 +48,15 @@ class [[ entity_name.capitalize() ]]Service:
         if repository.exists_by_field("email", data['email']):
             raise ValueError("An instance with this email already exists.")
 
-        #validacion mediante entity
-        entity = [[ entity_name.capitalize() ]]Entity(**data)            
+        #crear y validar la entidad
+        entity = [[ entity_name.capitalize() ]]Entity.from_dict(data)
+        entity.validate()       
 
-        # Creación en el repositorio
-        entity = self.repository.create(data=[[ entity_name.capitalize() ]]Entity.to_dict())
+        # Guardar en el repositorio
+        saved_entity = self.repository.create(entity)
 
-        return entity.to_dict()
+        return saved_entity.to_dict()
+
 
     def retrieve_[[ entity_name.lower() ]](self, entity_id: int) -> dict:
         """
@@ -67,6 +72,7 @@ class [[ entity_name.capitalize() ]]Service:
 
         return entity.to_dict()
 
+
     def update_[[ entity_name.lower() ]](self, entity_id: int, data) -> dict:
         """
         Actualiza una instancia existente de [[ entity_name.lower() ]].
@@ -81,20 +87,22 @@ class [[ entity_name.capitalize() ]]Service:
         if not entity:
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}.")
 
-        #actualizar la instancia para comprobar validaciones
-        entity.update(data)                     
+        # actualizar la instancia y validar
+        entity.update(data)     
+        entity.validate()   
 
-        # Actualización en el repositorio
-        updated_entity = self.repository.update(entity_id, data)
+        # Guardar en el repositorio
+        updated_entity = self.repository.save(entity)
         
         return updated_entity.to_dict()
+
 
     def delete_[[ entity_name.lower() ]](self, entity_id: int) -> bool:
         """
         Elimina una instancia de [[ entity_name.lower() ]].
 
         :param entity_id: ID de la instancia a eliminar.
-        :return: Ninguno.
+        :return: True/False (depende del exito de la operacion)
         :raises ValueError: Si no se encuentra la instancia.
         """
         # Recuperar la entidad

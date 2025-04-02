@@ -1,6 +1,7 @@
 from typing import List, Optional
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.forms import ValidationError
 
 # importa las entidades utilizadas aqui
 from ..models import [[ entity_name.capitalize() ]]
@@ -34,13 +35,14 @@ class [[ entity_name.capitalize() ]]Repository:
         # Convertir a entidades usando el Mapper genérico
         return [Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity) for instance in instance_list]        
 
+
     @staticmethod
     def get_by_id(id) -> [[ entity_name.capitalize() ]]Entity:
         """
         Obtiene un registro por su ID.
         
         :param id: ID del registro a recuperar.
-        :return: El registro encontrado o None si no existe.
+        :return: El entidad encontrada o None si no existe.
         """
 
         try:
@@ -49,6 +51,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
         except [[ entity_name.capitalize() ]].DoesNotExist:
             return None
+
 
     @staticmethod
     def exists_by_field(field_name, value) -> bool:
@@ -61,6 +64,7 @@ class [[ entity_name.capitalize() ]]Repository:
         """
 
         return [[ entity_name.capitalize() ]].objects.filter(**{field_name: value}).exists()
+
 
     @staticmethod
     def count_all(filters: Optional[dict] = None) -> int:
@@ -80,15 +84,18 @@ class [[ entity_name.capitalize() ]]Repository:
 
         return instance_list.count()            
 
+
     @staticmethod
-    def create(data) -> [[ entity_name.capitalize() ]]Entity:
+    def create(entity: [[ entity_name.capitalize() ]]Entity) -> [[ entity_name.capitalize() ]]Entity:
         """
         Crea un nuevo registro.
 
-        :param data: Diccionario con los datos necesarios para crear el registro.
-        :return: La instancia creada.
+        :param entity: Entidad con los datos necesarios para crear el registro.
+        :return: La entidad creada.
         :raises ValueError: Si los datos no son válidos.
         """
+        #convertir a dict
+        data = entity.to_dict()        
 
         # Eliminar las claves 'id' y 'uuid' si existen en el diccionario
         data.pop('id', None)
@@ -97,50 +104,50 @@ class [[ entity_name.capitalize() ]]Repository:
         # Crear el registro
         instance = [[ entity_name.capitalize() ]](**data)
 
-        # Validar antes de guardar
+        # Validar y guardar
         try:
             instance.full_clean()  # Validaciones del modelo
             instance.save()
+
         except ValueError as e:
-            raise ValueError(f"Validation Error: {e.message_dict}")
+            raise ValueError(f"An error occurred while processing the value: {e}")
         
         return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
 
-    @staticmethod
-    def update(id, data) -> [[ entity_name.capitalize() ]]Entity:
-        """
-        Actualiza un registro existente.
 
-        :param id: ID del registro a actualizar.
-        :param data: Diccionario con los datos a actualizar.
-        :return: La instancia actualizada.
+    @staticmethod
+    def save(entity: [[ entity_name.capitalize() ]]Entity) -> [[ entity_name.capitalize() ]]Entity:
+        """
+        Guarda los cambios en una entidad existente.
+
+        :param entity: Entidad con los datos a actualizar (debe traer el id en los campos).
+        :return: La entidad guardada.
         :raises ObjectDoesNotExist: Si no existe el registro con el ID dado.
         :raises ValueError: Si los datos no son válidos.
         """
 
-        # Eliminar las claves 'id' y 'uuid' si existen en el diccionario
-        data.pop('id', None)
-        data.pop('uuid', None)
-
         try:
-            instance = [[ entity_name.capitalize() ]].objects.get(id=id)
+            # Recuperar el modelo existente basado en el ID de la entidad
+            instance = [[ entity_name.capitalize() ]].objects.get(id=entity.id)
 
-            # Actualizar cada campo proporcionado en 'data'
-            for key, value in data.items():
+            # Actualizar cada campo de la entidad en el modelo
+            for key, value in entity.to_dict().items():
                 if hasattr(instance, key):
                     setattr(instance, key, value)
 
-            # Validar la instancia antes de guardar
-            instance.full_clean()  # Esto ejecuta las validaciones del modelo
-            instance.save()  # Guarda los cambios en la base de datos
+            # Validar y guardar
+            instance.full_clean()  # Validaciones del modelo Django
+            instance.save()
             
+            # Convertir el modelo actualizado de vuelta a una entidad
             return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
 
         except [[ entity_name.capitalize() ]].DoesNotExist:
             raise ObjectDoesNotExist(f"No [[ entity_name.lower() ]] found with ID {id}")
 
-        except ValueError as e:
-            raise ValueError(f"Validation Error: {e.message_dict}")
+        except ValidationError as e:
+            raise ValueError(f"Validation error occurred: {e.message_dict}")
+
 
     @staticmethod
     def delete(id) -> bool:

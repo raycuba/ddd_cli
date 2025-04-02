@@ -13,8 +13,11 @@ class [[ entity_name.capitalize() ]]Entity:
     name: str  # Nombre obligatorio
     email: str  # Email obligatorio
 
-    def __post_init__(self):
-        self.validate()   
+    password: Optional[str] = None #Password para resetear solamente
+
+    # Descomentar si se quiere hacer una validacion estricta
+    #def __post_init__(self):
+    #    self.validate()   
 
     def validate(self) -> None:
         """
