@@ -72,75 +72,10 @@ def [[ entity_name.lower() ]]_create(request):
         form = [[ entity_name.capitalize() ]]CreateForm()
 
     # Render the template with the form
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_create.html', {'form': form})
+    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_create.html', {'form': form}) 
 
 
-def [[ entity_name.lower() ]]_edit(request, id=None): 
-    """
-    Generic view to edit an existing [[ entity_name.lower() ]] instance.
-    """
-    if id is None:
-        # Redirect if ID is not present
-        return redirect('[[ entity_name.lower() ]]_list')
-
-    repository = [[ entity_name.capitalize() ]]Repository()
-
-    try:
-        # Obtain service data
-        [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
-
-    except ValueError as e:
-        # Handling domain-specific errors
-        messages.error(request,  str(e))
-        return redirect('[[ entity_name.lower() ]]_list')
-
-    # Initialize the form with the entity data
-    form = [[ entity_name.capitalize() ]]EditForm(initial={
-        'id': [[ entity_name.lower() ]]['id'],
-        'name': [[ entity_name.lower() ]]['name'],
-        'email': [[ entity_name.lower() ]]['email']
-    })
-
-    # Render the template with the initialized form
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_edit.html', {'form': form})
-
-    
-def [[ entity_name.lower() ]]_save(request, id=None):
-    """
-    Generic view to save changes to an existing [[ entity_name.lower() ]] instance.
-    """
-
-    if request.method == "POST":
-
-        repository = [[ entity_name.capitalize() ]]Repository()    
-
-        # Validate form data
-        form = [[ entity_name.capitalize() ]]EditForm(request.POST)
-        if form.is_valid():
-            form_data = form.cleaned_data    
-
-            try:
-                # remove readonly parameters from data
-                form_data.pop('id', None)
-
-                # Call the update service
-                update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data)
-
-                # Display a success message to the user
-                messages.success(request, f"Successfully updated [[ entity_name.lower() ]].")
-
-                # Redirect to the list of [[ entity_name.lower() ]]s
-                return redirect('[[ entity_name.lower() ]]_list')                
-
-            except ValueError as e:
-                # Handle errors related to business rules or validations
-                messages.error(request, f"Error saving [[ entity_name.lower() ]]: {str(e)}")
-
-        else:
-            messages.error(request, "There were errors in the form. Please correct them.")            
-
-
-def [[ entity_name.lower() ]]_edit_save(request, id=None):
+def [[ entity_name.lower() ]]_edit(request, id=None):
     """
     Generic view to edit an existing [[ entity_name.lower() ]] instance using a service.
     """
@@ -175,12 +110,15 @@ def [[ entity_name.lower() ]]_edit_save(request, id=None):
                 # Call the update service
                 update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data)
 
-                # Display success message and redirect
+                # Display success message
                 messages.success(request, f"Successfully updated [[ entity_name.lower() ]].")
+
+                # Redirect to the list of [[ entity_name.lower() ]]s
                 return redirect('[[ entity_name.lower() ]]_list')
 
             except ValueError as e:
                 form.add_error(None, str(e))
+
         else:
             messages.error(request, "There were errors in the form. Please correct them.")
 
@@ -194,7 +132,7 @@ def [[ entity_name.lower() ]]_edit_save(request, id=None):
         })
 
     # Render the template with the form
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_edit_save.html', {'form': form})
+    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_edit.html', {'form': form})
 
 
 def [[ entity_name.lower() ]]_detail(request, id=None):
@@ -228,6 +166,7 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
     Generic view to delete an existing [[ entity_name.lower() ]] instance using a service.
     """
     if id is None:
+        messages.error(request, "Non Valid id to delete")
         return redirect('[[ entity_name.lower() ]]_list')
 
     repository = [[ entity_name.capitalize() ]]Repository()

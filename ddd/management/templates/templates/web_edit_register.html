@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-Django form
+Django form edit
 {% endblock %}
 
 {% block content %}
-    <h1 class="title">Edit Form in Django</h1>
+    <h1 class="title">Edit/Save Form in Django</h1>
 
     <!--Codigo de Mensajes de error-->
     {% if messages %}
@@ -39,7 +39,7 @@ Django form
     {% endif %}
 
     <!--Codigo de Formulario-->
-    <form action="{% url '[[ entity_name.lower() ]]_save'  id=form.id.value  %}" method="POST">
+    <form action="" method="POST">
         {% csrf_token %}
 
         {{ form.as_p }}
@@ -48,7 +48,7 @@ Django form
     </form>
 
     {% comment %}  
-    <form action="{% url '[[ entity_name.lower() ]]_save'  id=form.id.value  %}" method="POST">
+    <form action="" method="POST">
         {% csrf_token %}
         {{ form.non_field_errors }}
         
@@ -67,5 +67,5 @@ Django form
         <input type="submit" value="Save" />
     </form>         
     {% endcomment %}
-
-{% endblock %} 
+    
+{% endblock %}

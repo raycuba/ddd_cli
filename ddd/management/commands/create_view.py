@@ -44,7 +44,6 @@ class CreateViewCommand:
         web_list_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_list' + '.html')
         web_create_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_create' + '.html')
         web_edit_register_path = os.path.join(views_templates_dir, entity_name.lower() +'_web_edit' + '.html')
-        web_edit_save_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_edit_save' + '.html')
         web_detail_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_detail' + '.html')        
         
         #si ya existe el archivo web_create_register mostrar error
@@ -55,11 +54,6 @@ class CreateViewCommand:
         #si ya existe el archivo web_edit_register mostrar error
         if os.path.exists(web_edit_register_path):
             print(Fore.RED + f"The file '{web_edit_register_path}' already exists." + Style.RESET_ALL)
-            return
-
-        #si ya existe el archivo web_edit_save_register mostrar error
-        if os.path.exists(web_edit_save_register_path):
-            print(Fore.RED + f"The file '{web_edit_save_register_path}' already exists." + Style.RESET_ALL)
             return
 
         #si ya existe el archivo web_list_register mostrar error
@@ -102,9 +96,6 @@ class CreateViewCommand:
 
         readWriteTemplate(templateName='templates', fileName='web_edit_register.html',  render_params={'entity_name':entity_name}, repository_path=web_edit_register_path, failIfError=True)
         print(f"Template web_edit of Entity '{entity_name}' created at {web_edit_register_path}")
-
-        readWriteTemplate(templateName='templates', fileName='web_edit_save_register.html',  render_params={'entity_name':entity_name}, repository_path=web_edit_save_register_path, failIfError=True)
-        print(f"Template web_edit_save of Entity '{entity_name}' created at {web_edit_save_register_path}")
 
         readWriteTemplate(templateName='templates', fileName='web_detail_register.html',  render_params={'entity_name':entity_name}, repository_path=web_detail_register_path, failIfError=True)
         print(f"Template web_detail of Entity '{entity_name}' created at {web_detail_register_path}")
