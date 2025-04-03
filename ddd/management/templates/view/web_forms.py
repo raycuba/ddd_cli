@@ -147,6 +147,34 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
         }
     )
 
+    def clean_name(self):
+        '''
+        Esta validacion es solo para el campo 'name'
+        '''    
+        name = self.cleaned_data.get('name')
+        if len(name) < 3:
+            raise forms.ValidationError("The name must be at least 3 characters long.")
+        return name    
+
+    def clean_email(self):
+        '''
+        Esta validacion es solo para el campo 'email'
+        '''
+        email = self.cleaned_data.get('email')
+        if email.endswith('@example.com'):
+            raise forms.ValidationError("Emails from example.com are not allowed.")
+        return email
+
+    def clean(self):
+        '''
+        Aqui podemos hacer validaciones que involucren a varios campos
+        '''
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password_confirm = cleaned_data.get('password_confirm')
+
+        if password != password_confirm:
+            raise forms.ValidationError("Passwords do not match.")
 
 
 class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]BaseForm):
@@ -189,3 +217,67 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
         # Hacer todos los campos no editables
         for field in self.fields.values():
             field.widget.attrs['disabled'] = True
+
+
+
+
+
+
+
+
+            
+'''
+Flujo de Validación en Django Forms
+
+Cuando se llama al método is_valid() de un formulario, Django realiza las siguientes acciones de manera secuencial:
+
+1. Limpiar los datos de entrada crudos
+    Antes de cualquier validación, Django toma los datos enviados ( o  en formularios de tipo GET) y los procesa en el objeto . 
+    Esto incluye convertir los valores en tipos de datos que Django pueda interpretar.
+
+2. Validación de los campos individuales
+    Django valida cada campo del formulario según las reglas especificadas en el formulario o en el modelo asociado. 
+    Este proceso incluye:
+    
+    Validadores básicos del campo:
+    - Validación de tipo: Por ejemplo, un campo 'forms.integerField' asegura que el valor sea un entero.
+    - Validación de valores requeridos: Si el campo tiene 'required=True' y no se proporciona ningún valor, se genera un error.
+    - Validación de longitud: En campos como 'CharField', 'max_length' y 'min_length' son comprobados.
+    - Validación de opciones: En campos como 'Choice_Field', el valor debe ser una de las opciones definidas
+
+    Validadores específicos: Los validadores personalizados definidos en el propio campo o como funciones adicionales se ejecutan
+
+3. Métodos 'clean_<nombr_campo>'
+    Django busca métodos personalizados para los campos del formulario, siguiendo la convención 'clean_<nombr_campo>'. 
+    Si existen, estos métodos se ejecutan después de las validaciones básicas del campo.
+
+    Ejemplo:
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not email.endswith("@example.com"):
+            raise forms.ValidationError("Only example.com emails are allowed.")
+        return email
+
+    Los errores generados por estos métodos se almacenan en el atributo 'form.field_name.errors'.
+
+4. Métodos 'clean()' generales
+    Una vez que todos los campos han sido validados individualmente, Django llama al método 'clean()'  general del formulario. 
+    Este método es útil para validar dependencias entre múltiples campos.
+    Por ejemplo:
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password_confirm = cleaned_data.get('password_confirm')
+
+        if password != password_confirm:
+            raise forms.ValidationError("Passwords do not match.")
+
+    Los errores de este método se almacenan en 'form.errors' como errores globales, no asociados a un campo específico.
+
+5. Almacenar los datos validados
+    Si no hay errores, los valores procesados y validados se almacenan en el atributo 'form.cleaned_data', 
+    que es un diccionario con los datos del formulario que pasaron la validación.
+
+'''
