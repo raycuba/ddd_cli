@@ -32,7 +32,6 @@ ddd/management/templates/templates/test.html
 ddd/management/templates/templates/web_create_register.html
 ddd/management/templates/templates/web_detail_register.html
 ddd/management/templates/templates/web_edit_register.html
-ddd/management/templates/templates/web_edit_save_register.html
 ddd/management/templates/templates/web_list_register.html
 ddd/management/templates/utils/get_value.py
 ddd/management/templates/view/web_forms.py

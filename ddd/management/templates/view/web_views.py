@@ -125,7 +125,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
     # request.method == "GET":
     else:  
         # Initialize the form with existing data
-        form = [[ entity_name.capitalize() ]EditForm(initial={
+        form = [[ entity_name.capitalize() ]]EditForm(initial={
             'id': [[ entity_name.lower() ]]['id'],            
             'name': [[ entity_name.lower() ]]['name'],
             'email': [[ entity_name.lower() ]]['email']
