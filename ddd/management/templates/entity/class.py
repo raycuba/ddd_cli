@@ -13,8 +13,6 @@ class [[ entity_name.capitalize() ]]Entity:
     name: str  # Nombre obligatorio
     email: str  # Email obligatorio
 
-    password: Optional[str] = None #Password para resetear solamente
-
     # Descomentar si se quiere hacer una validacion estricta
     #def __post_init__(self):
     #    self.validate()   
@@ -31,16 +29,17 @@ class [[ entity_name.capitalize() ]]Entity:
         if self.description and len(self.description) > 500:
             raise ValueError("La descripción no puede superar los 500 caracteres.")
 
-    def update(self, data:dict) -> None:
+    def update(self, data:dict, addMode:bool = False) -> None:
         """
         Actualiza los atributos de la entidad con valores nuevos.
+        si addMode = True permite añadir campos nuevos
         """
         # Actualizar cada campo proporcionado en 'data'
         for key, value in data.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
+            if hasattr(self, key) or addMode:
+                setattr(self, key, value)             
 
-        self.validate()
+        self.validate()    
 
     def to_dict(self) -> dict:
         """
@@ -53,6 +52,10 @@ class [[ entity_name.capitalize() ]]Entity:
         """
         Crea una instancia de la entidad a partir de un diccionario.
         """
+
+        # aqui quitaremos de 'data' los campos no deseados para la entity
+
+        #retornar la entity
         return [[ entity_name.capitalize() ]]Entity(**data)
         
 
