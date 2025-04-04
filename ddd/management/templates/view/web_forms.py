@@ -25,7 +25,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             'placeholder': 'Enter your full name',
             'minlength': '3',  # HTML5 validación
             'maxlength': '100',  # HTML5 validación
-            'pattern': '^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$',  # Expresión regular en el navegador
+            'pattern': r'^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$',  # Expresión regular en el navegador
             'title': 'The name must only contain letters, numbers, and spaces.'  # Mensaje de ayuda                          
         }),
         validators=[
@@ -43,7 +43,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             'class': 'form-control',
             'minlength': '4',  # Mínima longitud en el navegador
             'maxlength': '250',  # Máxima longitud en el navegador      
-            'pattern': '^[A-Za-z\s]*$',  # Expresión regular en el navegador           
+            'pattern': r'^[A-Za-z\s]*$',  # Expresión regular en el navegador           
             'title': 'The name can only contain letters and spaces.'
         }),
         validators=[
