@@ -16,6 +16,7 @@ class CreateEntityCommand:
         """Crea una nueva entidad"""
         entities_dir = os.path.join(app_path, 'domain') if not split else os.path.join(app_path, 'domain', 'entities')
         entities_path = os.path.join(entities_dir, 'entities.py') if not split else os.path.join(entities_dir, entity_name.lower() + '_entity.py')
+        exceptions_path = os.path.join(entities_dir, 'exceptions.py') if not split else os.path.join(entities_dir, entity_name.lower() + '_exceptions.py')
 
         # Crear directorios si no existen
         try:
@@ -37,7 +38,6 @@ class CreateEntityCommand:
         if not os.path.exists(entities_path):
             #renderizar imports
             rendered_content_imports = renderTemplate(templateName = 'entity', fileName='imports.py', render_params={'entity_name':entity_name})
-
             # Escribir imports en el archivo
             with open(entities_path, 'w') as f:
                 f.write(rendered_content_imports + '\n')
@@ -45,8 +45,14 @@ class CreateEntityCommand:
 
         #renderizar class
         rendered_content_class = renderTemplate(templateName = 'entity', fileName='class.py', render_params={'entity_name':entity_name})
-
         # Escribir class en el archivo
         with open(entities_path, 'a') as f:
             f.write('\n' + rendered_content_class + '\n')
         print(f"Class of Entity '{entity_name}' created at {entities_path}")            
+
+        #renderizar exceptions
+        rendered_content_exceptions = renderTemplate(templateName = 'entity', fileName='exceptions.py', render_params={'entity_name':entity_name})
+        # Escribir exceptions en el archivo
+        with open(exceptions_path, 'w') as f:
+            f.write(rendered_content_exceptions + '\n')
+        print(f"Exceptions of Entity '{entity_name}' created at {exceptions_path}")

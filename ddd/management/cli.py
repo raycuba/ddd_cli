@@ -3,6 +3,7 @@ from ddd.management.commands.create_entity import CreateEntityCommand
 from ddd.management.commands.create_service import CreateServiceCommand
 from ddd.management.commands.create_repository import CreateRepositoryCommand
 from ddd.management.commands.create_dto import CreateDTOCommand
+from ddd.management.commands.create_serializer import CreateSerializerCommand
 from ddd.management.commands.create_view_api_apiview import CreateViewApiApiViewCommand
 from ddd.management.commands.create_view_api_viewset import CreateViewApiViewSetCommand
 from ddd.management.commands.create_view import CreateViewCommand
@@ -18,8 +19,9 @@ class CLI:
         CreateServiceCommand(self.subparsers)
         CreateRepositoryCommand(self.subparsers)
         CreateDTOCommand(self.subparsers)
-        # CreateViewApiApiViewCommand(self.subparsers)
-        # CreateViewApiViewSetCommand(self.subparsers)
+        CreateSerializerCommand(self.subparsers)
+        CreateViewApiApiViewCommand(self.subparsers)
+        CreateViewApiViewSetCommand(self.subparsers)
         CreateViewCommand(self.subparsers)
 
     def run(self):

@@ -16,7 +16,7 @@ class CreateDTOCommand:
         
     def create_dto(self, app_path, dto_name, split=False, **kwargs):
         """Crea un nuevo DTO"""
-        dtos_dir = os.path.join(app_path, 'domain') if not split else os.path.join(app_path, 'domain', 'dtos')
+        dtos_dir = app_path if not split else os.path.join(app_path, 'dtos')
         dtos_path = os.path.join(dtos_dir, 'dtos.py') if not split else os.path.join(dtos_dir, dto_name.lower() + '_dto.py')
 
         # Crear directorios si no existen

@@ -9,6 +9,7 @@ ddd/management/commands/__init__.py
 ddd/management/commands/create_dto.py
 ddd/management/commands/create_entity.py
 ddd/management/commands/create_repository.py
+ddd/management/commands/create_serializer.py
 ddd/management/commands/create_service.py
 ddd/management/commands/create_view.py
 ddd/management/commands/create_view_api_apiview.py
@@ -19,10 +20,15 @@ ddd/management/templates/api/viewset_views.py
 ddd/management/templates/dto/class.py
 ddd/management/templates/dto/imports.py
 ddd/management/templates/entity/class.py
+ddd/management/templates/entity/exceptions.py
 ddd/management/templates/entity/imports.py
 ddd/management/templates/repository/class.py
 ddd/management/templates/repository/mappers.py
+ddd/management/templates/routers/api_apiview_urls.py
+ddd/management/templates/routers/api_viewset_urls.py
 ddd/management/templates/routers/web_urls.py
+ddd/management/templates/serializer/class.py
+ddd/management/templates/serializer/imports.py
 ddd/management/templates/service/class_crud.py
 ddd/management/templates/service/function_crud.py
 ddd/management/templates/service/imports.py

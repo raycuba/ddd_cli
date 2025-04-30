@@ -7,6 +7,8 @@ from django.forms import ValidationError
 from ..models import [[ entity_name.capitalize() ]]
 from .mappers import Mapper
 from ..domain.entities import [[ entity_name.capitalize() ]]Entity
+from ..domain.exceptions import EntityNotFoundError
+
 
 class [[ entity_name.capitalize() ]]Repository:
     """
@@ -50,6 +52,7 @@ class [[ entity_name.capitalize() ]]Repository:
             return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
 
         except [[ entity_name.capitalize() ]].DoesNotExist:
+            raise EntityNotFoundError(f"No [[ entity_name.lower() ]] found with ID {id}")
             return None
 
 
@@ -122,7 +125,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
         :param entity: Entidad con los datos a actualizar (debe traer el id en los campos).
         :return: La entidad guardada.
-        :raises ObjectDoesNotExist: Si no existe el registro con el ID dado.
+        :raises EntityNotFoundError: Si no existe el registro con el ID dado.
         :raises ValueError: Si los datos no son válidos.
         """
 
@@ -143,7 +146,7 @@ class [[ entity_name.capitalize() ]]Repository:
             return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
 
         except [[ entity_name.capitalize() ]].DoesNotExist:
-            raise ObjectDoesNotExist(f"No [[ entity_name.lower() ]] found with ID {id}")
+            raise EntityNotFoundError(f"No [[ entity_name.lower() ]] found with ID {id}")
 
         except ValidationError as e:
             raise ValueError(f"Validation error occurred: {e.message_dict}")
@@ -155,7 +158,7 @@ class [[ entity_name.capitalize() ]]Repository:
         Elimina un registro por su ID.
 
         :param id: ID del registro a eliminar.
-        :raises ObjectDoesNotExist: Si no existe el registro con el ID dado.
+        :raises EntityNotFoundError: Si no existe el registro con el ID dado.
         """
 
         try:
@@ -164,6 +167,6 @@ class [[ entity_name.capitalize() ]]Repository:
             return True
 
         except [[ entity_name.capitalize() ]].DoesNotExist:
-            raise ObjectDoesNotExist(f"No [[ entity_name.lower() ]] found with ID {id}")
+            raise EntityNotFoundError(f"No [[ entity_name.lower() ]] found with ID {id}")
 
 

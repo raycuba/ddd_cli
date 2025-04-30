@@ -1,13 +1,18 @@
 
 from .utils import *
 from colorama import Fore, Style
+import os
+from .create_serializer import CreateSerializerCommand
 
 class CreateViewApiViewSetCommand:
     def __init__(self, subparsers):
         parser = subparsers.add_parser('create-view-api-viewset', help='Create a view for api based on ViewSet')
         parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument('entity_name', type=str, help='The name of the entity')  
-        parser.set_defaults(func=self.execute)                  
+        parser.set_defaults(func=self.execute)    
+
+        # guardar el subparser para usarlo en el comando
+        self.subparsers = subparsers                      
 
     def execute(self, args):
         self.create_view_api_viewset(args.app_path, args.entity_name)
@@ -15,6 +20,7 @@ class CreateViewApiViewSetCommand:
     def create_view_api_viewset(self, app_path, entity_name, **kwargs):
         """Crea una view para api basada en ApiViewSet"""
         views_dir = app_path
+        urls_path = os.path.join(views_dir, entity_name.lower() + '_urls.py')        
         views_path = os.path.join(views_dir, entity_name.lower() + '_views.py')
 
         # Crear directorios si no existen
@@ -35,9 +41,16 @@ class CreateViewApiViewSetCommand:
         #convertir app_path (ej: apps/ap1) a app_name (ej: apps.app1)
         app_name = app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
 
+        #renderizar urls
+        readWriteTemplate(templateName='routers', fileName='api_viewset_urls.py',  render_params={'entity_name':entity_name}, repository_path=urls_path, failIfError=True)
+        print(f"ViewSet Urls of Entity '{entity_name}' created at {urls_path}")     
+
+        # Crear serializer
+        serializer_command = CreateSerializerCommand(subparsers=self.subparsers)
+        serializer_command.create_serializer(app_path, entity_name)                   
+
         #renderizar view
         rendered_content_class = renderTemplate(templateName = 'api', fileName='viewset_views.py', render_params={'app_name':app_name, 'entity_name':entity_name})
-
         # Escribir class en el archivo
         with open(views_path, 'w') as f:
             f.write('\n' + rendered_content_class + '\n')

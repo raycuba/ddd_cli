@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
 
+# Import domain-specific exceptions
+from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
+
 # Import entity-specific forms
 from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]CreateForm, [[ entity_name.capitalize() ]]EditForm, [[ entity_name.capitalize() ]]ViewForm
 
@@ -90,6 +93,11 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
         # Obtain service data
         [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
+    except EntityNotFoundError as e:
+        # Handling domain-specific errors
+        messages.error(request,  str(e))
+        return redirect('[[ entity_name.lower() ]]_list')
+
     except ValueError as e:
         # Handling domain-specific errors
         messages.error(request,  str(e))
@@ -115,6 +123,9 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
 
                 # Redirect to the list of [[ entity_name.lower() ]]s
                 return redirect('[[ entity_name.lower() ]]_list')
+
+            except EntityNotFoundError as e:
+                form.add_error(None, str(e))
 
             except ValueError as e:
                 form.add_error(None, str(e))
@@ -147,6 +158,11 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
         # Get entity data from the service
         [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
+    except EntityNotFoundError as e:
+        # Handling domain-specific errors
+        messages.error(request,  str(e))
+        return redirect('[[ entity_name.lower() ]]_list')
+
     except ValueError as e:
         # Handling domain-specific errors
         messages.error(request,  str(e))
@@ -174,6 +190,10 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
         # Call the disposal service
         delete_[[ entity_name.lower() ]](repository=repository, entity_id=id)
         messages.success(request, f"Successfully deleted [[ entity_name.lower() ]].")
+
+    except EntityNotFoundError as e:
+        # Handling domain-specific errors
+        messages.error(request,  str(e))
         
     except ValueError as e:
         # Handling domain-specific errors

@@ -1,16 +1,26 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from rest_framework.permissions import IsAuthenticated
 
-# Importar servicios del dominio que contienen la lógica de negocio
+# import the serializer
+from serializers import [[ entity_name.capitalize() ]]Serializer
+
+# Import domain-specific exceptions
+from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
+
+# Import domain-specific services
 from [[ app_name.lower() ]].domain.services import (
+    list_[[ entity_name.lower() ]],
     create_[[ entity_name.lower() ]],
     retrieve_[[ entity_name.lower() ]],
     update_[[ entity_name.lower() ]],
-    delete_[[ entity_name.lower() ]]
+    delete_[[ entity_name.lower() ]],
 )
 
-# Importar el repositorio que maneja la interacción con la infraestructura
+# Import infrastructure-specific repositories
 from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
 
 class [[ entity_name.capitalize() ]]APIView(APIView):
@@ -22,6 +32,23 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
     - Repositorios que interactúan con la capa de persistencia.
     """
 
+    # Definición de permisos y autenticación
+    # permission_classes = [IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
+
+    # Definición de métodos HTTP permitidos
+    # http_method_names = ['get', 'post', 'put', 'delete']
+
+    @swagger_auto_schema(
+        operation_summary="Retrieve a list or a specific [[ entity_name.lower() ]]",
+        operation_description="Retrieve a list of all [[ entity_name.lower() ]] or a specific one by ID.",
+        responses={
+            200: [[ entity_name.capitalize() ]]Serializer,
+            404: "Not Found",
+            400: "Bad Request"
+        },
+        tags=["[[ entity_name.lower() ]]"]
+    )
     def get(self, request, id=None):
         """
         Maneja solicitudes GET para recuperar uno o todos los registros.
@@ -29,34 +56,61 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         - Si se proporciona `id`, recupera un registro específico.
         - Si no se proporciona `id`, recupera todos los registros.
         """
+
         if id:
             # Recuperar un registro específico por ID
             try:
-                # Instanciar el repositorio para acceder a los datos
                 repository = [[ entity_name.capitalize() ]]Repository()
+                [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
-                # Llamar al servicio de recuperación para una entidad específica
-                result = retrieve_[[ entity_name.lower() ]](repository=repository, id=id)
+                # Serializar el registro recuperado
+                response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
+                response_serializer.is_valid(raise_exception=True)
 
                 # Retornar la respuesta con un estado HTTP 200 OK
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(response_serializer.data, status=status.HTTP_200_OK)
+
+
+            except EntityNotFoundError as e:
+                # Manejar errores si el registro no existe
+                return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)                          
+
             except ValueError as e:
                 # Manejar errores si no se encuentra el registro
                 return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+
         else:
             # Recuperar todos los registros
             try:
                 repository = [[ entity_name.capitalize() ]]Repository()
+                [[ entity_name.lower() ]]List = list_[[ entity_name.lower() ]](repository=repository)
 
-                # Llamar al servicio para listar todas las entidades
-                result = retrieve_[[ entity_name.lower() ]](repository=repository)
+                # Serializar la lista de registros
+                response_serializer_list = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]]List, many=True)
+                response_serializer_list.is_valid(raise_exception=True)
 
                 # Retornar la respuesta con un estado HTTP 200 OK
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(response_serializer_list.data, status=status.HTTP_200_OK)
+
+            except EntityNotFoundError as e:
+                # Manejar errores si el registro no existe
+                return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)                            
+
             except ValueError as e:
                 # Manejar errores si no se encuentran registros
                 return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
+
+    @swagger_auto_schema(
+        operation_summary="Create a new [[ entity_name.lower() ]]",
+        operation_description="Create a new [[ entity_name.lower() ]] with the provided data.",
+        request_body=[[ entity_name.capitalize() ]]Serializer,
+        responses={
+            201: [[ entity_name.capitalize() ]]Serializer,
+            400: "Bad Request"
+        },
+        tags=["[[ entity_name.lower() ]]"]
+    )
     def post(self, request):
         """
         Maneja solicitudes POST para crear un nuevo registro.
@@ -64,21 +118,41 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         - Valida los datos entrantes.
         - Llama al servicio de creación para manejar la lógica de negocio.
         """
-        data = request.data  # Datos enviados en el cuerpo de la solicitud
+        
+        # Datos enviados en el cuerpo de la solicitud
+        serializer = [[ entity_name.capitalize() ]]Serializer(data=request.data) 
+        if not serializer.is_valid():
+            # Si la validación falla, retornar un error 400 BAD REQUEST
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Instanciar el repositorio
-            repository = [[ entity_name.capitalize() ]]Repository()
-
             # Llamar al servicio de creación con los datos proporcionados
-            result = create_[[ entity_name.lower() ]](repository=repository, **data)
+            repository = [[ entity_name.capitalize() ]]Repository()
+            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, data=serializer.validated_data)
+
+            # Serializar el nuevo registro creado
+            response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
+            response_serializer.is_valid(raise_exception=True)
 
             # Retornar la respuesta con un estado HTTP 201 CREATED
-            return Response(result, status=status.HTTP_201_CREATED)
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+
         except ValueError as e:
             # Manejar errores relacionados con las reglas de negocio
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+
+    @swagger_auto_schema(
+        operation_summary="Update an existing [[ entity_name.lower() ]]",
+        operation_description="Update an existing [[ entity_name.lower() ]] with the provided ID and data.",
+        request_body=[[ entity_name.capitalize() ]]Serializer,
+        responses={
+            200: [[ entity_name.capitalize() ]]Serializer,
+            400: "Bad Request",
+            404: "Not Found"
+        },
+        tags=["[[ entity_name.lower() ]]"]
+    )
     def put(self, request, id):
         """
         Maneja solicitudes PUT para actualizar un registro existente.
@@ -86,21 +160,44 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         - Valida los datos entrantes.
         - Llama al servicio de actualización para manejar la lógica de negocio.
         """
-        data = request.data  # Datos enviados en el cuerpo de la solicitud
+
+        # Datos enviados en el cuerpo de la solicitud
+        serializer = [[ entity_name.capitalize() ]]Serializer(data=request.data) 
+        if not serializer.is_valid():
+            # Si la validación falla, retornar un error 400 BAD REQUEST
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Instanciar el repositorio
-            repository = [[ entity_name.capitalize() ]]Repository()
-
             # Llamar al servicio de actualización con el ID y los nuevos datos
-            result = update_[[ entity_name.lower() ]](repository=repository, id=id, **data)
+            repository = [[ entity_name.capitalize() ]]Repository()
+            [[ entity_name.lower() ]] = update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=serializer.validated_data)
+
+            # Serializar el registro actualizado
+            response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
+            response_serializer.is_valid(raise_exception=True)
 
             # Retornar la respuesta con un estado HTTP 200 OK
-            return Response(result, status=status.HTTP_200_OK)
+            return Response(response_serializer.data, status=status.HTTP_200_OK)
+
+        except EntityNotFoundError as e:
+            # Manejar errores si el registro no existe
+            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+
         except ValueError as e:
             # Manejar errores relacionados con las reglas de negocio
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+
+    @swagger_auto_schema(
+        operation_summary="Delete an existing [[ entity_name.lower() ]]",
+        operation_description="Delete an existing [[ entity_name.lower() ]] with the provided ID.",
+        responses={
+            204: "No Content",
+            400: "Bad Request",
+            404: "Not Found"
+        },
+        tags=["[[ entity_name.lower() ]]"]
+    )
     def delete(self, request, id):
         """
         Maneja solicitudes DELETE para eliminar un registro existente.
@@ -113,10 +210,15 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
             repository = [[ entity_name.capitalize() ]]Repository()
 
             # Llamar al servicio de eliminación con el ID proporcionado
-            result = delete_[[ entity_name.lower() ]](repository=repository, id=id)
+            [[ entity_name.lower() ]] = delete_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
             # Retornar una respuesta sin contenido con estado HTTP 204 NO CONTENT
-            return Response(result, status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        except EntityNotFoundError as e:
+            # Manejar errores si el registro no existe
+            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+
         except ValueError as e:
             # Manejar errores relacionados con las reglas de negocio o ID inexistente
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
