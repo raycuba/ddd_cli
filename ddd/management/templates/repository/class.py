@@ -136,7 +136,10 @@ class [[ entity_name.capitalize() ]]Repository:
             # Actualizar cada campo de la entidad en el modelo
             for key, value in entity.to_dict().items():
                 if hasattr(instance, key):
-                    setattr(instance, key, value)
+                    if key != 'id' and key != 'uuid': # No actualizar campos especiales
+                        # Los campos especiales son aquellos que nunca cambian como: id, uuid, created_at, updated_at, etc.
+                        # o aquellos que tienen una forma especial de ser guardados como: photo, password, etc.
+                        setattr(instance, key, value)
 
             # Validar y guardar
             instance.full_clean()  # Validaciones del modelo Django
