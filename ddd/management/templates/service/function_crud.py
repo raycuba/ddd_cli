@@ -1,5 +1,5 @@
 
-def list_[[ entity_name.lower() ]](repository, filters: Optional[dict] = None) -> List[dict]:
+def list_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, filters: Optional[dict] = None) -> List[dict]:
     """
     Lista instancias de [[ entity_name.lower() ]].
 
@@ -13,7 +13,7 @@ def list_[[ entity_name.lower() ]](repository, filters: Optional[dict] = None) -
     return [entity.to_dict() for entity in entity_list]  
 
 
-def create_[[ entity_name.lower() ]](repository, data) -> dict:
+def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, data) -> dict:
     """
     Crea una nueva instancia de [[ entity_name.lower() ]].
 
@@ -36,7 +36,7 @@ def create_[[ entity_name.lower() ]](repository, data) -> dict:
     return saved_entity.to_dict()
 
 
-def retrieve_[[ entity_name.lower() ]](repository, entity_id: int) -> dict:
+def retrieve_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, entity_id: int) -> dict:
     """
     Recupera una instancia de [[ entity_name.lower() ]] por su ID.
 
@@ -52,7 +52,7 @@ def retrieve_[[ entity_name.lower() ]](repository, entity_id: int) -> dict:
     return entity.to_dict()
 
 
-def update_[[ entity_name.lower() ]](repository, entity_id: int, data) -> dict:
+def update_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, entity_id: int, data) -> dict:
     """
     Actualiza una instancia existente de [[ entity_name.lower() ]].
 
@@ -77,7 +77,7 @@ def update_[[ entity_name.lower() ]](repository, entity_id: int, data) -> dict:
     return updated_entity.to_dict()
 
 
-def delete_[[ entity_name.lower() ]](repository, entity_id: int) -> bool:
+def delete_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, entity_id: int) -> bool:
     """
     Elimina una instancia de [[ entity_name.lower() ]].
 
