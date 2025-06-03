@@ -187,11 +187,11 @@ class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]Bas
     })
 
 
-class [[ entity_name.capitalize() ]]EditForm([[ entity_name.capitalize() ]]BaseForm):
+class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]BaseForm):
     """
-    Form to edit an instance of [[ entity_name.lower() ]]. 
+    Form to edit by Get an instance of [[ entity_name.lower() ]]. 
     """
-    #Agregamos un campo adicional para 'id' Oculto para el POST
+    #Agregamos un campo adicional para 'id' Oculto para el Formulario
     id = forms.IntegerField(
         label='ID',
         required=False,
@@ -205,6 +205,20 @@ class [[ entity_name.capitalize() ]]EditForm([[ entity_name.capitalize() ]]BaseF
         self.email.widget.attrs.update({
             'readonly': 'True'
         })
+
+
+class [[ entity_name.capitalize() ]]EditPostForm([[ entity_name.capitalize() ]]BaseForm):
+    """
+    Form to edit by Post an instance of [[ entity_name.lower() ]]. 
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)     
+
+        # Eliminamos los campos que no se deben guardar de la forma tradicional
+        for field in ['password', 'photo']:
+            if field in self.fields:
+                del self.fields[field]      
 
 
 class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseForm):

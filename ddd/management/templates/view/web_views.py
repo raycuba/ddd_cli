@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
 
 # Import entity-specific forms
-from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]CreateForm, [[ entity_name.capitalize() ]]EditForm, [[ entity_name.capitalize() ]]ViewForm
+from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]CreateForm, [[ entity_name.capitalize() ]]EditGetForm, [[ entity_name.capitalize() ]]EditPostForm, [[ entity_name.capitalize() ]]ViewForm
 
 # Import domain-specific services
 from [[ app_name.lower() ]].domain.services import (
@@ -106,14 +106,16 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
     if request.method == "POST":
 
         # Validate form data
-        form = [[ entity_name.capitalize() ]]EditForm(request.POST)
+        form = [[ entity_name.capitalize() ]]EditPostForm(request.POST)
 
         if form.is_valid():
             form_data = form.cleaned_data
 
             try:
-                # remove readonly parameters from data
-                form_data.pop('id', None)
+                # obtenemos del request los campos especiales del formulario
+                # ejemplo: password = request.POST.get('password', None)
+                # ejemplo: photo = request.FILES.get('photo', None)
+                # y los enviamos como parametros al servicio de actualizacion
 
                 # Call the update service
                 update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data)
@@ -136,7 +138,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
     # request.method == "GET":
     else:  
         # Initialize the form with existing data
-        form = [[ entity_name.capitalize() ]]EditForm(initial={
+        form = [[ entity_name.capitalize() ]]EditGetForm(initial={
             'id': [[ entity_name.lower() ]]['id'],            
             'name': [[ entity_name.lower() ]]['name'],
             'email': [[ entity_name.lower() ]]['email']
