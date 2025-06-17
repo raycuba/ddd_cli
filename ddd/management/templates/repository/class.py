@@ -89,7 +89,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def create(entity: [[ entity_name.capitalize() ]]Entity) -> [[ entity_name.capitalize() ]]Entity:
+    def create(entity: [[ entity_name.capitalize() ]]Entity, otherEntity_id: Optional[int]) -> [[ entity_name.capitalize() ]]Entity:
         """
         Crea un nuevo registro.
 
@@ -103,6 +103,11 @@ class [[ entity_name.capitalize() ]]Repository:
         # Eliminar las claves 'id' y 'uuid' si existen en el diccionario
         data.pop('id', None)
         data.pop('uuid', None)        
+
+        # Si se proporciona un ID de otra entidad, agregarlo al diccionario
+        # django crea el campo 'otherEntity_id' automáticamente si la relación es ForeignKey => otherEntity
+        if otherEntity_id is not None:
+            data['otherEntity_id'] = otherEntity_id
 
         # Crear el registro
         instance = [[ entity_name.capitalize() ]](**data)
