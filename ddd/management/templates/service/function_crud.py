@@ -13,7 +13,7 @@ def list_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Rep
     return [entity.to_dict() for entity in entity_list]  
 
 
-def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, data) -> dict:
+def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, otherEntity_id: Optional[int], data) -> dict:
     """
     Crea una nueva instancia de [[ entity_name.lower() ]].
 
@@ -31,7 +31,7 @@ def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     entity.validate()
 
     # Guardar en el repositorio
-    saved_entity = repository.create(entity)
+    saved_entity = repository.create(otherEntity_id, entity)
 
     return saved_entity.to_dict()
 

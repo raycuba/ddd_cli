@@ -57,9 +57,12 @@ def [[ entity_name.lower() ]]_create(request):
             form_data = form.cleaned_data
             repository = [[ entity_name.capitalize() ]]Repository()
 
+            # Get the ID of the related entity if it exists
+            otherEntity_id = request.POST.get('otherEntity_id', None)
+
             try:
                 # Call the creation service
-                create_[[ entity_name.lower() ]](repository=repository, data=form_data)
+                create_[[ entity_name.lower() ]](repository=repository, otherEntity_id=otherEntity_id, data=form_data)
 
                 # Display success message and redirect
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]].")

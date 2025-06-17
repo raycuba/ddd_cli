@@ -136,10 +136,13 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Si la validación falla, retornar un error 400 BAD REQUEST
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        # Obtener el ID de la entidad relacionada si existe
+        otherEntity_id = request.data.get('otherEntity_id', None)
+
         try:
             # Llamar al servicio para crear el registro
             repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, data=serializer.validated_data)
+            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, otherEntity_id=otherEntity_id,data=serializer.validated_data)
 
             # Serializar el nuevo registro creado
             response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
