@@ -38,7 +38,7 @@ def [[ entity_name.lower() ]]_list(request):
         messages.error(request,  str(e))
 
     # Renderizar la plantilla con la lista
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_list.html', {
+    return render(request, '[[ app_path.lower() ]]/[[ entity_name.lower() ]]_web_list.html', {
         '[[ entity_name.lower() ]]List': [[ entity_name.lower() ]]List
     })
 
@@ -66,7 +66,7 @@ def [[ entity_name.lower() ]]_create(request):
 
                 # Mostrar mensaje de éxito y redirigir
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]].")
-                return redirect('[[ app_name.lower() ]]:[[ entity_name.lower() ]]_list')
+                return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
             except ValueError as e:
                 # Manejar errores específicos del dominio
@@ -78,7 +78,7 @@ def [[ entity_name.lower() ]]_create(request):
         form = [[ entity_name.capitalize() ]]CreateForm()
 
     # Renderizar la plantilla con el formulario
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_create.html', {'form': form}) 
+    return render(request, '[[ app_path.lower() ]]/[[ entity_name.lower() ]]_web_create.html', {'form': form}) 
 
 
 def [[ entity_name.lower() ]]_edit(request, id=None):
@@ -88,7 +88,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
 
     if id is None:
         # Redireccion si no se proporciona un ID
-        return redirect('[[ app_name.lower() ]]:[[ entity_name.lower() ]]_list')
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
     repository = [[ entity_name.capitalize() ]]Repository()
 
@@ -99,12 +99,12 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
     except EntityNotFoundError as e:
         # Manejar errores específicos del dominio
         messages.error(request,  str(e))
-        return redirect('[[ app_name.lower() ]]:[[ entity_name.lower() ]]_list')
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
     except ValueError as e:
         # Manejar errores específicos del dominio
         messages.error(request,  str(e))
-        return redirect('[[ app_name.lower() ]]:[[ entity_name.lower() ]]_list')
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
     if request.method == "POST":
 
@@ -127,7 +127,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
                 messages.success(request, f"Successfully updated [[ entity_name.lower() ]].")
 
                 # Redireccionar a la lista de [[ entity_name.lower() ]]s
-                return redirect('[[ app_name.lower() ]]:[[ entity_name.lower() ]]_list')
+                return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
             except EntityNotFoundError as e:
                 form.add_error(None, str(e))
@@ -148,7 +148,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
         })
 
     # Renderizar la plantilla con el formulario
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_edit.html', {'form': form})
+    return render(request, '[[ app_path.lower() ]]/[[ entity_name.lower() ]]_web_edit.html', {'form': form})
 
 
 def [[ entity_name.lower() ]]_detail(request, id=None):
@@ -156,7 +156,7 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
     Vista genérica para mostrar los detalles de una instancia específica de [[ entity_name.lower() ]].
     """
     if id is None:
-        return redirect('[[ app_name.lower() ]]:[[ entity_name.lower() ]]_list')
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
     repository = [[ entity_name.capitalize() ]]Repository()
     try:
@@ -166,12 +166,12 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
     except EntityNotFoundError as e:
         # Manejar errores específicos del dominio
         messages.error(request,  str(e))
-        return redirect('[[ app_name.lower() ]]:[[ entity_name.lower() ]]_list')
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
     except ValueError as e:
         # Manejar errores específicos del dominio
         messages.error(request,  str(e))
-        return redirect('[[ app_name.lower() ]]:[[ entity_name.lower() ]]_list')
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
     # Renderizar la plantilla con el formulario de vista
     form = [[ entity_name.capitalize() ]]ViewForm(initial={
@@ -179,7 +179,7 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
         'email': [[ entity_name.lower() ]]['email']
     })
 
-    return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_detail.html', {'form': form})
+    return render(request, '[[ app_path.lower() ]]/[[ entity_name.lower() ]]_web_detail.html', {'form': form})
 
 
 def [[ entity_name.lower() ]]_delete(request, id=None):
@@ -188,7 +188,7 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
     """
     if id is None:
         messages.error(request, "Non Valid id to delete")
-        return redirect('[[ app_name.lower() ]]:[[ entity_name.lower() ]]_list')
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
     repository = [[ entity_name.capitalize() ]]Repository()
     try:
@@ -204,5 +204,5 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
         # Manejar errores específicos del dominio
         messages.error(request,  str(e))
 
-    return redirect('[[ app_name.lower() ]]:[[ entity_name.lower() ]]_list')
+    return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 

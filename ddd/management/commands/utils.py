@@ -83,3 +83,21 @@ def readWriteTemplate(templateName: str, fileName:str, render_params: dict, repo
     except Exception as e:
         if failIfError:
             raise Exception(e.args)
+        
+def decodeAppPath(app_path: str) -> tuple:
+    """
+    Convierte una ruta de aplicación (ej: apps/app1) a:
+    1. nombre de aplicación (ej: apps.app1)
+    2. ultimo nombre de la aplicación (ej: app1)
+    3. ruta de la aplicación (ej: apps:app1)
+    """
+    # Convertir app_path a app_name
+    app_name = app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
+    
+    # Obtener el último nombre de la aplicación
+    last_app_name = app_name.split('.')[-1]
+
+    # Convertir app_path a ruta de aplicación
+    app_route = app_name.replace('.', ':')
+
+    return app_name, last_app_name, app_route

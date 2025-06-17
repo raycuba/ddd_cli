@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import [[ entity_name.lower() ]]_views
 
-app_name = "[[ app_name.lower() ]]"
+app_name = "[[ last_app_name.lower() ]]"
 
 urlpatterns = [
     

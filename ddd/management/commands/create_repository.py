@@ -17,7 +17,7 @@ class CreateRepositoryCommand:
             repository_path = os.path.join(repository_dir, entity_name.lower() + '_repository.py')
             mappers_path = os.path.join(repository_dir, 'mappers.py')
 
-            app_name = app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
+            app_name, last_app_name, app_route = decodeAppPath(app_path)
 
             # Crear directorios si no existen
             try:

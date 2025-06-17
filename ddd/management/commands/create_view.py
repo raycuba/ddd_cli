@@ -14,7 +14,7 @@ class CreateViewCommand:
     def create_view(self, app_path, entity_name, **kwargs):
         """Crea una view para web"""
         views_dir = app_path
-        views_templates_dir = os.path.join(views_dir, 'templates')
+        views_templates_dir = os.path.join(views_dir, 'templates', app_path)
 
         urls_path = os.path.join(views_dir, entity_name.lower() + '_urls.py')
         views_path = os.path.join(views_dir, entity_name.lower() + '_views.py')
@@ -67,10 +67,10 @@ class CreateViewCommand:
             return                                      
         
         #convertir app_path (ej: apps/ap1) a app_name (ej: apps.app1)
-        app_name = app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
+        app_name, last_app_name, app_route = decodeAppPath(app_path)
 
         #renderizar views
-        rendered_content_class = renderTemplate(templateName = 'view', fileName='web_views.py', render_params={'app_name':app_name, 'entity_name':entity_name})
+        rendered_content_class = renderTemplate(templateName = 'view', fileName='web_views.py', render_params={'app_path': app_path, 'app_name':app_name, 'last_app_name':last_app_name, 'app_route':app_route, 'entity_name':entity_name})
         # Escribir views en el archivo
         with open(views_path, 'w') as f:
             f.write('\n' + rendered_content_class + '\n')
@@ -84,7 +84,7 @@ class CreateViewCommand:
         print(f"Class Form of Entity '{entity_name}' created at {forms_path}")
 
         #renderizar urls
-        readWriteTemplate(templateName='routers', fileName='web_urls.py',  render_params={'app_name':app_name, 'entity_name':entity_name}, repository_path=urls_path, failIfError=True)
+        readWriteTemplate(templateName='routers', fileName='web_urls.py',  render_params={'last_app_name':last_app_name, 'entity_name':entity_name}, repository_path=urls_path, failIfError=True)
         print(f"Urls of Entity '{entity_name}' created at {urls_path}")
 
         #renderizar templates

@@ -38,7 +38,7 @@ class CreateViewApiApiViewCommand:
             return
         
         #convertir app_path (ej: apps/ap1) a app_name (ej: apps.app1)
-        app_name = app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
+        app_name, last_app_name, app_route = decodeAppPath(app_path)
 
         #renderizar urls
         readWriteTemplate(templateName='routers', fileName='api_apiview_urls.py',  render_params={'entity_name':entity_name}, repository_path=urls_path, failIfError=True)
