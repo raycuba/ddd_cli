@@ -12,7 +12,7 @@ from django.core.validators import (
 
 class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     """
-    Base Form
+    Formulario base para la entidad [[ entity_name.lower() ]].
     """
 
     # Campo de texto y numeros (Nombre)
@@ -179,7 +179,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
 
 class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]BaseForm):
     """
-    Form to create a new instance of [[ entity_name.lower() ]]. Sin modificaciones adicionales.
+    Formulario para crear una nueva instancia de [[ entity_name.lower() ]]. Sin modificaciones adicionales.
     """
     #Permitimos que el email sea editable
     [[ entity_name.capitalize() ]]BaseForm.base_fields['email'].widget.attrs.update({
@@ -189,7 +189,7 @@ class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]Bas
 
 class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]BaseForm):
     """
-    Form to edit by Get an instance of [[ entity_name.lower() ]]. 
+    Formulario para editar mediante GET una instancia de [[ entity_name.lower() ]]. 
     """
     #Agregamos un campo adicional para 'id' Oculto para el Formulario
     id = forms.IntegerField(
@@ -209,7 +209,7 @@ class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]Ba
 
 class [[ entity_name.capitalize() ]]EditPostForm([[ entity_name.capitalize() ]]BaseForm):
     """
-    Form to edit by Post an instance of [[ entity_name.lower() ]]. 
+    Formulario para editar mediante POST una instancia de [[ entity_name.lower() ]]. 
     """
 
     def __init__(self, *args, **kwargs):
@@ -223,7 +223,7 @@ class [[ entity_name.capitalize() ]]EditPostForm([[ entity_name.capitalize() ]]B
 
 class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseForm):
     """
-    Readonly form to view an instance of [[ entity_name.lower() ]]
+    Formulario de solo lectura para Visualizar una instancia de [[ entity_name.lower() ]]
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

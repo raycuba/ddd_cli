@@ -13,7 +13,7 @@ class [[ entity_name.capitalize() ]]Entity:
     name: str  # Nombre obligatorio
     email: str  # Email obligatorio
 
-    otherEntity_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
+    parent_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
 
     # Descomentar si se quiere hacer una validacion estricta
     #def __post_init__(self):

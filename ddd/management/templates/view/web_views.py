@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
 
-# Import domain-specific exceptions
+# Importar excepciones específicas de dominio
 from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
 
-# Import entity-specific forms
+# Importar formularios específicos de la entidad
 from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]CreateForm, [[ entity_name.capitalize() ]]EditGetForm, [[ entity_name.capitalize() ]]EditPostForm, [[ entity_name.capitalize() ]]ViewForm
 
-# Import domain-specific services
+# Importar servicios específicos del dominio
 from [[ app_name.lower() ]].domain.services import (
     list_[[ entity_name.lower() ]],
     create_[[ entity_name.lower() ]],
@@ -17,27 +17,27 @@ from [[ app_name.lower() ]].domain.services import (
     delete_[[ entity_name.lower() ]],
 )
 
-# Import infrastructure-specific repositories
+# Importar repositorios específicos de la infraestructura
 from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
 
 
 def [[ entity_name.lower() ]]_list(request):
     """
-    Generic view to display a list of all [[ entity_name.lower() ]] instances.
+    Vista genérica para mostrar una lista de todas las instancias de [[ entity_name.lower() ]].
     """
 
     [[ entity_name.lower() ]]List = [] #inicialize list
 
-    # Get data from the repository
+    # Obtener la lista del repositorio
     try:
         repository = [[ entity_name.capitalize() ]]Repository()
         [[ entity_name.lower() ]]List = list_[[ entity_name.lower() ]](repository=repository)
 
     except ValueError as e:
-        # Handling domain-specific errors
+        # Manejo de errores específicos del dominio
         messages.error(request,  str(e))
 
-    #  Render the view with the data
+    # Renderizar la plantilla con la lista
     return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_list.html', {
         '[[ entity_name.lower() ]]List': [[ entity_name.lower() ]]List
     })
@@ -45,70 +45,70 @@ def [[ entity_name.lower() ]]_list(request):
 
 def [[ entity_name.lower() ]]_create(request):
     """
-    Generic view to create a new [[ entity_name.lower() ]] instance using a service.
+    Vista genérica para crear una nueva instancia de [[ entity_name.lower() ]] utilizando un servicio.
     """
 
     if request.method == "POST":
 
-        # Validate form data
+        # Validar los datos del formulario
         form = [[ entity_name.capitalize() ]]CreateForm(request.POST)
 
         if form.is_valid():
             form_data = form.cleaned_data
             repository = [[ entity_name.capitalize() ]]Repository()
 
-            # Get the ID of the related entity if it exists
-            otherEntity_id = request.POST.get('otherEntity_id', None)
+            # Obtener el ID de la entidad relacionada si existe
+            parent_id = request.POST.get('parent_id', None)
 
             try:
-                # Call the creation service
-                create_[[ entity_name.lower() ]](repository=repository, otherEntity_id=otherEntity_id, data=form_data)
+                # LLamar al servicio de creación
+                create_[[ entity_name.lower() ]](repository=repository, parent_id=parent_id, data=form_data)
 
-                # Display success message and redirect
+                # Mostrar mensaje de éxito y redirigir
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]].")
                 return redirect('[[ entity_name.lower() ]]_list')
 
             except ValueError as e:
-                # Handling domain-specific errors
+                # Manejar errores específicos del dominio
                 form.add_error(None, str(e))
         else:
             messages.error(request, "There were errors in the form. Please correct them.")
     else:
-        # Empty form for GET requests
+        # Formulario vacío para solicitudes GET
         form = [[ entity_name.capitalize() ]]CreateForm()
 
-    # Render the template with the form
+    # Renderizar la plantilla con el formulario
     return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_create.html', {'form': form}) 
 
 
 def [[ entity_name.lower() ]]_edit(request, id=None):
     """
-    Generic view to edit an existing [[ entity_name.lower() ]] instance using a service.
+    Vista genérica para editar una instancia existente de [[ entity_name.lower() ]] utilizando un servicio.
     """
 
     if id is None:
-        # Redirect if ID is not present
+        # Redireccion si no se proporciona un ID
         return redirect('[[ entity_name.lower() ]]_list')
 
     repository = [[ entity_name.capitalize() ]]Repository()
 
     try:
-        # Obtain service data
+        # Obtener los datos de la entidad desde el servicio
         [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
     except EntityNotFoundError as e:
-        # Handling domain-specific errors
+        # Manejar errores específicos del dominio
         messages.error(request,  str(e))
         return redirect('[[ entity_name.lower() ]]_list')
 
     except ValueError as e:
-        # Handling domain-specific errors
+        # Manejar errores específicos del dominio
         messages.error(request,  str(e))
         return redirect('[[ entity_name.lower() ]]_list')
 
     if request.method == "POST":
 
-        # Validate form data
+        # Validar los datos del formulario
         form = [[ entity_name.capitalize() ]]EditPostForm(request.POST)
 
         if form.is_valid():
@@ -120,13 +120,13 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
                 # ejemplo: photo = request.FILES.get('photo', None)
                 # y los enviamos como parametros al servicio de actualizacion
 
-                # Call the update service
+                # LLamar al servicio de actualización
                 update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data)
 
-                # Display success message
+                # Mostrar mensaje de éxito
                 messages.success(request, f"Successfully updated [[ entity_name.lower() ]].")
 
-                # Redirect to the list of [[ entity_name.lower() ]]s
+                # Redireccionar a la lista de [[ entity_name.lower() ]]s
                 return redirect('[[ entity_name.lower() ]]_list')
 
             except EntityNotFoundError as e:
@@ -147,33 +147,33 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
             'email': [[ entity_name.lower() ]]['email']
         })
 
-    # Render the template with the form
+    # Renderizar la plantilla con el formulario
     return render(request, '[[ app_name.lower() ]]/[[ entity_name.lower() ]]_web_edit.html', {'form': form})
 
 
 def [[ entity_name.lower() ]]_detail(request, id=None):
     """
-    Generic view to display details of a specific [[ entity_name.lower() ]] instance.
+    Vista genérica para mostrar los detalles de una instancia específica de [[ entity_name.lower() ]].
     """
     if id is None:
         return redirect('[[ entity_name.lower() ]]_list')
 
     repository = [[ entity_name.capitalize() ]]Repository()
     try:
-        # Get entity data from the service
+        # Obtener los datos de la entidad desde el servicio
         [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
     except EntityNotFoundError as e:
-        # Handling domain-specific errors
+        # Manejar errores específicos del dominio
         messages.error(request,  str(e))
         return redirect('[[ entity_name.lower() ]]_list')
 
     except ValueError as e:
-        # Handling domain-specific errors
+        # Manejar errores específicos del dominio
         messages.error(request,  str(e))
         return redirect('[[ entity_name.lower() ]]_list')
 
-    # Render details with a read-only form
+    # Renderizar la plantilla con el formulario de vista
     form = [[ entity_name.capitalize() ]]ViewForm(initial={
         'name': [[ entity_name.lower() ]]['name'],
         'email': [[ entity_name.lower() ]]['email']
@@ -184,7 +184,7 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
 
 def [[ entity_name.lower() ]]_delete(request, id=None):
     """
-    Generic view to delete an existing [[ entity_name.lower() ]] instance using a service.
+    Vista genérica para eliminar una instancia existente de [[ entity_name.lower() ]] utilizando un servicio.
     """
     if id is None:
         messages.error(request, "Non Valid id to delete")
@@ -192,16 +192,16 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
 
     repository = [[ entity_name.capitalize() ]]Repository()
     try:
-        # Call the disposal service
+        # LLamar al servicio de eliminación
         delete_[[ entity_name.lower() ]](repository=repository, entity_id=id)
         messages.success(request, f"Successfully deleted [[ entity_name.lower() ]].")
 
     except EntityNotFoundError as e:
-        # Handling domain-specific errors
+        # Manejar errores específicos del dominio
         messages.error(request,  str(e))
         
     except ValueError as e:
-        # Handling domain-specific errors
+        # Manejar errores específicos del dominio
         messages.error(request,  str(e))
 
     return redirect('[[ entity_name.lower() ]]_list')

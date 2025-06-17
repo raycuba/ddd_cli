@@ -5,13 +5,13 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.permissions import IsAuthenticated
 
-# import the serializer
+# importar serializers
 from serializers import [[ entity_name.capitalize() ]]Serializer
 
-# Import domain-specific exceptions
+# importar excepciones especificas de dominio
 from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
 
-# Import domain-specific services
+# importar servicios específicos del dominio
 from [[ app_name.lower() ]].domain.services import (
     list_[[ entity_name.lower() ]],
     create_[[ entity_name.lower() ]],
@@ -20,7 +20,7 @@ from [[ app_name.lower() ]].domain.services import (
     delete_[[ entity_name.lower() ]],
 )
 
-# Import infrastructure-specific repositories
+# Importar repositorios específicos de la infraestructura
 from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
 
 class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
@@ -137,12 +137,12 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Obtener el ID de la entidad relacionada si existe
-        otherEntity_id = request.data.get('otherEntity_id', None)
+        parent_id = request.data.get('parent_id', None)
 
         try:
             # Llamar al servicio para crear el registro
             repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, otherEntity_id=otherEntity_id,data=serializer.validated_data)
+            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, parent_id=parent_id,data=serializer.validated_data)
 
             # Serializar el nuevo registro creado
             response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
