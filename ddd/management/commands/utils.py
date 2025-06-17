@@ -86,18 +86,24 @@ def readWriteTemplate(templateName: str, fileName:str, render_params: dict, repo
         
 def decodeAppPath(app_path: str) -> tuple:
     """
-    Convierte una ruta de aplicación (ej: apps/app1) a:
-    1. nombre de aplicación (ej: apps.app1)
+    Convierte una ruta de aplicación (ej: apps/manager/app1) a:
+    1. nombre de aplicación (ej: apps.manager.app1)
     2. ultimo nombre de la aplicación (ej: app1)
-    3. ruta de la aplicación (ej: apps:app1)
+    3. ruta de la aplicación (ej: apps:manager:app1)
+    4. path relativo de la aplicación (ej: manager/app1) quitando el primer prefijo.
     """
+
+    # Convertir app_path a path relativo
+    relative_app_path = app_path.split('/', 1)[-1] if '/' in app_path else app_path
+
     # Convertir app_path a app_name
     app_name = app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
+    relative_app_name = relative_app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
     
     # Obtener el último nombre de la aplicación
     last_app_name = app_name.split('.')[-1]
 
     # Convertir app_path a ruta de aplicación
-    app_route = app_name.replace('.', ':')
+    app_route = relative_app_name.replace('.', ':')
 
-    return app_name, last_app_name, app_route
+    return app_name, last_app_name, app_route, relative_app_path

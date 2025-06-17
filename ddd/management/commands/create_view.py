@@ -13,8 +13,11 @@ class CreateViewCommand:
 
     def create_view(self, app_path, entity_name, **kwargs):
         """Crea una view para web"""
+        # decodificar app_path 
+        app_name, last_app_name, app_route, relative_app_path = decodeAppPath(app_path)
+
         views_dir = app_path
-        views_templates_dir = os.path.join(views_dir, 'templates', app_path)
+        views_templates_dir = os.path.join(views_dir, 'templates', relative_app_path)
 
         urls_path = os.path.join(views_dir, entity_name.lower() + '_urls.py')
         views_path = os.path.join(views_dir, entity_name.lower() + '_views.py')
@@ -65,12 +68,9 @@ class CreateViewCommand:
         if os.path.exists(web_detail_register_path):
             print(Fore.RED + f"The file '{web_detail_register_path}' already exists." + Style.RESET_ALL)
             return                                      
-        
-        #convertir app_path (ej: apps/ap1) a app_name (ej: apps.app1)
-        app_name, last_app_name, app_route = decodeAppPath(app_path)
 
         #renderizar views
-        rendered_content_class = renderTemplate(templateName = 'view', fileName='web_views.py', render_params={'app_path': app_path, 'app_name':app_name, 'last_app_name':last_app_name, 'app_route':app_route, 'entity_name':entity_name})
+        rendered_content_class = renderTemplate(templateName = 'view', fileName='web_views.py', render_params={'app_path': app_path, 'app_name':app_name, 'last_app_name':last_app_name, 'app_route':app_route, 'relative_app_path':relative_app_path, 'entity_name':entity_name})
         # Escribir views en el archivo
         with open(views_path, 'w') as f:
             f.write('\n' + rendered_content_class + '\n')

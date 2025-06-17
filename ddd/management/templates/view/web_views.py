@@ -38,7 +38,7 @@ def [[ entity_name.lower() ]]_list(request):
         messages.error(request,  str(e))
 
     # Renderizar la plantilla con la lista
-    return render(request, '[[ app_path.lower() ]]/[[ entity_name.lower() ]]_web_list.html', {
+    return render(request, '[[ relative_app_path.lower() ]]/[[ entity_name.lower() ]]_web_list.html', {
         '[[ entity_name.lower() ]]List': [[ entity_name.lower() ]]List
     })
 
@@ -78,7 +78,7 @@ def [[ entity_name.lower() ]]_create(request):
         form = [[ entity_name.capitalize() ]]CreateForm()
 
     # Renderizar la plantilla con el formulario
-    return render(request, '[[ app_path.lower() ]]/[[ entity_name.lower() ]]_web_create.html', {'form': form}) 
+    return render(request, '[[ relative_app_path.lower() ]]/[[ entity_name.lower() ]]_web_create.html', {'form': form}) 
 
 
 def [[ entity_name.lower() ]]_edit(request, id=None):
@@ -148,7 +148,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
         })
 
     # Renderizar la plantilla con el formulario
-    return render(request, '[[ app_path.lower() ]]/[[ entity_name.lower() ]]_web_edit.html', {'form': form})
+    return render(request, '[[ relative_app_path.lower() ]]/[[ entity_name.lower() ]]_web_edit.html', {'form': form})
 
 
 def [[ entity_name.lower() ]]_detail(request, id=None):
@@ -179,7 +179,7 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
         'email': [[ entity_name.lower() ]]['email']
     })
 
-    return render(request, '[[ app_path.lower() ]]/[[ entity_name.lower() ]]_web_detail.html', {'form': form})
+    return render(request, '[[ relative_app_path.lower() ]]/[[ entity_name.lower() ]]_web_detail.html', {'form': form})
 
 
 def [[ entity_name.lower() ]]_delete(request, id=None):
