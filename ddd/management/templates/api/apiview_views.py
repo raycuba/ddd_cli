@@ -70,7 +70,6 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
                 # Retornar la respuesta con un estado HTTP 200 OK
                 return Response(response_serializer.data, status=status.HTTP_200_OK)
 
-
             except EntityNotFoundError as e:
                 # Manejar errores si el registro no existe
                 return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)                          
