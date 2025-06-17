@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import [[ entity_name.lower() ]]_views
 
+app_name = "[[ app_name.lower() ]]"
+
 urlpatterns = [
     
     path('[[ entity_name.lower() ]]-list/', [[ entity_name.lower() ]]_views.[[ entity_name.lower() ]]_list, name="[[ entity_name.lower() ]]_list"),

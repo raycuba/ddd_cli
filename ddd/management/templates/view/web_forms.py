@@ -186,6 +186,11 @@ class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]Bas
         'readonly': False,
     })
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)        
+
+        # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
+
 
 class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]BaseForm):
     """
@@ -201,6 +206,8 @@ class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]Ba
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)     
 
+        # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
+
         #impedimos que el email sea editable 
         self.email.widget.attrs.update({
             'readonly': 'True'
@@ -215,6 +222,8 @@ class [[ entity_name.capitalize() ]]EditPostForm([[ entity_name.capitalize() ]]B
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)     
 
+        # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
+
         # Eliminamos los campos que no se deben guardar de la forma tradicional
         for field in ['password', 'photo']:
             if field in self.fields:
@@ -227,6 +236,8 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
 
         # Hacer todos los campos no editables
         for field in self.fields.values():

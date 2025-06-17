@@ -84,7 +84,7 @@ class CreateViewCommand:
         print(f"Class Form of Entity '{entity_name}' created at {forms_path}")
 
         #renderizar urls
-        readWriteTemplate(templateName='routers', fileName='web_urls.py',  render_params={'entity_name':entity_name}, repository_path=urls_path, failIfError=True)
+        readWriteTemplate(templateName='routers', fileName='web_urls.py',  render_params={'app_name':app_name, 'entity_name':entity_name}, repository_path=urls_path, failIfError=True)
         print(f"Urls of Entity '{entity_name}' created at {urls_path}")
 
         #renderizar templates
