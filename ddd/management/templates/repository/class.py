@@ -39,7 +39,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def get_by_id(id) -> [[ entity_name.capitalize() ]]Entity:
+    def get_by_id(id) -> Optional[ [[ entity_name.capitalize() ]]Entity ]:
         """
         Obtiene un registro por su ID.
         
@@ -94,6 +94,7 @@ class [[ entity_name.capitalize() ]]Repository:
         Crea un nuevo registro.
 
         :param entity: Entidad con los datos necesarios para crear el registro.
+        :param parent_id: ID del padre si es necesario (opcional).
         :return: La entidad creada.
         :raises ValueError: Si los datos no son válidos.
         """
