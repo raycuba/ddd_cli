@@ -13,6 +13,10 @@ __pycache__/
 env/
 venv/
 
+# directorio de apps de prueba
+test_apps/
+apps/
+
 # Configuración del sistema
 *.swp
 *.swo

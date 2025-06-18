@@ -7,18 +7,18 @@ Django form detail
 {% block content %}
     <h1 class="title">View Form in Django</h1>
 
-    <form action="{% url '[[ app_route.lower() ]]_list' %}" method="GET">
+    <form action="{% url '[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list' %}" method="GET">
         {% csrf_token %}
 
         {{ form.as_p }}
 
-        <a href="{% url '[[ app_route.lower() ]]_list' %}" class="btn btn-primary btn-link">Go List</a>
+        <a href="{% url '[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list' %}" class="btn btn-primary btn-link">Go List</a>
     </form>
 
     {% comment %}  
     <!-- ejemplo de como personalizar el formulario -->
 
-    <form action="{% url '[[ app_route.lower() ]]_list' %}" method="GET">
+    <form action="{% url '[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list' %}" method="GET">
         {% csrf_token %}
         
         <!-- ejemplo de como generar todos los campos -->
@@ -44,7 +44,7 @@ Django form detail
             {% endif %}            
         </div>          
 
-        <a href="{% url '[[ app_route.lower() ]]_list' %}" class="btn btn-primary btn-link">Go List</a>
+        <a href="{% url '[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list' %}" class="btn btn-primary btn-link">Go List</a>
     </form>         
     {% endcomment %}
 
