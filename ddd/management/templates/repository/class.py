@@ -52,7 +52,6 @@ class [[ entity_name.capitalize() ]]Repository:
             return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
 
         except [[ entity_name.capitalize() ]].DoesNotExist:
-            raise EntityNotFoundError(f"No [[ entity_name.lower() ]] found with ID {id}")
             return None
 
 
