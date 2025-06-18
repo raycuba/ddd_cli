@@ -1,6 +1,11 @@
 MANIFEST.in
 README.md
 setup.py
+apps/__init__.py
+apps/app1/__init__.py
+apps/app1/myentity_forms.py
+apps/app1/myentity_urls.py
+apps/app1/myentity_views.py
 ddd/__init__.py
 ddd/management/__init__.py
 ddd/management/cli.py
