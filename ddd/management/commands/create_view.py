@@ -88,15 +88,15 @@ class CreateViewCommand:
         print(f"Urls of Entity '{entity_name}' created at {urls_path}")
 
         #renderizar templates
-        readWriteTemplate(templateName='templates', fileName='web_list_register.html',  render_params={'entity_name':entity_name}, repository_path=web_list_register_path, failIfError=True)
+        readWriteTemplate(templateName='templates', fileName='web_list_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name}, repository_path=web_list_register_path, failIfError=True)
         print(f"Template web_list of Entity '{entity_name}' created at {web_list_register_path}")
 
-        readWriteTemplate(templateName='templates', fileName='web_create_register.html',  render_params={}, repository_path=web_create_register_path, failIfError=True)
+        readWriteTemplate(templateName='templates', fileName='web_create_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name}, repository_path=web_create_register_path, failIfError=True)
         print(f"Template web_create of Entity '{entity_name}' created at {web_create_register_path}")
 
-        readWriteTemplate(templateName='templates', fileName='web_edit_register.html',  render_params={'entity_name':entity_name}, repository_path=web_edit_register_path, failIfError=True)
+        readWriteTemplate(templateName='templates', fileName='web_edit_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name}, repository_path=web_edit_register_path, failIfError=True)
         print(f"Template web_edit of Entity '{entity_name}' created at {web_edit_register_path}")
 
-        readWriteTemplate(templateName='templates', fileName='web_detail_register.html',  render_params={'entity_name':entity_name}, repository_path=web_detail_register_path, failIfError=True)
+        readWriteTemplate(templateName='templates', fileName='web_detail_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name}, repository_path=web_detail_register_path, failIfError=True)
         print(f"Template web_detail of Entity '{entity_name}' created at {web_detail_register_path}")
 
