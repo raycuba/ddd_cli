@@ -11,7 +11,7 @@ Django form create
     {% if messages %}
         <!-- Mostrar mensajes globales del framework de mensajes -->
         {% for message in messages %}
-            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}info{% endif %}">
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}">
                 <strong>{{ message.tags|capfirst }}:</strong> {{ message }}
             </div>
         {% endfor %}
