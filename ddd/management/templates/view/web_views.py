@@ -33,7 +33,7 @@ def [[ entity_name.lower() ]]_list(request):
         repository = [[ entity_name.capitalize() ]]Repository()
         [[ entity_name.lower() ]]List = list_[[ entity_name.lower() ]](repository=repository)
 
-    except ValueError as e:
+    except (ValueError, EntityNotFoundError) as e:
         # Manejo de errores específicos del dominio
         messages.error(request,  str(e))
 
@@ -68,7 +68,7 @@ def [[ entity_name.lower() ]]_create(request):
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]].")
                 return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-            except ValueError as e:
+            except (ValueError, EntityNotFoundError) as e:
                 # Manejar errores específicos del dominio
                 form.add_error(None, str(e))
         else:
@@ -96,12 +96,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
         # Obtener los datos de la entidad desde el servicio
         [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
-    except EntityNotFoundError as e:
-        # Manejar errores específicos del dominio
-        messages.error(request,  str(e))
-        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
-
-    except ValueError as e:
+    except (ValueError, EntityNotFoundError) as e:
         # Manejar errores específicos del dominio
         messages.error(request,  str(e))
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
@@ -129,10 +124,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
                 # Redireccionar a la lista de [[ entity_name.lower() ]]s
                 return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-            except EntityNotFoundError as e:
-                form.add_error(None, str(e))
-
-            except ValueError as e:
+            except (ValueError, EntityNotFoundError) as e:
                 form.add_error(None, str(e))
 
         else:
@@ -163,12 +155,7 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
         # Obtener los datos de la entidad desde el servicio
         [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
-    except EntityNotFoundError as e:
-        # Manejar errores específicos del dominio
-        messages.error(request,  str(e))
-        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
-
-    except ValueError as e:
+    except (ValueError, EntityNotFoundError) as e:
         # Manejar errores específicos del dominio
         messages.error(request,  str(e))
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
@@ -195,12 +182,8 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
         # LLamar al servicio de eliminación
         delete_[[ entity_name.lower() ]](repository=repository, entity_id=id)
         messages.success(request, f"Successfully deleted [[ entity_name.lower() ]].")
-
-    except EntityNotFoundError as e:
-        # Manejar errores específicos del dominio
-        messages.error(request,  str(e))
         
-    except ValueError as e:
+    except (ValueError, EntityNotFoundError) as e:
         # Manejar errores específicos del dominio
         messages.error(request,  str(e))
 

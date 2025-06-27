@@ -69,7 +69,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Retornar los datos serializados con un estado HTTP 200 OK
             return Response(response_serializer_list.data, status=status.HTTP_200_OK)
 
-        except ValueError as e:
+        except (ValueError, EntityNotFoundError) as e:
             # Manejar errores de lógica de negocio
             return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
@@ -103,11 +103,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Retornar el resultado con un estado HTTP 200 OK
             return Response(response_serializer.data, status=status.HTTP_200_OK)
 
-        except EntityNotFoundError as e:
-            # Manejar errores si el registro no existe
-            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
-
-        except ValueError as e:
+        except (ValueError, EntityNotFoundError) as e:
             # Manejar errores si el registro no existe
             return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
@@ -151,7 +147,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Retornar el resultado con un estado HTTP 201 CREATED
             return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
-        except ValueError as e:
+        except (ValueError, EntityNotFoundError) as e:
             # Manejar errores en las reglas de negocio o validación
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -193,11 +189,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Retornar el resultado con un estado HTTP 200 OK
             return Response(response_serializer.data, status=status.HTTP_200_OK)
 
-        except EntityNotFoundError as e:
-            # Manejar errores si el registro no existe
-            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
-
-        except ValueError as e:
+        except (ValueError, EntityNotFoundError) as e:
             # Manejar errores en las reglas de negocio o validación
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -227,11 +219,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Retornar un estado HTTP 204 NO CONTENT para confirmar la eliminación
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        except EntityNotFoundError as e:
-            # Manejar errores si el registro no existe
-            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
-
-        except ValueError as e:
+        except (ValueError, EntityNotFoundError) as e:
             # Manejar errores si el registro no existe o no se puede eliminar
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -68,13 +68,9 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
                 response_serializer.is_valid(raise_exception=True)
 
                 # Retornar la respuesta con un estado HTTP 200 OK
-                return Response(response_serializer.data, status=status.HTTP_200_OK)
+                return Response(response_serializer.data, status=status.HTTP_200_OK)                     
 
-            except EntityNotFoundError as e:
-                # Manejar errores si el registro no existe
-                return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)                          
-
-            except ValueError as e:
+            except (ValueError, EntityNotFoundError) as e:
                 # Manejar errores si no se encuentra el registro
                 return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
@@ -89,13 +85,9 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
                 response_serializer_list.is_valid(raise_exception=True)
 
                 # Retornar la respuesta con un estado HTTP 200 OK
-                return Response(response_serializer_list.data, status=status.HTTP_200_OK)
+                return Response(response_serializer_list.data, status=status.HTTP_200_OK)                          
 
-            except EntityNotFoundError as e:
-                # Manejar errores si el registro no existe
-                return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)                            
-
-            except ValueError as e:
+            except (ValueError, EntityNotFoundError) as e:
                 # Manejar errores si no se encuentran registros
                 return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
@@ -139,7 +131,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
             # Retornar la respuesta con un estado HTTP 201 CREATED
             return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
-        except ValueError as e:
+        except (ValueError, EntityNotFoundError) as e:
             # Manejar errores relacionados con las reglas de negocio
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -181,11 +173,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
             # Retornar la respuesta con un estado HTTP 200 OK
             return Response(response_serializer.data, status=status.HTTP_200_OK)
 
-        except EntityNotFoundError as e:
-            # Manejar errores si el registro no existe
-            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
-
-        except ValueError as e:
+        except (ValueError, EntityNotFoundError) as e:
             # Manejar errores relacionados con las reglas de negocio
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -216,11 +204,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
 
             # Retornar una respuesta sin contenido con estado HTTP 204 NO CONTENT
             return Response(status=status.HTTP_204_NO_CONTENT)
-        
-        except EntityNotFoundError as e:
-            # Manejar errores si el registro no existe
-            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
-        except ValueError as e:
+        except (ValueError, EntityNotFoundError) as e:
             # Manejar errores relacionados con las reglas de negocio o ID inexistente
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
