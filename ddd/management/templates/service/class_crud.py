@@ -53,7 +53,7 @@ class [[ entity_name.capitalize() ]]Service:
         entity.validate()       
 
         # Guardar en el repositorio
-        saved_entity = self.repository.create(parent_id, entity)
+        saved_entity = self.repository.create(entity=entity, parent_id=parent_id)
 
         return saved_entity.to_dict()
 
