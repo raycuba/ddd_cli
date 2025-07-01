@@ -6,12 +6,13 @@ class [[ entity_name.capitalize() ]]Entity:
     Esta clase representa la lógica de negocio central y las reglas asociadas 
     con [[ entity_name.lower() ]] en el sistema.
     """
-    #campos id
+    # atributos id
     id: Optional[int] = None  # ID relacionado con la base de datos
     uuid: Optional[UUID] = None
 
-    name: str  # Nombre obligatorio
-    email: str  # Email obligatorio
+    # atributos 
+    attributeName: str  # Atributo obligatorio
+    attributeEmail: Optional[str] = None  # Atributo opcional
 
     parent_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
 
@@ -26,10 +27,10 @@ class [[ entity_name.capitalize() ]]Entity:
         - Consistencia interna de los atributos
         - Validaciones intrínsecas al momento de creación/modificación
         """
-        if not self.name or len(self.name) < 3:
-            raise ValueError("El nombre debe tener al menos 3 caracteres")
-        if self.description and len(self.description) > 500:
-            raise ValueError("La descripción no puede superar los 500 caracteres")
+        if not self.attributeName or len(self.attributeName) < 3:
+            raise ValueError("El attributeName debe tener al menos 3 caracteres")
+        if self.attributeEmail and len(self.attributeEmail) > 500:
+            raise ValueError("El attributeEmail no puede superar los 500 caracteres")
 
     def update(self, data:dict, addMode:bool = False) -> None:
         """
@@ -61,10 +62,11 @@ class [[ entity_name.capitalize() ]]Entity:
         return [[ entity_name.capitalize() ]]Entity(**data)
         
 
-'''
-Ejemplos de campos adicionales:
+'''Ejemplos de campos adicionales:
 
-external_id: Optional[str] = None  # Identificador externo, como un UUID público
+name: str  # Nombre obligatorio
+email: Optional[str] = None  # Email opcional
+external_id: Optional[str] = None  # Identificador externo, o un UUID público
 slug: Optional[str] = None  # Identificador único legible para URLs
 title: str  # Título de la entidad
 content: Optional[str] = None  # Contenido detallado o descripción extensa
@@ -88,4 +90,5 @@ updated_by: Optional[int] = None  # Usuario que actualizó la entidad
 order_status: Optional[str] = None  # Estado de la orden (e.g., "PENDING", "COMPLETED")
 total_price: Optional[float] = None  # Precio total de la orden
 items: Optional[List[Dict]] = None  # Lista de artículos asociados
+
 '''

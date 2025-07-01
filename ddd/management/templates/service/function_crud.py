@@ -23,8 +23,8 @@ def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     :raises ValueError: Si las reglas de negocio no se cumplen.
     """
     # Validación de reglas de negocio (opcional)
-    if repository.exists_by_field("email", data['email']):
-        raise ValueError("An instance with this email already exists")
+    if repository.exists_by_field("attributeName", data['attributeName']):
+        raise ValueError("An instance with this attributeName already exists")
 
     #crear y validar la entidad
     entity = [[ entity_name.capitalize() ]]Entity.from_dict(data)

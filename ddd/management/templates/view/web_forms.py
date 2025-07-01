@@ -16,7 +16,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     """
 
     # Campo de texto y numeros (Nombre)
-    name = forms.CharField(
+    attributeName = forms.CharField(
         label="Name",
         max_length=100,
         required=True,
@@ -36,7 +36,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     )
 
     # Campo de texto (Category)
-    category = forms.CharField(
+    attributeCategory = forms.CharField(
         label='Category',
         required=True,
         widget=forms.TextInput(attrs={
@@ -54,7 +54,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     ) 
 
     # Campo de correo electrónico
-    email = forms.EmailField(
+    attributeEmail = forms.EmailField(
         label="Email",
         required=True,
         widget=forms.EmailInput(attrs={
@@ -67,7 +67,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     )
 
     # Campo de contraseña
-    password = forms.CharField(
+    attributePassword = forms.CharField(
         label="Password",
         required=True,
         widget=forms.PasswordInput(attrs={
@@ -81,7 +81,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     )
 
     # Campo numérico
-    age = forms.IntegerField(
+    attributeAge = forms.IntegerField(
         label="Age",
         required=True,
         widget=forms.NumberInput(attrs={
@@ -97,7 +97,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     )
 
     # Campo de fecha
-    birth_date = forms.DateField(
+    attributeBirthDate = forms.DateField(
         label="Birth Date",
         required=True,
         widget=forms.DateInput(attrs={
@@ -107,7 +107,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     )
 
     # Selección desplegable
-    country = forms.ChoiceField(
+    attributeCountry = forms.ChoiceField(
         label="Country",
         required=True,
         choices=[
@@ -122,7 +122,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     )
 
     # Opciones de radio
-    gender = forms.ChoiceField(
+    attributeGender = forms.ChoiceField(
         label="Gender",
         required=True,
         choices=[
@@ -136,7 +136,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     )
 
     # Casillas de verificación
-    accept_terms = forms.BooleanField(
+    attributeTerms = forms.BooleanField(
         label="I accept the terms and conditions",
         required=True,
         widget=forms.CheckboxInput(attrs={
@@ -147,33 +147,33 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
         }
     )
 
-    def clean_name(self):
+    def clean_attributeName(self):
         '''
-        Esta validacion es solo para el campo 'name'
+        Esta validacion es solo para el campo 'attributeName'
         '''    
-        name = self.cleaned_data.get('name')
-        if len(name) < 3:
+        attributeName = self.cleaned_data.get('attributeName')
+        if len(attributeName) < 3:
             raise forms.ValidationError("The name must be at least 3 characters long")
-        return name    
+        return attributeName
 
-    def clean_email(self):
+    def clean_attributeEmail(self):
         '''
-        Esta validacion es solo para el campo 'email'
+        Esta validacion es solo para el campo 'attributeEmail'
         '''
-        email = self.cleaned_data.get('email')
-        if email.endswith('@example.com'):
+        attributeEmail = self.cleaned_data.get('attributeEmail')
+        if attributeEmail.endswith('@example.com'):
             raise forms.ValidationError("Emails from example.com are not allowed")
-        return email
+        return attributeEmail
 
     def clean(self):
         '''
         Aqui podemos hacer validaciones que involucren a varios campos
         '''
         cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        password_confirm = cleaned_data.get('password_confirm')
+        attributePassword = cleaned_data.get('attributePassword')
+        attributePassword_confirm = cleaned_data.get('attributePassword_confirm')
 
-        if password != password_confirm:
+        if attributePassword != attributePassword_confirm:
             raise forms.ValidationError("Passwords do not match")
 
 
@@ -181,8 +181,8 @@ class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]Bas
     """
     Formulario para crear una nueva instancia de [[ entity_name.lower() ]]. Sin modificaciones adicionales.
     """
-    #Permitimos que el email sea editable
-    [[ entity_name.capitalize() ]]BaseForm.base_fields['email'].widget.attrs.update({
+    #Permitimos que el attributeEmail sea editable
+    [[ entity_name.capitalize() ]]BaseForm.base_fields['attributeEmail'].widget.attrs.update({
         'readonly': False,
     })
 
@@ -208,8 +208,8 @@ class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]Ba
 
         # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
 
-        #impedimos que el email sea editable 
-        self.email.widget.attrs.update({
+        #impedimos que el attributeEmail sea editable 
+        self.attributeEmail.widget.attrs.update({
             'readonly': 'True'
         })
 
@@ -225,7 +225,7 @@ class [[ entity_name.capitalize() ]]EditPostForm([[ entity_name.capitalize() ]]B
         # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
 
         # Eliminamos los campos que no se deben guardar de la forma tradicional
-        for field in ['password', 'photo']:
+        for field in ['attributePassword', 'attributePhoto']:
             if field in self.fields:
                 del self.fields[field]      
 
