@@ -65,14 +65,14 @@ def [[ entity_name.lower() ]]_create(request):
                 create_[[ entity_name.lower() ]](repository=repository, parent_id=parent_id, data=form_data)
 
                 # Mostrar mensaje de éxito y redirigir
-                messages.success(request, f"Successfully created [[ entity_name.lower() ]].")
+                messages.success(request, f"Successfully created [[ entity_name.lower() ]]")
                 return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
             except (ValueError, EntityNotFoundError) as e:
                 # Manejar errores específicos del dominio
                 form.add_error(None, str(e))
         else:
-            messages.error(request, "There were errors in the form. Please correct them.")
+            messages.error(request, "There were errors in the form. Please correct them")
     else:
         # Formulario vacío para solicitudes GET
         form = [[ entity_name.capitalize() ]]CreateForm()
@@ -119,7 +119,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
                 update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data)
 
                 # Mostrar mensaje de éxito
-                messages.success(request, f"Successfully updated [[ entity_name.lower() ]].")
+                messages.success(request, f"Successfully updated [[ entity_name.lower() ]]")
 
                 # Redireccionar a la lista de [[ entity_name.lower() ]]s
                 return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
@@ -128,7 +128,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
                 form.add_error(None, str(e))
 
         else:
-            messages.error(request, "There were errors in the form. Please correct them.")
+            messages.error(request, "There were errors in the form. Please correct them")
 
     # request.method == "GET":
     else:  
@@ -181,7 +181,7 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
     try:
         # LLamar al servicio de eliminación
         delete_[[ entity_name.lower() ]](repository=repository, entity_id=id)
-        messages.success(request, f"Successfully deleted [[ entity_name.lower() ]].")
+        messages.success(request, f"Successfully deleted [[ entity_name.lower() ]]")
         
     except (ValueError, EntityNotFoundError) as e:
         # Manejar errores específicos del dominio

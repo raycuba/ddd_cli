@@ -52,5 +52,5 @@ class [[ service_name.capitalize() ]]_[[ entity_name.capitalize() ]]_service:
         # Por ejemplo:
         # result = self.repository.get_by_id(data.id)
         # TODO: Agrega la lógica de negocio aquí.
-        raise NotImplementedError("Debes implementar la lógica de negocio para [[ service_name.lower() ]] en [[ entity_name.capitalize() ]].")        
+        raise NotImplementedError("Debes implementar la lógica de negocio para [[ service_name.lower() ]] en [[ entity_name.capitalize() ]]")        
 

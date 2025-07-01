@@ -42,7 +42,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
 
     @swagger_auto_schema(
         operation_summary="Retrieve a list or a specific [[ entity_name.lower() ]]",
-        operation_description="Retrieve a list of all [[ entity_name.lower() ]] or a specific one by ID.",
+        operation_description="Retrieve a list of all [[ entity_name.lower() ]] or a specific one by ID",
         responses={
             200: [[ entity_name.capitalize() ]]Serializer,
             404: "Not Found",
@@ -76,7 +76,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
 
     @swagger_auto_schema(
         operation_summary="Retrieve a specific [[ entity_name.lower() ]] by ID",
-        operation_description="Retrieve a specific [[ entity_name.lower() ]] by its ID.",
+        operation_description="Retrieve a specific [[ entity_name.lower() ]] by its ID",
         responses={
             200: [[ entity_name.capitalize() ]]Serializer,
             404: "Not Found",
@@ -110,7 +110,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
 
     @swagger_auto_schema(
         operation_summary="Create a new [[ entity_name.lower() ]]",
-        operation_description="Create a new [[ entity_name.lower() ]] with the provided data.",
+        operation_description="Create a new [[ entity_name.lower() ]] with the provided data",
         request_body=[[ entity_name.capitalize() ]]Serializer,
         responses={
             201: [[ entity_name.capitalize() ]]Serializer,
@@ -154,7 +154,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
 
     @swagger_auto_schema(
         operation_summary="Update an existing [[ entity_name.lower() ]]",
-        operation_description="Update an existing [[ entity_name.lower() ]] with the provided ID and data.",
+        operation_description="Update an existing [[ entity_name.lower() ]] with the provided ID and data",
         request_body=[[ entity_name.capitalize() ]]Serializer,
         responses={
             200: [[ entity_name.capitalize() ]]Serializer,
@@ -196,7 +196,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
 
     @swagger_auto_schema(
         operation_summary="Delete an existing [[ entity_name.lower() ]]",
-        operation_description="Delete an existing [[ entity_name.lower() ]] with the provided ID.",
+        operation_description="Delete an existing [[ entity_name.lower() ]] with the provided ID",
         responses={
             204: "No Content",
             400: "Bad Request",

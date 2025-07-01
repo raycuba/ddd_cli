@@ -31,7 +31,7 @@ class CreateSerializerCommand:
         
         #si split y ya existe el archivo mostrar error
         if split and os.path.exists(serializers_path):
-            print(Fore.RED + f"File '{serializers_path}' already exists. Cannot create separate file." + Style.RESET_ALL)
+            print(Fore.RED + f"File '{serializers_path}' already exists. Cannot create separate file" + Style.RESET_ALL)
             return
 
         # Escribir imports en el archivo 

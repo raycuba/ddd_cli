@@ -31,7 +31,7 @@ class CreateDTOCommand:
         
         #si split y ya existe el archivo mostrar error
         if split and os.path.exists(dtos_path):
-            print(Fore.RED + f"File '{dtos_path}' already exists. Cannot create separate file." + Style.RESET_ALL)
+            print(Fore.RED + f"File '{dtos_path}' already exists. Cannot create separate file" + Style.RESET_ALL)
             return
 
         # Escribir imports en el archivo 

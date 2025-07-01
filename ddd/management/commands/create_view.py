@@ -36,12 +36,12 @@ class CreateViewCommand:
         
         #si ya existe el archivo view mostrar error
         if os.path.exists(views_path):
-            print(Fore.RED + f"The file '{views_path}' already exists." + Style.RESET_ALL)
+            print(Fore.RED + f"The file '{views_path}' already exists" + Style.RESET_ALL)
             return
         
         #si ya existe el archivo form mostrar error
         if os.path.exists(forms_path):
-            print(Fore.RED + f"The file '{forms_path}' already exists." + Style.RESET_ALL)
+            print(Fore.RED + f"The file '{forms_path}' already exists" + Style.RESET_ALL)
             return
          
         web_list_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_list' + '.html')
@@ -51,22 +51,22 @@ class CreateViewCommand:
         
         #si ya existe el archivo web_create_register mostrar error
         if os.path.exists(web_create_register_path):
-            print(Fore.RED + f"The file '{web_create_register_path}' already exists." + Style.RESET_ALL)
+            print(Fore.RED + f"The file '{web_create_register_path}' already exists" + Style.RESET_ALL)
             return  
 
         #si ya existe el archivo web_edit_register mostrar error
         if os.path.exists(web_edit_register_path):
-            print(Fore.RED + f"The file '{web_edit_register_path}' already exists." + Style.RESET_ALL)
+            print(Fore.RED + f"The file '{web_edit_register_path}' already exists" + Style.RESET_ALL)
             return
 
         #si ya existe el archivo web_list_register mostrar error
         if os.path.exists(web_list_register_path):
-            print(Fore.RED + f"The file '{web_list_register_path}' already exists." + Style.RESET_ALL)
+            print(Fore.RED + f"The file '{web_list_register_path}' already exists" + Style.RESET_ALL)
             return
 
         #si ya existe el archivo web_detail_register mostrar error
         if os.path.exists(web_detail_register_path):
-            print(Fore.RED + f"The file '{web_detail_register_path}' already exists." + Style.RESET_ALL)
+            print(Fore.RED + f"The file '{web_detail_register_path}' already exists" + Style.RESET_ALL)
             return                                      
 
         #renderizar views

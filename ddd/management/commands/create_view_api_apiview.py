@@ -34,7 +34,7 @@ class CreateViewApiApiViewCommand:
         
         #si ya existe el archivo mostrar error
         if os.path.exists(views_path):
-            print(Fore.RED + f"File '{views_path}' already exists." + Style.RESET_ALL)
+            print(Fore.RED + f"File '{views_path}' already exists" + Style.RESET_ALL)
             return
         
         # decodficar app_path

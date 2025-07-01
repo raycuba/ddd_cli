@@ -24,7 +24,7 @@ def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     """
     # Validación de reglas de negocio (opcional)
     if repository.exists_by_field("email", data['email']):
-        raise ValueError("An instance with this email already exists.")
+        raise ValueError("An instance with this email already exists")
 
     #crear y validar la entidad
     entity = [[ entity_name.capitalize() ]]Entity.from_dict(data)
@@ -47,7 +47,7 @@ def retrieve_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]
     """
     entity = repository.get_by_id(entity_id)
     if not entity:
-        raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}.")
+        raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
 
     return entity.to_dict()
 
@@ -65,7 +65,7 @@ def update_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     # Recuperar la entidad
     entity = repository.get_by_id(entity_id)
     if not entity:
-        raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}.")
+        raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
 
     # actualizar la instancia y validar
     entity.update(data)     
@@ -89,7 +89,7 @@ def delete_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     # Recuperar la entidad
     entity = repository.get_by_id(entity_id)
     if not entity:
-        raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}.")
+        raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
 
     # Eliminación en el repositorio
     repository.delete(entity_id)

@@ -33,7 +33,7 @@ class CreateRepositoryCommand:
             
             #si ya existe el archivo mostrar error
             if os.path.exists(repository_path):
-                print(Fore.RED + f"The file '{repository_path}' already exists." + Style.RESET_ALL)
+                print(Fore.RED + f"The file '{repository_path}' already exists" + Style.RESET_ALL)
                 return
             
             # Crear archivo de mappers.py        

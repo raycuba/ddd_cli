@@ -30,7 +30,7 @@ class CreateServiceCommand:
         
         #si split y ya existe el archivo mostrar error
         if split and os.path.exists(services_path):
-            print(Fore.RED + f"The file '{services_path}' already exists. A separate file cannot be created." + Style.RESET_ALL)
+            print(Fore.RED + f"The file '{services_path}' already exists. A separate file cannot be created" + Style.RESET_ALL)
             return
 
         # Escribir imports en el archivo 

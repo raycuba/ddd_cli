@@ -29,8 +29,8 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             'title': 'The name must only contain letters, numbers, and spaces.'  # Mensaje de ayuda                          
         }),
         validators=[
-            MinLengthValidator(3, "The name must be at least 3 characters."),
-            MaxLengthValidator(100, "The name must not exceed 100 characters."),
+            MinLengthValidator(3, "The name must be at least 3 characters"),
+            MaxLengthValidator(100, "The name must not exceed 100 characters"),
             RegexValidator(r'^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$', 'The name must only contain letters, numbers, and spaces.'),
         ]
     )
@@ -47,9 +47,9 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             'title': 'The name can only contain letters and spaces.'
         }),
         validators=[
-            MinLengthValidator(4, "The name must be at least 4 characters."),
-            MaxLengthValidator(250, "The name must not exceed 250 characters."),
-            RegexValidator(r'^[A-Za-z\s]*$', "The name can only contain letters and spaces."),
+            MinLengthValidator(4, "The name must be at least 4 characters"),
+            MaxLengthValidator(250, "The name must not exceed 250 characters"),
+            RegexValidator(r'^[A-Za-z\s]*$', "The name can only contain letters and spaces"),
         ]          
     ) 
 
@@ -62,7 +62,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             'placeholder': 'Enter your email',
         }),
         validators=[
-            EmailValidator("Please enter a valid email address."),
+            EmailValidator("Please enter a valid email address"),
         ]
     )
 
@@ -76,7 +76,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             'minlength': '8',
         }),
         validators=[
-            MinLengthValidator(8, "Password must be at least 8 characters long."),
+            MinLengthValidator(8, "Password must be at least 8 characters long"),
         ]
     )
 
@@ -91,8 +91,8 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             'placeholder': 'Enter your age',
         }),
         validators=[
-            MinValueValidator(18, "You must be at least 18 years old."),
-            MaxValueValidator(100, "The age must not exceed 100."),
+            MinValueValidator(18, "You must be at least 18 years old"),
+            MaxValueValidator(100, "The age must not exceed 100"),
         ]
     )
 
@@ -143,7 +143,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             'class': 'form-check-input',
         }),
         error_messages={
-            'required': "You must accept the terms and conditions to proceed.",
+            'required': "You must accept the terms and conditions to proceed",
         }
     )
 
@@ -153,7 +153,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
         '''    
         name = self.cleaned_data.get('name')
         if len(name) < 3:
-            raise forms.ValidationError("The name must be at least 3 characters long.")
+            raise forms.ValidationError("The name must be at least 3 characters long")
         return name    
 
     def clean_email(self):
@@ -162,7 +162,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
         '''
         email = self.cleaned_data.get('email')
         if email.endswith('@example.com'):
-            raise forms.ValidationError("Emails from example.com are not allowed.")
+            raise forms.ValidationError("Emails from example.com are not allowed")
         return email
 
     def clean(self):
@@ -174,7 +174,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
         password_confirm = cleaned_data.get('password_confirm')
 
         if password != password_confirm:
-            raise forms.ValidationError("Passwords do not match.")
+            raise forms.ValidationError("Passwords do not match")
 
 
 class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]BaseForm):
@@ -281,7 +281,7 @@ Cuando se llama al método is_valid() de un formulario, Django realiza las sigui
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if not email.endswith("@example.com"):
-            raise forms.ValidationError("Only example.com emails are allowed.")
+            raise forms.ValidationError("Only example.com emails are allowed")
         return email
 
     Los errores generados por estos métodos se almacenan en el atributo 'form.field_name.errors'.
@@ -297,7 +297,7 @@ Cuando se llama al método is_valid() de un formulario, Django realiza las sigui
         password_confirm = cleaned_data.get('password_confirm')
 
         if password != password_confirm:
-            raise forms.ValidationError("Passwords do not match.")
+            raise forms.ValidationError("Passwords do not match")
 
     Los errores de este método se almacenan en 'form.errors' como errores globales, no asociados a un campo específico.
 

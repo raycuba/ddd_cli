@@ -27,9 +27,9 @@ class [[ entity_name.capitalize() ]]Entity:
         - Validaciones intrínsecas al momento de creación/modificación
         """
         if not self.name or len(self.name) < 3:
-            raise ValueError("El nombre debe tener al menos 3 caracteres.")
+            raise ValueError("El nombre debe tener al menos 3 caracteres")
         if self.description and len(self.description) > 500:
-            raise ValueError("La descripción no puede superar los 500 caracteres.")
+            raise ValueError("La descripción no puede superar los 500 caracteres")
 
     def update(self, data:dict, addMode:bool = False) -> None:
         """

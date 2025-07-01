@@ -30,7 +30,7 @@ class CreateEntityCommand:
         
         #si split y ya existe el archivo mostrar error
         if split and os.path.exists(entities_path):
-            print(Fore.RED + f"File '{entities_path}' already exists. Cannot create separate file." + Style.RESET_ALL)
+            print(Fore.RED + f"File '{entities_path}' already exists. Cannot create separate file" + Style.RESET_ALL)
             return
 
         # Escribir imports en el archivo 

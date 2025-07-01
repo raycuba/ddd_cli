@@ -14,4 +14,4 @@ def [[ service_name.lower() ]]_[[ entity_name.lower() ]]_service(repository, dat
     # Por ejemplo:
     # data = repository.get_by_id(data.id)
 
-    raise NotImplementedError("Debes implementar la lógica de negocio para [[ service_name.lower() ]] de [[ entity_name.capitalize() ]].")
+    raise NotImplementedError("Debes implementar la lógica de negocio para [[ service_name.lower() ]] de [[ entity_name.capitalize() ]]")
