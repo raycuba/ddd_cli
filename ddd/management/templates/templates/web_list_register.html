@@ -8,7 +8,7 @@ Django form list
     <h1 class="title">List of</h1>
 
     <!-- Mensajes globales -->
-    {% if messages and not form.errors %}
+    {% if messages %}
         <!-- Mostrar mensajes globales del framework de mensajes -->
         {% for message in messages %}
             <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}">
