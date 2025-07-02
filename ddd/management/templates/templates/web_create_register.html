@@ -7,7 +7,7 @@ Django form create
 {% block content %}
     <h1 class="title">Create a Form in Django</h1>
 
-    <!--Codigo de Mensajes de error-->
+    <!-- Mensajes globales -->
     {% if messages and not form.errors %}
         <!-- Mostrar mensajes globales del framework de mensajes -->
         {% for message in messages %}
@@ -17,6 +17,7 @@ Django form create
         {% endfor %}
     {% endif %}
 
+    <!-- Errores del formulario -->
     {% if form.errors %}
         <div class="alert alert-danger">
             <strong class="red">Error!</strong> <spam>There are errors in the form</spam>:
