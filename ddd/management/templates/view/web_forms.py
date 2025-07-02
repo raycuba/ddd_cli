@@ -286,7 +286,7 @@ Cuando se llama al método is_valid() de un formulario, Django realiza las sigui
 
     Los errores generados por estos métodos se almacenan en el atributo 'form.field_name.errors'.
 
-4. Métodos 'clean()' generales
+4. Método 'clean()' general
     Una vez que todos los campos han sido validados individualmente, Django llama al método 'clean()'  general del formulario. 
     Este método es útil para validar dependencias entre múltiples campos.
     Por ejemplo:
