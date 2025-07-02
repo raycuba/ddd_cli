@@ -5,6 +5,7 @@ from . import [[ entity_name.lower() ]]_views
 app_name = "[[ last_app_name.lower() ]]"
 
 urlpatterns = [
+
     path('', [[ entity_name.lower() ]]_views.[[ entity_name.lower() ]]_list, name="index"),  # ← Esta es la URL por defecto    
     path('[[ entity_name.lower() ]]-list/', [[ entity_name.lower() ]]_views.[[ entity_name.lower() ]]_list, name="[[ entity_name.lower() ]]_list"),
     path('[[ entity_name.lower() ]]-create/', [[ entity_name.lower() ]]_views.[[ entity_name.lower() ]]_create, name="[[ entity_name.lower() ]]_create"),
