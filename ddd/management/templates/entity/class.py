@@ -11,7 +11,7 @@ class [[ entity_name.capitalize() ]]Entity:
     uuid: Optional[UUID] = None
 
     # atributos 
-    attributeName: str  # Atributo obligatorio
+    attributeName: Optional[str] = None  # Atributo opcional
     attributeEmail: Optional[str] = None  # Atributo opcional
 
     parent_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
@@ -64,17 +64,18 @@ class [[ entity_name.capitalize() ]]Entity:
 
 '''Ejemplos de campos adicionales:
 
-name: str  # Nombre obligatorio
+name: Optional[str] = None  # Nombre 
 email: Optional[str] = None  # Email opcional
 external_id: Optional[str] = None  # Identificador externo, o un UUID público
 slug: Optional[str] = None  # Identificador único legible para URLs
-title: str  # Título de la entidad
+title: Optional[str] = None  # Título de la entidad
 content: Optional[str] = None  # Contenido detallado o descripción extensa
 price: Optional[float] = None  # Precio o valor numérico
 quantity: Optional[int] = None  # Cantidad disponible o asociada
 rating: Optional[float] = None  # Valoración media (ej. 4.5 estrellas)
 is_active: bool = True  # Estado activo/inactivo
 is_featured: Optional[bool] = None  # Si es destacado/promocionado
+is_valid: Optional[bool] = True # Opcional, pero valor inicial no None
 updated_at: Optional[str] = None  # Fecha de última modificación (ISO 8601)
 deleted_at: Optional[str] = None  # Fecha de eliminación o "soft delete"
 parent_id: Optional[int] = None  # Llave foránea hacia una entidad padre
@@ -90,5 +91,9 @@ updated_by: Optional[int] = None  # Usuario que actualizó la entidad
 order_status: Optional[str] = None  # Estado de la orden (e.g., "PENDING", "COMPLETED")
 total_price: Optional[float] = None  # Precio total de la orden
 items: Optional[List[Dict]] = None  # Lista de artículos asociados
+
+Nota: en un @dataclass lo mejor es que los atributos sean opcionales,
+y que se inicialicen con None, para evitar problemas de validación
+y que se puedan añadir nuevos atributos sin problemas.
 
 '''
