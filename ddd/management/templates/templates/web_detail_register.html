@@ -17,6 +17,7 @@ Django form detail
         {% endfor %}
     {% endif %}    
 
+    <!--Codigo de Formulario-->
     <form action="{% url '[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list' %}" method="GET">
         {% csrf_token %}
 
