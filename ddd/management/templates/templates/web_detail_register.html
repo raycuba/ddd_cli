@@ -7,6 +7,16 @@ Django form detail
 {% block content %}
     <h1 class="title">View Form in Django</h1>
 
+    <!--Codigo de Mensajes de error-->
+    {% if messages %}
+        <!-- Mostrar mensajes globales del framework de mensajes -->
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}">
+                <strong>{{ message.tags|capfirst }}:</strong> {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}    
+
     <form action="{% url '[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list' %}" method="GET">
         {% csrf_token %}
 
