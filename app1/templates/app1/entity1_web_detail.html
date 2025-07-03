@@ -1,28 +1,28 @@
+
 {% extends 'layout.html' %}
 
 {% block title %}
-Django form edit
+Django form detail
 {% endblock %}
 
 {% block content %}
-    <h1 class="title">Edit/Save Form in Django</h1>
+    <h1 class="title">View Form in Django</h1>
 
-    {% include '[[ relative_app_path ]]/_web_global_errors.html' %}
-    {% include '[[ relative_app_path ]]/_web_form_errors.html' %}
+    {% include 'app1/_web_global_errors.html' %}  
 
     <!--Codigo de Formulario-->
-    <form action="" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'app1:entity1_list' %}" method="GET">
         {% csrf_token %}
 
         {{ form.as_p }}
 
-        <input type="submit" value="Save" />
+        <a href="{% url 'app1:entity1_list' %}" class="btn btn-primary btn-link">Go List</a>
     </form>
 
     {% comment %}  
     <!-- ejemplo de como personalizar el formulario -->
 
-    <form action="" method="POST">
+    <form action="{% url 'app1:entity1_list' %}" method="GET">
         {% csrf_token %}
         
         <!-- ejemplo de como generar todos los campos -->
@@ -30,11 +30,6 @@ Django form edit
             <div class="form-group">
                 {{ field.label_tag }}
                 {{ field }}
-                {% if field.errors %}
-                    <div class="text-danger">
-                        {{ field.errors|join:", " }}
-                    </div>
-                {% endif %}
             </div>
         {% endfor %}
 
@@ -51,10 +46,10 @@ Django form edit
                     {% endfor %}
                 </div>
             {% endif %}            
-        </div>            
+        </div>          
 
-        <input type="submit" value="Save" />
+        <a href="{% url 'app1:entity1_list' %}" class="btn btn-primary btn-link">Go List</a>
     </form>         
     {% endcomment %}
-    
-{% endblock %}
+
+{% endblock %} 

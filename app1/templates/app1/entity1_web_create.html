@@ -1,14 +1,15 @@
+
 {% extends 'layout.html' %}
 
 {% block title %}
-Django form edit
+Django form create
 {% endblock %}
 
 {% block content %}
-    <h1 class="title">Edit/Save Form in Django</h1>
+    <h1 class="title">Create a Form in Django</h1>
 
-    {% include '[[ relative_app_path ]]/_web_global_errors.html' %}
-    {% include '[[ relative_app_path ]]/_web_form_errors.html' %}
+    {% include 'app1/_web_global_errors.html' %}
+    {% include 'app1/_web_form_errors.html' %}
 
     <!--Codigo de Formulario-->
     <form action="" method="POST" enctype="multipart/form-data">
@@ -22,7 +23,7 @@ Django form edit
     {% comment %}  
     <!-- ejemplo de como personalizar el formulario -->
 
-    <form action="" method="POST">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         
         <!-- ejemplo de como generar todos los campos -->
@@ -51,10 +52,10 @@ Django form edit
                     {% endfor %}
                 </div>
             {% endif %}            
-        </div>            
+        </div>             
 
         <input type="submit" value="Save" />
     </form>         
     {% endcomment %}
-    
+
 {% endblock %}

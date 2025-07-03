@@ -43,12 +43,14 @@ class CreateViewCommand:
         if os.path.exists(forms_path):
             print(Fore.RED + f"The file '{forms_path}' already exists" + Style.RESET_ALL)
             return
-         
+
         web_list_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_list' + '.html')
         web_create_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_create' + '.html')
         web_edit_register_path = os.path.join(views_templates_dir, entity_name.lower() +'_web_edit' + '.html')
         web_detail_register_path = os.path.join(views_templates_dir, entity_name.lower() + '_web_detail' + '.html')        
-        
+        web_form_errors_path = os.path.join(views_templates_dir, '_web_form_errors' + '.html') 
+        web_global_errors_path = os.path.join(views_templates_dir, '_web_global_errors' + '.html') 
+
         #si ya existe el archivo web_create_register mostrar error
         if os.path.exists(web_create_register_path):
             print(Fore.RED + f"The file '{web_create_register_path}' already exists" + Style.RESET_ALL)
@@ -67,7 +69,17 @@ class CreateViewCommand:
         #si ya existe el archivo web_detail_register mostrar error
         if os.path.exists(web_detail_register_path):
             print(Fore.RED + f"The file '{web_detail_register_path}' already exists" + Style.RESET_ALL)
-            return                                      
+            return          
+
+        #si ya existe el archivo web_form_errors mostrar error
+        if os.path.exists(web_form_errors_path):
+            print(Fore.RED + f"The file '{web_form_errors_path}' already exists" + Style.RESET_ALL)
+            return
+
+        #si ya existe el archivo web_global_errors mostrar error
+        if os.path.exists(web_global_errors_path):
+            print(Fore.RED + f"The file '{web_global_errors_path}' already exists" + Style.RESET_ALL)
+            return                            
 
         #renderizar views
         rendered_content_class = renderTemplate(templateName = 'view', fileName='web_views.py', render_params={'app_path': app_path, 'app_name':app_name, 'last_app_name':last_app_name, 'app_route':app_route, 'relative_app_path':relative_app_path, 'entity_name':entity_name})
@@ -88,15 +100,21 @@ class CreateViewCommand:
         print(f"Urls of Entity '{entity_name}' created at {urls_path}")
 
         #renderizar templates
-        readWriteTemplate(templateName='templates', fileName='web_list_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name}, repository_path=web_list_register_path, failIfError=True)
+        readWriteTemplate(templateName='templates', fileName='web_list_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name, 'relative_app_path':relative_app_path}, repository_path=web_list_register_path, failIfError=True)
         print(f"Template web_list of Entity '{entity_name}' created at {web_list_register_path}")
 
-        readWriteTemplate(templateName='templates', fileName='web_create_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name}, repository_path=web_create_register_path, failIfError=True)
+        readWriteTemplate(templateName='templates', fileName='web_create_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name, 'relative_app_path':relative_app_path}, repository_path=web_create_register_path, failIfError=True)
         print(f"Template web_create of Entity '{entity_name}' created at {web_create_register_path}")
 
-        readWriteTemplate(templateName='templates', fileName='web_edit_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name}, repository_path=web_edit_register_path, failIfError=True)
+        readWriteTemplate(templateName='templates', fileName='web_edit_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name, 'relative_app_path':relative_app_path}, repository_path=web_edit_register_path, failIfError=True)
         print(f"Template web_edit of Entity '{entity_name}' created at {web_edit_register_path}")
 
-        readWriteTemplate(templateName='templates', fileName='web_detail_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name}, repository_path=web_detail_register_path, failIfError=True)
+        readWriteTemplate(templateName='templates', fileName='web_detail_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name, 'relative_app_path':relative_app_path}, repository_path=web_detail_register_path, failIfError=True)
         print(f"Template web_detail of Entity '{entity_name}' created at {web_detail_register_path}")
+
+        readWriteTemplate(templateName='templates', fileName='_web_form_errors.html',  render_params={}, repository_path=web_form_errors_path, failIfError=True)
+        print(f"Template web_form_errors of Entity '{entity_name}' created at {web_form_errors_path}")
+
+        readWriteTemplate(templateName='templates', fileName='_web_global_errors.html',  render_params={}, repository_path=web_global_errors_path, failIfError=True)
+        print(f"Template web_global_errors of Entity '{entity_name}' created at {web_global_errors_path}")
 

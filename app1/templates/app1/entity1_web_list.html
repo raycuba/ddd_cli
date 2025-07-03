@@ -1,3 +1,4 @@
+
 {% extends 'layout.html' %}
 
 {% block title %}
@@ -7,7 +8,7 @@ Django form list
 {% block content %}
     <h1 class="title">List of</h1>
 
-    {% include '[[ relative_app_path ]]/_web_global_errors.html' %}
+    {% include 'app1/_web_global_errors.html' %}
 
     <!--Codigo de Listado-->
     <table class="table table-striped border datatable">
@@ -22,14 +23,14 @@ Django form list
         </thead>
         <tbody>
 
-            {% for [[ entity_name.lower() ]] in [[ entity_name.lower() ]]_list %}
+            {% for entity1 in entity1_list %}
             <tr class="align-middle">              
-                <td>{{[[ entity_name.lower() ]].attributeName}}</td>                
-                <td>{{[[ entity_name.lower() ]].attributeEmail}}</td>
+                <td>{{entity1.attributeName}}</td>                
+                <td>{{entity1.attributeEmail}}</td>
                 <td>
-                    {% if [[ entity_name.lower() ]].attributeRole == 'adm' %} Administrator {% elif [[ entity_name.lower() ]].attributeRole == 'man' %} Manager {% elif [[ entity_name.lower() ]].attributeRole == 'emp' %} Employee {% endif %}
+                    {% if entity1.attributeRole == 'adm' %} Administrator {% elif entity1.attributeRole == 'man' %} Manager {% elif entity1.attributeRole == 'emp' %} Employee {% endif %}
                 </td>
-                <td>{{[[ entity_name.lower() ]].attributeStatus}}</td>
+                <td>{{entity1.attributeStatus}}</td>
                 <td>
                     <a class="btn btn-success" href="">Edit</a>
                     <a class="btn btn-success" href="">View</a>

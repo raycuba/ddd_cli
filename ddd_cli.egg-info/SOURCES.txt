@@ -1,6 +1,10 @@
 MANIFEST.in
 README.md
 setup.py
+app1/__init__.py
+app1/entity1_forms.py
+app1/entity1_urls.py
+app1/entity1_views.py
 ddd/__init__.py
 ddd/management/__init__.py
 ddd/management/cli.py
@@ -34,6 +38,8 @@ ddd/management/templates/service/function_crud.py
 ddd/management/templates/service/imports.py
 ddd/management/templates/service/old/class.py
 ddd/management/templates/service/old/function.py
+ddd/management/templates/templates/_web_form_errors.html
+ddd/management/templates/templates/_web_global_errors.html
 ddd/management/templates/templates/test.html
 ddd/management/templates/templates/web_create_register.html
 ddd/management/templates/templates/web_detail_register.html

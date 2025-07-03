@@ -7,37 +7,8 @@ Django form create
 {% block content %}
     <h1 class="title">Create a Form in Django</h1>
 
-    <!-- Mensajes globales -->
-    {% if messages and not form.errors %}
-        <!-- Mostrar mensajes globales del framework de mensajes -->
-        {% for message in messages %}
-            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}">
-                <strong>{{ message.tags|capfirst }}:</strong> {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-
-    <!-- Errores del formulario -->
-    {% if form.errors %}
-        <div class="alert alert-danger">
-            <strong class="red">Error!</strong> <spam>There are errors in the form</spam>:
-            <ul>
-                <!-- Mostrar errores globales del formulario -->
-                {% for error in form.non_field_errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-
-                <!-- Mostrar errores específicos de los campos -->
-                {% for field, errors in form.errors.items %}
-                    {% if field != '__all__' %}
-                        {% for error in errors %}
-                            <li>{{ field|capfirst }}: {{ error }}</li>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+    {% include '[[ relative_app_path ]]/_web_global_errors.html' %}
+    {% include '[[ relative_app_path ]]/_web_form_errors.html' %}
 
     <!--Codigo de Formulario-->
     <form action="" method="POST" enctype="multipart/form-data">

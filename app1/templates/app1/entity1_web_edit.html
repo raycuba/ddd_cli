@@ -1,3 +1,4 @@
+
 {% extends 'layout.html' %}
 
 {% block title %}
@@ -7,8 +8,8 @@ Django form edit
 {% block content %}
     <h1 class="title">Edit/Save Form in Django</h1>
 
-    {% include '[[ relative_app_path ]]/_web_global_errors.html' %}
-    {% include '[[ relative_app_path ]]/_web_form_errors.html' %}
+    {% include 'app1/_web_global_errors.html' %}
+    {% include 'app1/_web_form_errors.html' %}
 
     <!--Codigo de Formulario-->
     <form action="" method="POST" enctype="multipart/form-data">
