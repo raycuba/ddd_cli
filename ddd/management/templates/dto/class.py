@@ -58,8 +58,8 @@ class [[ dto_name.capitalize() ]]Dto:
     parent_id: Optional[int] = None  # Llave foránea hacia una entidad padre
     owner_id: Optional[int] = None  # Llave foránea hacia el usuario propietario
     tags: Optional[List[str]] = None  # Lista de etiquetas (relación Many-to-Many)
-    image_url: Optional[str] = None  # URL hacia una imagen asociada
-    video_url: Optional[str] = None  # URL hacia un video asociado
+    image: Optional[str] = None  # URL hacia una imagen asociada
+    video: Optional[str] = None  # URL hacia un video asociado
     latitude: Optional[float] = None  # Coordenada de latitud
     longitude: Optional[float] = None  # Coordenada de longitud
     location_name: Optional[str] = None  # Nombre del lugar (dirección o ciudad)

@@ -51,8 +51,8 @@ class [[ serializer_name.capitalize() ]]Serializer(serializers.Serializer):
     parent_id: serializers.IntegerField(allow_null=True)  # Llave foránea hacia una entidad padre
     owner_id: serializers.IntegerField(allow_null=True)  # Llave foránea hacia el usuario propietario
     tags: serializers.ListField(child=serializers.CharField(), allow_null=True)  # Lista de etiquetas (relación Many-to-Many)
-    image_url: serializers.URLField(allow_null=True)  # URL hacia una imagen asociada
-    video_url: serializers.URLField(allow_null=True)  # URL hacia un video asociado
+    image: serializers.URLField(allow_null=True)  # URL hacia una imagen asociada
+    video: serializers.URLField(allow_null=True)  # URL hacia un video asociado
     latitude: serializers.FloatField(allow_null=True)  # Coordenada de latitud
     longitude: serializers.FloatField(allow_null=True)  # Coordenada de longitud
     location_name: serializers.CharField(allow_null=True)  # Nombre del lugar (dirección o ciudad)
