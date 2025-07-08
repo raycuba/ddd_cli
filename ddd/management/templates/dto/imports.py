@@ -1,2 +1,2 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Dict, List, Optional

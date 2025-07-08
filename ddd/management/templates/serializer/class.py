@@ -60,5 +60,8 @@ class [[ serializer_name.capitalize() ]]Serializer(serializers.Serializer):
     updated_by: serializers.IntegerField(allow_null=True)  # Usuario que actualizó la entidad
     order_status: serializers.ChoiceField(choices=[('PENDING', 'Pending'), ('COMPLETED', 'Completed')], allow_null=True)  # Estado de la orden (e.g., "PENDING", "COMPLETED")
     total_price: serializers.DecimalField(max_digits=10, decimal_places=2, allow_null=True)  # Precio total de la orden
-    items: serializers.ListField(child=serializers.DictField(), allow_null=True)  # Lista de artículos asociados    
+    config: serializers.DictField(allow_null=True)  # Configuración adicional ej. {"shipping": "free", "gift_wrap": True} 
+    categories: serializers.ListField(child=serializers.CharField(), allow_null=True)  # Lista de categorías asociadas ej. ["electronics", "clothing"]
+    items: serializers.ListField(child=serializers.DictField(), allow_null=True)  # Lista de artículos asociados ej. [{"product_id": 1, "quantity": 2}, {"product_id": 2, "quantity": 1}]
+
     '''

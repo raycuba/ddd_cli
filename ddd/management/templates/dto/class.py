@@ -67,6 +67,8 @@ class [[ dto_name.capitalize() ]]Dto:
     updated_by: Optional[int] = None  # Usuario que actualizó la entidad
     order_status: Optional[str] = None  # Estado de la orden (e.g., "PENDING", "COMPLETED")
     total_price: Optional[float] = None  # Precio total de la orden
-    items: Optional[List[Dict]] = None  # Lista de artículos asociados    
+    config: Optional[Dict] = field(default_factory=dict)  # Configuración adicional, ej. {"shipping": "free", "gift_wrap": True} 
+    categories: Optional[List[str]] = field(default_factory=list)  # Lista de categorías asociadas, ej. ["electronics", "clothing"]
+    items: Optional[List[Dict]] = None  # Lista de artículos asociados ej. [{"product_id": 1, "quantity": 2}, {"product_id": 2, "quantity": 1}]
         
     '''
