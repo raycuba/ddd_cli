@@ -7,15 +7,20 @@ class [[ dto_name.capitalize() ]]Dto:
     como entre la capa de dominio y la capa de infraestructura o vistas.
     """
 
-    # Atributos de ID
+    # identificadores
     id: Optional[int] = None  # ID es opcional al crear un nuevo objeto
 
-    # Atributos del DTO
+    # Atributos principales
     attributeName: str  # Atributo obligatorio
     attributeEmail: Optional[str] = None  # Atributo opcional
 
+    # Relaciones
+    external_id: Optional[int] = None  # ID de la entidad externa asociada (ideal para relaciones 1-a-1)
+
+
     def __post_init__(self):
         self.validate()       
+
 
     def validate(self) -> None:
         """
@@ -25,12 +30,14 @@ class [[ dto_name.capitalize() ]]Dto:
         - Ejemplo: campos no nulos, longitud mínima
         """
 
+
     def to_dict(self) -> dict:
         """
         Convierte el DTO a un diccionario.
         Ideal para serialización.
         """
         return self.__dict__
+
 
     @staticmethod
     def from_dict(data: dict) -> "[[ dto_name.capitalize() ]]Dto":
@@ -41,12 +48,9 @@ class [[ dto_name.capitalize() ]]Dto:
 
 
     '''Ejemplos de campos adicionales:
-
     name: str  # Nombre obligatorio
     email: Optional[str] = None  # Email opcional
-    external_id: Optional[str] = None  # Identificador externo, o un UUID público
     slug: Optional[str] = None  # Identificador único legible para URLs
-    title: str  # Título de la entidad
     content: Optional[str] = None  # Contenido detallado o descripción extensa
     price: Optional[float] = None  # Precio o valor numérico
     quantity: Optional[int] = None  # Cantidad disponible o asociada
@@ -55,9 +59,6 @@ class [[ dto_name.capitalize() ]]Dto:
     is_featured: Optional[bool] = None  # Si es destacado/promocionado
     updated_at: Optional[str] = None  # Fecha de última modificación (ISO 8601)
     deleted_at: Optional[str] = None  # Fecha de eliminación o "soft delete"
-    parent_id: Optional[int] = None  # Llave foránea hacia una entidad padre
-    owner_id: Optional[int] = None  # Llave foránea hacia el usuario propietario
-    tags: Optional[List[str]] = None  # Lista de etiquetas (relación Many-to-Many)
     image: Optional[str] = None  # URL hacia una imagen asociada
     video: Optional[str] = None  # URL hacia un video asociado
     latitude: Optional[float] = None  # Coordenada de latitud
@@ -70,5 +71,10 @@ class [[ dto_name.capitalize() ]]Dto:
     config: Optional[Dict] = field(default_factory=dict)  # Configuración adicional, ej. {"shipping": "free", "gift_wrap": True} 
     categories: Optional[List[str]] = field(default_factory=list)  # Lista de categorías asociadas, ej. ["electronics", "clothing"]
     items: Optional[List[Dict]] = None  # Lista de artículos asociados ej. [{"product_id": 1, "quantity": 2}, {"product_id": 2, "quantity": 1}]
-        
+    
+    # Atributos de relación
+    external_id: Optional[int] = None  # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
+    external_uuid: Optional[str] = None  # UUID externo
+    external_ids: Optional[List[int]] = None  # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
+    external_uuids: Optional[List[str]] = None  # Lista de UUIDs externos  
     '''

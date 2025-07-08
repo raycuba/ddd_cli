@@ -6,7 +6,7 @@ from drf_yasg import openapi
 from rest_framework.permissions import IsAuthenticated
 
 # importar serializers
-from serializers import [[ entity_name.capitalize() ]]Serializer
+from serializers import [[ entity_name.capitalize() ]]DTOSerializer
 
 # Importar excepciones especificas de dominio
 from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
@@ -39,11 +39,12 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
     # Definición de métodos HTTP permitidos
     # http_method_names = ['get', 'post', 'put', 'delete']
 
+
     @swagger_auto_schema(
         operation_summary="Retrieve a list or a specific [[ entity_name.lower() ]]",
         operation_description="Retrieve a list of all [[ entity_name.lower() ]] or a specific one by ID",
         responses={
-            200: [[ entity_name.capitalize() ]]Serializer,
+            200: [[ entity_name.capitalize() ]]DTOSerializer,
             404: "Not Found",
             400: "Bad Request"
         },
@@ -64,7 +65,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
                 [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
 
                 # Serializar el registro recuperado
-                response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
+                response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
                 response_serializer.is_valid(raise_exception=True)
 
                 # Retornar la respuesta con un estado HTTP 200 OK
@@ -81,7 +82,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
                 [[ entity_name.lower() ]]List = list_[[ entity_name.lower() ]](repository=repository)
 
                 # Serializar la lista de registros
-                response_serializer_list = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]]List, many=True)
+                response_serializer_list = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]]List, many=True)
                 response_serializer_list.is_valid(raise_exception=True)
 
                 # Retornar la respuesta con un estado HTTP 200 OK
@@ -95,9 +96,9 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
     @swagger_auto_schema(
         operation_summary="Create a new [[ entity_name.lower() ]]",
         operation_description="Create a new [[ entity_name.lower() ]] with the provided data",
-        request_body=[[ entity_name.capitalize() ]]Serializer,
+        request_body=[[ entity_name.capitalize() ]]DTOSerializer,
         responses={
-            201: [[ entity_name.capitalize() ]]Serializer,
+            201: [[ entity_name.capitalize() ]]DTOSerializer,
             400: "Bad Request"
         },
         tags=["[[ entity_name.lower() ]]"]
@@ -111,21 +112,21 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         """
         
         # Datos enviados en el cuerpo de la solicitud
-        serializer = [[ entity_name.capitalize() ]]Serializer(data=request.data) 
+        serializer = [[ entity_name.capitalize() ]]DTOSerializer(data=request.data) 
         if not serializer.is_valid():
             # Si la validación falla, retornar un error 400 BAD REQUEST
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Obtener el ID de la entidad relacionada si existe
-        parent_id = request.data.get('parent_id', None)
+        external_id = request.data.get('external_id', None)
 
         try:
             # Llamar al servicio de creación con los datos proporcionados
             repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, parent_id=parent_id,data=serializer.validated_data)
+            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, external_id=external_id,data=serializer.validated_data)
 
             # Serializar el nuevo registro creado
-            response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
+            response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
             response_serializer.is_valid(raise_exception=True)
 
             # Retornar la respuesta con un estado HTTP 201 CREATED
@@ -139,9 +140,9 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
     @swagger_auto_schema(
         operation_summary="Update an existing [[ entity_name.lower() ]]",
         operation_description="Update an existing [[ entity_name.lower() ]] with the provided ID and data",
-        request_body=[[ entity_name.capitalize() ]]Serializer,
+        request_body=[[ entity_name.capitalize() ]]DTOSerializer,
         responses={
-            200: [[ entity_name.capitalize() ]]Serializer,
+            200: [[ entity_name.capitalize() ]]DTOSerializer,
             400: "Bad Request",
             404: "Not Found"
         },
@@ -156,7 +157,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         """
 
         # Datos enviados en el cuerpo de la solicitud
-        serializer = [[ entity_name.capitalize() ]]Serializer(data=request.data) 
+        serializer = [[ entity_name.capitalize() ]]DTOSerializer(data=request.data) 
         if not serializer.is_valid():
             # Si la validación falla, retornar un error 400 BAD REQUEST
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -167,7 +168,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
             [[ entity_name.lower() ]] = update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=serializer.validated_data)
 
             # Serializar el registro actualizado
-            response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
+            response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
             response_serializer.is_valid(raise_exception=True)
 
             # Retornar la respuesta con un estado HTTP 200 OK

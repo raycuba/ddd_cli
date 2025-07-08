@@ -58,11 +58,11 @@ def [[ entity_name.lower() ]]_create(request):
             repository = [[ entity_name.capitalize() ]]Repository()
 
             # Obtener el ID de la entidad relacionada si existe
-            parent_id = request.POST.get('parent_id', None)
+            external_id = request.POST.get('external_id', None)
 
             try:
                 # LLamar al servicio de creación
-                create_[[ entity_name.lower() ]](repository=repository, parent_id=parent_id, data=form_data)
+                create_[[ entity_name.lower() ]](repository=repository, external_id=external_id, data=form_data)
 
                 # Mostrar mensaje de éxito y redirigir
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]]")

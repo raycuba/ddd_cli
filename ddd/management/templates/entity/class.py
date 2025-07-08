@@ -6,15 +6,17 @@ class [[ entity_name.capitalize() ]]Entity:
     Esta clase representa la lógica de negocio central y las reglas asociadas 
     con [[ entity_name.lower() ]] en el sistema.
     """
-    # atributos id
+
+    # Identificadores
     id: Optional[int] = None  # ID relacionado con la base de datos
     uuid: Optional[UUID] = None
 
-    # atributos 
+    # Atributos principales
     attributeName: Optional[str] = None  # Atributo opcional
     attributeEmail: Optional[str] = None  # Atributo opcional
 
-    parent_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
+    # Relaciones
+    external_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
 
     # Descomentar si se quiere hacer una validacion estricta
     #def __post_init__(self):
@@ -63,12 +65,9 @@ class [[ entity_name.capitalize() ]]Entity:
         
 
 '''Ejemplos de campos adicionales:
-
 name: Optional[str] = None  # Nombre 
 email: Optional[str] = None  # Email opcional
-external_id: Optional[str] = None  # Identificador externo, o un UUID público
 slug: Optional[str] = None  # Identificador único legible para URLs
-title: Optional[str] = None  # Título de la entidad
 content: Optional[str] = None  # Contenido detallado o descripción extensa
 price: Optional[float] = None  # Precio o valor numérico
 quantity: Optional[int] = None  # Cantidad disponible o asociada
@@ -78,9 +77,6 @@ is_featured: Optional[bool] = None  # Si es destacado/promocionado
 is_valid: Optional[bool] = True # Opcional, pero valor inicial no None
 updated_at: Optional[str] = None  # Fecha de última modificación (ISO 8601)
 deleted_at: Optional[str] = None  # Fecha de eliminación o "soft delete"
-parent_id: Optional[int] = None  # Llave foránea hacia una entidad padre
-owner_id: Optional[int] = None  # Llave foránea hacia el usuario propietario
-tags: Optional[List[str]] = None  # Lista de etiquetas (relación Many-to-Many)
 image: Optional[str] = None  # URL hacia una imagen asociada
 video: Optional[str] = None  # URL hacia un video asociado
 latitude: Optional[float] = None  # Coordenada de latitud
@@ -93,6 +89,12 @@ total_price: Optional[float] = None  # Precio total de la orden
 config: Optional[Dict] = field(default_factory=dict)  # Configuración adicional, ej. {"shipping": "free", "gift_wrap": True} 
 categories: Optional[List[str]] = field(default_factory=list)  # Lista de categorías asociadas, ej. ["electronics", "clothing"]
 items: Optional[List[Dict]] = None  # Lista de artículos asociados ej. [{"product_id": 1, "quantity": 2}, {"product_id": 2, "quantity": 1}]
+
+# Atributos de relación
+external_id: Optional[int] = None  # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
+external_uuid: Optional[str] = None  # UUID externo
+external_ids: Optional[List[int]] = None  # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
+external_uuids: Optional[List[str]] = None  # Lista de UUIDs externos
 
 Nota: en un @dataclass lo mejor es que los atributos sean opcionales,
 y que se inicialicen con None, para evitar problemas de validación

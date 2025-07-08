@@ -88,12 +88,12 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def create(entity: [[ entity_name.capitalize() ]]Entity, parent_id: Optional[int]) -> [[ entity_name.capitalize() ]]Entity:
+    def create(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int]) -> [[ entity_name.capitalize() ]]Entity:
         """
         Crea un nuevo registro.
 
         :param entity: Entidad con los datos necesarios para crear el registro.
-        :param parent_id: ID del padre si es necesario (opcional).
+        :param external_id: ID del padre si es necesario (opcional).
         :return: La entidad creada.
         :raises ValueError: Si los datos no son válidos.
         """
@@ -105,9 +105,9 @@ class [[ entity_name.capitalize() ]]Repository:
         data.pop('uuid', None)        
 
         # Si se proporciona un ID de otra entidad, agregarlo al diccionario
-        # django crea el campo 'parent_id' automáticamente si la relación es ForeignKey => otherEntity
-        if parent_id is not None:
-            data['parent_id'] = parent_id
+        # django crea el campo 'external_id' automáticamente si la relación es ForeignKey => otherEntity
+        if external_id is not None:
+            data['external_id'] = external_id
 
         # Crear el registro
         instance = [[ entity_name.capitalize() ]](**data)

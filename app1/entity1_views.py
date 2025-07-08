@@ -59,11 +59,11 @@ def entity1_create(request):
             repository = Entity1Repository()
 
             # Obtener el ID de la entidad relacionada si existe
-            parent_id = request.POST.get('parent_id', None)
+            external_id = request.POST.get('external_id', None)
 
             try:
                 # LLamar al servicio de creación
-                create_entity1(repository=repository, parent_id=parent_id, data=form_data)
+                create_entity1(repository=repository, external_id=external_id, data=form_data)
 
                 # Mostrar mensaje de éxito y redirigir
                 messages.success(request, f"Successfully created entity1")

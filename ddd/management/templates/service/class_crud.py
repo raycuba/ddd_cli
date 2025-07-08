@@ -36,7 +36,7 @@ class [[ entity_name.capitalize() ]]Service:
         return [entity.to_dict() for entity in entity_list]      
 
 
-    def create_[[ entity_name.lower() ]](self, parent_id: Optional[int], data) -> dict:
+    def create_[[ entity_name.lower() ]](self, external_id: Optional[int], data) -> dict:
         """
         Crea una nueva instancia de [[ entity_name.lower() ]].
 
@@ -53,7 +53,7 @@ class [[ entity_name.capitalize() ]]Service:
         entity.validate()       
 
         # Guardar en el repositorio
-        saved_entity = self.repository.create(entity=entity, parent_id=parent_id)
+        saved_entity = self.repository.create(entity=entity, external_id=external_id)
 
         return saved_entity.to_dict()
 

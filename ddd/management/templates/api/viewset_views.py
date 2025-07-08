@@ -133,12 +133,12 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Obtener el ID de la entidad relacionada si existe
-        parent_id = request.data.get('parent_id', None)
+        external_id = request.data.get('external_id', None)
 
         try:
             # Llamar al servicio para crear el registro
             repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, parent_id=parent_id,data=serializer.validated_data)
+            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, external_id=external_id,data=serializer.validated_data)
 
             # Serializar el nuevo registro creado
             response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
