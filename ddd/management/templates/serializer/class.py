@@ -115,7 +115,7 @@ class [[ serializer_name.capitalize() ]]DTOSerializer(serializers.Serializer):
         )
 
         # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
-        external_ids = serializers.ListField(
+        externals_ids = serializers.ListField(
             required=False,
             allow_empty=True,
             allow_null=True,
@@ -125,7 +125,7 @@ class [[ serializer_name.capitalize() ]]DTOSerializer(serializers.Serializer):
         )
 
         # Lista de UUIDs externos
-        external_uuids = serializers.ListField(
+        externals_uuids = serializers.ListField(
             required=False,
             allow_empty=True,
             allow_null=True,

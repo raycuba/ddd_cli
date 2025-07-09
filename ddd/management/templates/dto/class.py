@@ -78,7 +78,7 @@ class [[ dto_name.capitalize() ]]Dto:
     - Atributos de relación
         external_id: Optional[int] = None  # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
         external_uuid: Optional[str] = None  # UUID externo
-        external_ids: Optional[List[int]] = None  # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
-        external_uuids: Optional[List[str]] = None  # Lista de UUIDs externos  
+        externals_ids: Optional[List[int]] = None  # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
+        externals_uuids: Optional[List[str]] = None  # Lista de UUIDs externos  
 
     '''
