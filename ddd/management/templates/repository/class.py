@@ -178,3 +178,36 @@ class [[ entity_name.capitalize() ]]Repository:
             raise EntityNotFoundError(f"No [[ entity_name.lower() ]] found with ID {id}")
 
 
+'''
+En Django ORM los campos de relación se definen como ForeignKey, ManyToManyField o OneToOneField.
+Para la traduccion de relaciones entre entidades, se pueden utilizar los siguientes campos:
+
+- `external_id`: 
+    Para relaciones de clave externa (ForeignKey) o uno a uno (OneToOneField)
+        ej: external = models.ForeignKey(OtherEntity, on_delete=models.CASCADE, related_name='related_entities')
+        o    ej: external = models.OneToOneField(OtherEntity, on_delete=models.CASCADE, related_name='related_entity')
+            
+    el model de Django crea automáticamente el campo `external_id` este campo es accesible como un atributo de la entidad.
+
+- `external_uuid`: Para relaciones basadas en un UUID adicional aparte del ID.
+        ej: external = models.UUIDField(default=uuid.uuid4, editable=False)
+     es necesario definir en el model de Django una propiedad 'external_uuid' que retorne el UUID relacionado.
+    @property
+    def external_uuid(self):
+        return str(self.external.uuid) if self.external else None
+
+- `external_ids`: Para relaciones de muchos a muchos (ManyToManyField).
+    Para relaciones de muchos a muchos:
+        ej: external = models.ManyToManyField(OtherEntity, related_name='related_entities')
+    es necesario definir en el model de Django una propiedad 'external_ids' que retorne una lista de IDs relacionados.
+    @property
+    def external_ids(self):
+        return list(self.related_entities.values_list('id', flat=True))
+
+- `external_uuids`: Para relaciones de muchos a muchos basadas en UUID adicional aparte del ID.
+        ej: external = models.ManyToManyField(OtherEntity, related_name='related_entities')
+    es necesario definir en el model de Django una propiedad 'external_uuids' que retorne una lista de UUIDs relacionados.
+    @property
+    def external_uuids(self):
+        return list(self.related_entities.values_list('uuid', flat=True))
+'''

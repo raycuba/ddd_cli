@@ -67,68 +67,71 @@ class [[ serializer_name.capitalize() ]]DTOSerializer(serializers.Serializer):
             )
     '''
 
-    '''Ejemplos de campos adicionales:
-    name = serializers.CharField(max_length=100, help_text="Nombre obligatorio") 
-    email = serializers.EmailField(allow_null=True, help_text="Email opcional") 
-    slug = serializers.SlugField(help_text="Identificador único legible para URLs") 
-    content = serializers.CharField(help_text="Contenido breve o resumen") 
-    price = serializers.DecimalField(max_digits=10, decimal_places=2, help_text="Precio o valor numérico") 
-    quantity = serializers.IntegerField(help_text="Cantidad disponible o asociada")
-    rating = serializers.FloatField(help_text="Valoración media (ej. 4.5 estrellas)") 
-    is_active = serializers.BooleanField(default=True, help_text="Estado activo/inactivo") 
-    is_featured = serializers.BooleanField(default=False, help_text="Si es destacado/promocionado")
-    created_at = serializers.DateTimeField(read_only=True, help_text="Fecha de creación")
-    updated_at = serializers.DateTimeField(read_only=True, help_text="Fecha de última modificación") 
-    deleted_at = serializers.DateTimeField(allow_null=True, help_text="Fecha de eliminación o 'soft delete'")
-    image = serializers.URLField(allow_null=True, help_text="URL hacia una imagen asociada") 
-    video = serializers.URLField(allow_null=True, help_text="URL hacia un video asociado") 
-    latitude = serializers.FloatField(allow_null=True, help_text="Coordenada de latitud")
-    longitude = serializers.FloatField(allow_null=True, help_text="Coordenada de longitud") 
-    location_name = serializers.CharField(allow_null=True, help_text="Nombre del lugar (dirección o ciudad)") 
-    created_by = serializers.IntegerField(allow_null=True, help_text="Usuario que creó la entidad") 
-    updated_by = serializers.IntegerField(allow_null=True, help_text="Usuario que actualizó la entidad") 
-    order_status = serializers.ChoiceField(choices=[('PENDING', 'Pending'), ('COMPLETED', 'Completed')], allow_null=True, help_text="Estado de la orden (e.g., 'PENDING', 'COMPLETED')")
-    total_price = serializers.DecimalField(max_digits=10, decimal_places=2, allow_null=True, help_text="Precio total de la orden")
-    config = serializers.DictField(allow_null=True, help_text="Configuración adicional ej. {'shipping': 'free', 'gift_wrap': True}")
-    categories = serializers.ListField(child=serializers.CharField(), allow_null=True, help_text="Lista de categorías asociadas ej. ['electronics', 'clothing']")
-    items = serializers.ListField(child=serializers.DictField(), allow_null=True, help_text="Lista de artículos asociados ej. [{'product_id': 1, 'quantity': 2}, {'product_id': 2, 'quantity': 1}]")
+    '''
+    Ejemplos de: 
 
-    # Atributos de relación
+        - Atributos obligatorios y opcionales
+        name = serializers.CharField(max_length=100, help_text="Nombre obligatorio") 
+        email = serializers.EmailField(allow_null=True, help_text="Email opcional") 
+        slug = serializers.SlugField(help_text="Identificador único legible para URLs") 
+        content = serializers.CharField(help_text="Contenido breve o resumen") 
+        price = serializers.DecimalField(max_digits=10, decimal_places=2, help_text="Precio o valor numérico") 
+        quantity = serializers.IntegerField(help_text="Cantidad disponible o asociada")
+        rating = serializers.FloatField(help_text="Valoración media (ej. 4.5 estrellas)") 
+        is_active = serializers.BooleanField(default=True, help_text="Estado activo/inactivo") 
+        is_featured = serializers.BooleanField(default=False, help_text="Si es destacado/promocionado")
+        created_at = serializers.DateTimeField(read_only=True, help_text="Fecha de creación")
+        updated_at = serializers.DateTimeField(read_only=True, help_text="Fecha de última modificación") 
+        deleted_at = serializers.DateTimeField(allow_null=True, help_text="Fecha de eliminación o 'soft delete'")
+        image = serializers.URLField(allow_null=True, help_text="URL hacia una imagen asociada") 
+        video = serializers.URLField(allow_null=True, help_text="URL hacia un video asociado") 
+        latitude = serializers.FloatField(allow_null=True, help_text="Coordenada de latitud")
+        longitude = serializers.FloatField(allow_null=True, help_text="Coordenada de longitud") 
+        location_name = serializers.CharField(allow_null=True, help_text="Nombre del lugar (dirección o ciudad)") 
+        created_by = serializers.IntegerField(allow_null=True, help_text="Usuario que creó la entidad") 
+        updated_by = serializers.IntegerField(allow_null=True, help_text="Usuario que actualizó la entidad") 
+        order_status = serializers.ChoiceField(choices=[('PENDING', 'Pending'), ('COMPLETED', 'Completed')], allow_null=True, help_text="Estado de la orden (e.g., 'PENDING', 'COMPLETED')")
+        total_price = serializers.DecimalField(max_digits=10, decimal_places=2, allow_null=True, help_text="Precio total de la orden")
+        config = serializers.DictField(allow_null=True, help_text="Configuración adicional ej. {'shipping': 'free', 'gift_wrap': True}")
+        categories = serializers.ListField(child=serializers.CharField(), allow_null=True, help_text="Lista de categorías asociadas ej. ['electronics', 'clothing']")
+        items = serializers.ListField(child=serializers.DictField(), allow_null=True, help_text="Lista de artículos asociados ej. [{'product_id': 1, 'quantity': 2}, {'product_id': 2, 'quantity': 1}]")
 
-    # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
-    external_id = serializers.IntegerField(
-        required=False,
-        allow_null=True,
-        write_only=True, 
-        help_text="ID de la entidad externa asociada"
-    ) 
+    - Atributos de relación
 
-     # UUID externo
-    external_uuid = serializers.UUIDField(
-        required=False,
-        allow_null=True,
-        write_only=True, 
-        help_text="UUID de la entidad externa asociada"
-    )
+        # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
+        external_id = serializers.IntegerField(
+            required=False,
+            allow_null=True,
+            write_only=True, 
+            help_text="ID de la entidad externa asociada"
+        ) 
 
-    # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
-    external_ids = serializers.ListField(
-        required=False,
-        allow_empty=True,
-        allow_null=True,
-        child=serializers.IntegerField(), 
-        write_only=True,
-        help_text="Lista de IDs de entidades externas asociadas"
-    )
+        # UUID externo
+        external_uuid = serializers.UUIDField(
+            required=False,
+            allow_null=True,
+            write_only=True, 
+            help_text="UUID de la entidad externa asociada"
+        )
 
-    # Lista de UUIDs externos
-    external_uuids = serializers.ListField(
-        required=False,
-        allow_empty=True,
-        allow_null=True,
-        child=serializers.UUIDField(),
-        write_only=True,
-        help_text="Lista de UUIDs de entidades externas asociadas"
-    )
+        # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
+        external_ids = serializers.ListField(
+            required=False,
+            allow_empty=True,
+            allow_null=True,
+            child=serializers.IntegerField(), 
+            write_only=True,
+            help_text="Lista de IDs de entidades externas asociadas"
+        )
+
+        # Lista de UUIDs externos
+        external_uuids = serializers.ListField(
+            required=False,
+            allow_empty=True,
+            allow_null=True,
+            child=serializers.UUIDField(),
+            write_only=True,
+            help_text="Lista de UUIDs de entidades externas asociadas"
+        )
 
     '''

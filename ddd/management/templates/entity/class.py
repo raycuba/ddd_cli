@@ -64,40 +64,43 @@ class [[ entity_name.capitalize() ]]Entity:
         return [[ entity_name.capitalize() ]]Entity(**data)
         
 
-'''Ejemplos de campos adicionales:
-name: Optional[str] = None  # Nombre 
-email: Optional[str] = None  # Email opcional
-slug: Optional[str] = None  # Identificador único legible para URLs
-content: Optional[str] = None  # Contenido detallado o descripción extensa
-price: Optional[float] = None  # Precio o valor numérico
-quantity: Optional[int] = None  # Cantidad disponible o asociada
-rating: Optional[float] = None  # Valoración media (ej. 4.5 estrellas)
-is_active: bool = True  # Estado activo/inactivo
-is_featured: Optional[bool] = None  # Si es destacado/promocionado
-is_valid: Optional[bool] = True # Opcional, pero valor inicial no None
-updated_at: Optional[str] = None  # Fecha de última modificación (ISO 8601)
-deleted_at: Optional[str] = None  # Fecha de eliminación o "soft delete"
-image: Optional[str] = None  # URL hacia una imagen asociada
-video: Optional[str] = None  # URL hacia un video asociado
-latitude: Optional[float] = None  # Coordenada de latitud
-longitude: Optional[float] = None  # Coordenada de longitud
-location_name: Optional[str] = None  # Nombre del lugar (dirección o ciudad)
-created_by: Optional[int] = None  # Usuario que creó la entidad
-updated_by: Optional[int] = None  # Usuario que actualizó la entidad
-order_status: Optional[str] = None  # Estado de la orden (e.g., "PENDING", "COMPLETED")
-total_price: Optional[float] = None  # Precio total de la orden
-config: Optional[Dict] = field(default_factory=dict)  # Configuración adicional, ej. {"shipping": "free", "gift_wrap": True} 
-categories: Optional[List[str]] = field(default_factory=list)  # Lista de categorías asociadas, ej. ["electronics", "clothing"]
-items: Optional[List[Dict]] = None  # Lista de artículos asociados ej. [{"product_id": 1, "quantity": 2}, {"product_id": 2, "quantity": 1}]
+    '''
+    Ejemplos de: 
 
-# Atributos de relación
-external_id: Optional[int] = None  # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
-external_uuid: Optional[str] = None  # UUID externo
-external_ids: Optional[List[int]] = None  # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
-external_uuids: Optional[List[str]] = None  # Lista de UUIDs externos
+    - Atributos obligatorios y opcionales
+        name: Optional[str] = None  # Nombre 
+        email: Optional[str] = None  # Email opcional
+        slug: Optional[str] = None  # Identificador único legible para URLs
+        content: Optional[str] = None  # Contenido detallado o descripción extensa
+        price: Optional[float] = None  # Precio o valor numérico
+        quantity: Optional[int] = None  # Cantidad disponible o asociada
+        rating: Optional[float] = None  # Valoración media (ej. 4.5 estrellas)
+        is_active: bool = True  # Estado activo/inactivo
+        is_featured: Optional[bool] = None  # Si es destacado/promocionado
+        is_valid: Optional[bool] = True # Opcional, pero valor inicial no None
+        updated_at: Optional[str] = None  # Fecha de última modificación (ISO 8601)
+        deleted_at: Optional[str] = None  # Fecha de eliminación o "soft delete"
+        image: Optional[str] = None  # URL hacia una imagen asociada
+        video: Optional[str] = None  # URL hacia un video asociado
+        latitude: Optional[float] = None  # Coordenada de latitud
+        longitude: Optional[float] = None  # Coordenada de longitud
+        location_name: Optional[str] = None  # Nombre del lugar (dirección o ciudad)
+        created_by: Optional[int] = None  # Usuario que creó la entidad
+        updated_by: Optional[int] = None  # Usuario que actualizó la entidad
+        order_status: Optional[str] = None  # Estado de la orden (e.g., "PENDING", "COMPLETED")
+        total_price: Optional[float] = None  # Precio total de la orden
+        config: Optional[Dict] = field(default_factory=dict)  # Configuración adicional, ej. {"shipping": "free", "gift_wrap": True} 
+        categories: Optional[List[str]] = field(default_factory=list)  # Lista de categorías asociadas, ej. ["electronics", "clothing"]
+        items: Optional[List[Dict]] = None  # Lista de artículos asociados ej. [{"product_id": 1, "quantity": 2}, {"product_id": 2, "quantity": 1}]
 
-Nota: en un @dataclass lo mejor es que los atributos sean opcionales,
-y que se inicialicen con None, para evitar problemas de validación
-y que se puedan añadir nuevos atributos sin problemas.
+    - Atributos de relación
+        external_id: Optional[int] = None  # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
+        external_uuid: Optional[str] = None  # UUID externo
+        external_ids: Optional[List[int]] = None  # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
+        external_uuids: Optional[List[str]] = None  # Lista de UUIDs externos
 
-'''
+    Nota: en un @dataclass lo mejor es que los atributos sean opcionales,
+    y que se inicialicen con None, para evitar problemas de validación
+    y que se puedan añadir nuevos atributos sin problemas.
+
+    '''
