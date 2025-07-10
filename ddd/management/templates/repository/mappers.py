@@ -40,12 +40,14 @@ class Mapper:
         # Crear y devolver la entidad usando los datos filtrados
         return entity_class(**data)
     
+
     @staticmethod
     def entity_to_dict(entity_instance: Any) -> dict:
         """Convierte una entidad en un diccionario que contiene solo sus propios campos"""
         # Convertir la entidad a diccionario directamente con asdict (solo los campos de la entidad)
         return asdict(entity_instance)
     
+        
     @staticmethod
     def model_to_dict(model_instance: models.Model) -> dict:
         """Convierte una instancia de modelo Django en un diccionario que contiene solo sus propios campos"""

@@ -33,6 +33,7 @@ class [[ entity_name.capitalize() ]]Entity:
             raise ValueError("El attributeName debe tener al menos 3 caracteres")
         if self.attributeEmail and len(self.attributeEmail) > 500:
             raise ValueError("El attributeEmail no puede superar los 500 caracteres")
+ 
 
     def update(self, data:dict, addMode:bool = False) -> None:
         """
@@ -46,12 +47,14 @@ class [[ entity_name.capitalize() ]]Entity:
 
         self.validate()    
 
+
     def to_dict(self) -> dict:
         """
         Convierte la entidad a un diccionario.
         """
         return self.__dict__
 
+        
     @staticmethod
     def from_dict(data: dict) -> "[[ entity_name.capitalize() ]]Entity":
         """

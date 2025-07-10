@@ -156,6 +156,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             raise forms.ValidationError("The name must be at least 3 characters long")
         return attributeName
 
+
     def clean_attributeEmail(self):
         '''
         Esta validacion es solo para el campo 'attributeEmail'
@@ -165,6 +166,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             raise forms.ValidationError("Emails from example.com are not allowed")
         return attributeEmail
 
+        
     def clean(self):
         '''
         Aqui podemos hacer validaciones que involucren a varios campos

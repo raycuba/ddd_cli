@@ -22,12 +22,14 @@ class [[ serializer_name.capitalize() ]]DTOSerializer(serializers.Serializer):
         help_text="ID de la entidad externa asociada"
     )
 
+    
     # Métodos create y update son obligatorios al usar `serializers.Serializer`
     def create(self, validated_data):
         """
         Debe implementarse según tu lógica de negocio.
         """
         raise NotImplementedError("Implementa el método `create` en tu serializer.")
+
 
     def update(self, instance, validated_data):
         """
