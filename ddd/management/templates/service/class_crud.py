@@ -36,7 +36,7 @@ class [[ entity_name.capitalize() ]]Service:
         return [entity.to_dict() for entity in entity_list]      
 
 
-    def create_[[ entity_name.lower() ]](self, external_id: Optional[int], data, adicionalData=False) -> dict:
+    def create_[[ entity_name.lower() ]](self, external_id: Optional[int], data, adicionalData=None) -> dict:
         """
         Crea una nueva instancia de [[ entity_name.lower() ]].
 
@@ -74,7 +74,7 @@ class [[ entity_name.capitalize() ]]Service:
         return entity.to_dict()
 
 
-    def update_[[ entity_name.lower() ]](self, entity_id: int, data, adicionalData=False) -> dict:
+    def update_[[ entity_name.lower() ]](self, entity_id: int, data, adicionalData=None) -> dict:
         """
         Actualiza una instancia existente de [[ entity_name.lower() ]].
 

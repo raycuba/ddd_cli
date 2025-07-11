@@ -13,7 +13,7 @@ def list_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Rep
     return [entity.to_dict() for entity in entity_list]  
 
 
-def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, external_id: Optional[int], data, adicionalData=False) -> dict:
+def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, external_id: Optional[int], data, adicionalData=None) -> dict:
     """
     Crea una nueva instancia de [[ entity_name.lower() ]].
 
@@ -53,7 +53,7 @@ def retrieve_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]
     return entity.to_dict()
 
 
-def update_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, entity_id: int, data, adicionalData=False) -> dict:
+def update_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, entity_id: int, data, adicionalData=None) -> dict:
     """
     Actualiza una instancia existente de [[ entity_name.lower() ]].
 
