@@ -36,11 +36,12 @@ class [[ entity_name.capitalize() ]]Service:
         return [entity.to_dict() for entity in entity_list]      
 
 
-    def create_[[ entity_name.lower() ]](self, external_id: Optional[int], data) -> dict:
+    def create_[[ entity_name.lower() ]](self, external_id: Optional[int], data, adicionalData=False) -> dict:
         """
         Crea una nueva instancia de [[ entity_name.lower() ]].
 
         :param data: Diccionario o DTO con los datos necesarios para crear la instancia.
+        :param adicionalData: Datos adicionales a incluir en la creación.
         :return: La entidad creada.
         :raises ValueError: Si las reglas de negocio no se cumplen.
         """
@@ -53,7 +54,7 @@ class [[ entity_name.capitalize() ]]Service:
         entity.validate()       
 
         # Guardar en el repositorio
-        saved_entity = self.repository.create(entity=entity, external_id=external_id)
+        saved_entity = self.repository.create(entity=entity, external_id=external_id, adicionalData=adicionalData)
 
         return saved_entity.to_dict()
 
@@ -73,12 +74,13 @@ class [[ entity_name.capitalize() ]]Service:
         return entity.to_dict()
 
 
-    def update_[[ entity_name.lower() ]](self, entity_id: int, data) -> dict:
+    def update_[[ entity_name.lower() ]](self, entity_id: int, data, adicionalData=False) -> dict:
         """
         Actualiza una instancia existente de [[ entity_name.lower() ]].
 
         :param entity_id: ID de la instancia a actualizar.
-        :param data: Diccionario o DTO con los datos a actualizar.    
+        :param data: Diccionario o DTO con los datos a actualizar.
+        :param adicionalData: Datos adicionales a incluir en la actualización.
         :return: La entidad actualizada.
         :raises ValueError: Si no se encuentra la instancia o las reglas de negocio no se cumplen.
         """
@@ -92,7 +94,7 @@ class [[ entity_name.capitalize() ]]Service:
         entity.validate()   
 
         # Guardar en el repositorio
-        updated_entity = self.repository.save(entity)
+        updated_entity = self.repository.save(entity, adicionalData=adicionalData)
         
         return updated_entity.to_dict()
 

@@ -88,12 +88,13 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def create(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int]) -> [[ entity_name.capitalize() ]]Entity:
+    def create(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int], adicionalData=False) -> [[ entity_name.capitalize() ]]Entity:
         """
         Crea un nuevo registro.
 
         :param entity: Entidad con los datos necesarios para crear el registro.
         :param external_id: ID del padre si es necesario (opcional).
+        :param adicionalData: Datos adicionales a incluir en la creación.
         :return: La entidad creada.
         :raises ValueError: Si los datos no son válidos.
         """
@@ -112,6 +113,12 @@ class [[ entity_name.capitalize() ]]Repository:
         # Crear el registro
         instance = [[ entity_name.capitalize() ]](**data)
 
+        # Si adicionalData es True, agregar datos adicionales
+        if adicionalData:
+            # Aquí puedes agregar lógica para manejar datos adicionales específicos
+            # Por ejemplo, guardar una foto, un password, o cualquier otro campo especial
+            pass
+
         # Validar y guardar
         try:
             instance.full_clean()  # Validaciones del modelo
@@ -124,7 +131,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def save(entity: [[ entity_name.capitalize() ]]Entity) -> [[ entity_name.capitalize() ]]Entity:
+    def save(entity: [[ entity_name.capitalize() ]]Entity, adicionalData=False) -> [[ entity_name.capitalize() ]]Entity:
         """
         Guarda los cambios en una entidad existente.
 
@@ -145,6 +152,12 @@ class [[ entity_name.capitalize() ]]Repository:
                         # Los campos especiales son aquellos que nunca cambian como: id, uuid, created_at, updated_at, etc.
                         # o aquellos que tienen una forma especial de ser guardados como: photo, password, etc.
                         setattr(instance, key, value)
+
+            # Si adicionalData es True, agregar datos adicionales
+            if adicionalData:
+                # Aquí puedes agregar lógica para manejar datos adicionales específicos
+                # Por ejemplo, guardar una foto, un password, o cualquier otro campo especial
+                pass
 
             # Validar y guardar
             instance.full_clean()  # Validaciones del modelo Django
