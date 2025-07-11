@@ -88,7 +88,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def create(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int], adicionalData=False) -> [[ entity_name.capitalize() ]]Entity:
+    def create(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int], adicionalData=None) -> [[ entity_name.capitalize() ]]Entity:
         """
         Crea un nuevo registro.
 
@@ -113,7 +113,7 @@ class [[ entity_name.capitalize() ]]Repository:
         # Crear el registro
         instance = [[ entity_name.capitalize() ]](**data)
 
-        # Si adicionalData es True, agregar datos adicionales
+        # Si adicionalData, agregar datos adicionales
         if adicionalData:
             # Aquí puedes agregar lógica para manejar datos adicionales específicos
             # Por ejemplo, guardar una foto, un password, o cualquier otro campo especial
@@ -131,7 +131,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def save(entity: [[ entity_name.capitalize() ]]Entity, adicionalData=False) -> [[ entity_name.capitalize() ]]Entity:
+    def save(entity: [[ entity_name.capitalize() ]]Entity, adicionalData=None) -> [[ entity_name.capitalize() ]]Entity:
         """
         Guarda los cambios en una entidad existente.
 
@@ -153,7 +153,7 @@ class [[ entity_name.capitalize() ]]Repository:
                         # o aquellos que tienen una forma especial de ser guardados como: photo, password, etc.
                         setattr(instance, key, value)
 
-            # Si adicionalData es True, agregar datos adicionales
+            # Si adicionalData, agregar datos adicionales
             if adicionalData:
                 # Aquí puedes agregar lógica para manejar datos adicionales específicos
                 # Por ejemplo, guardar una foto, un password, o cualquier otro campo especial
