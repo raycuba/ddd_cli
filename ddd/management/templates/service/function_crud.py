@@ -8,7 +8,7 @@ def list_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Rep
     :raises ValueError: Si las reglas de negocio no se cumplen.
     """
 
-    entity_list = repository.get_all(filters)
+    entity_list = repository.get_all(filters=filters)
 
     return [entity.to_dict() for entity in entity_list]  
 
@@ -24,7 +24,7 @@ def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     :raises ValueError: Si las reglas de negocio no se cumplen.
     """
     # Validación de reglas de negocio (opcional)
-    if repository.exists_by_field("attributeName", data['attributeName']):
+    if repository.exists_by_field(field_name="attributeName", value=data['attributeName']):
         raise ValueError("An instance with this attributeName already exists")
 
     #crear y validar la entidad
@@ -46,7 +46,7 @@ def retrieve_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]
     :return: La entidad recuperada.
     :raises ValueError: Si no se encuentra la instancia.
     """
-    entity = repository.get_by_id(entity_id)
+    entity = repository.get_by_id(id=entity_id)
     if not entity:
         raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
 
@@ -65,7 +65,7 @@ def update_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     :raises ValueError: Si no se encuentra la instancia o las reglas de negocio no se cumplen.
     """
     # Recuperar la entidad
-    entity = repository.get_by_id(entity_id)
+    entity = repository.get_by_id(id=entity_id)
     if not entity:
         raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
 
@@ -74,7 +74,7 @@ def update_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     entity.validate()   
 
     # Guardar en el repositorio
-    updated_entity = repository.save(entity, adicionalData=adicionalData)
+    updated_entity = repository.save(entity=entity, adicionalData=adicionalData)
 
     return updated_entity.to_dict()
 
@@ -89,11 +89,11 @@ def delete_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     :raises ValueError: Si no se encuentra la instancia.
     """
     # Recuperar la entidad
-    entity = repository.get_by_id(entity_id)
+    entity = repository.get_by_id(id=entity_id)
     if not entity:
         raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
 
     # Eliminación en el repositorio
-    repository.delete(entity_id)
+    repository.delete(id=entity_id)
 
     return True

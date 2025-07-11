@@ -31,7 +31,7 @@ class [[ entity_name.capitalize() ]]Service:
         :raises ValueError: Si las reglas de negocio no se cumplen.
         """
 
-        entity_list = self.repository.get_all(filters)
+        entity_list = self.repository.get_all(filters=filters)
 
         return [entity.to_dict() for entity in entity_list]      
 
@@ -46,7 +46,7 @@ class [[ entity_name.capitalize() ]]Service:
         :raises ValueError: Si las reglas de negocio no se cumplen.
         """
         # Validación de reglas de negocio (opcional)
-        if repository.exists_by_field("attributeName", data['attributeName']):
+        if repository.exists_by_field(field_name="attributeName", value=data['attributeName']):
             raise ValueError("An instance with this attributeName already exists")
 
         #crear y validar la entidad
@@ -67,7 +67,7 @@ class [[ entity_name.capitalize() ]]Service:
         :return: La entidad recuperada.
         :raises ValueError: Si no se encuentra la instancia.
         """
-        entity = self.repository.get_by_id(entity_id)
+        entity = self.repository.get_by_id(id=entity_id)
         if not entity:
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
 
@@ -85,7 +85,7 @@ class [[ entity_name.capitalize() ]]Service:
         :raises ValueError: Si no se encuentra la instancia o las reglas de negocio no se cumplen.
         """
         # Recuperar la entidad
-        entity = self.repository.get_by_id(entity_id)
+        entity = self.repository.get_by_id(id=entity_id)
         if not entity:
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
 
@@ -94,7 +94,7 @@ class [[ entity_name.capitalize() ]]Service:
         entity.validate()   
 
         # Guardar en el repositorio
-        updated_entity = self.repository.save(entity, adicionalData=adicionalData)
+        updated_entity = self.repository.save(entity=entity, adicionalData=adicionalData)
         
         return updated_entity.to_dict()
 
@@ -108,11 +108,11 @@ class [[ entity_name.capitalize() ]]Service:
         :raises ValueError: Si no se encuentra la instancia.
         """
         # Recuperar la entidad
-        entity = self.repository.get_by_id(entity_id)
+        entity = self.repository.get_by_id(id=entity_id)
         if not entity:
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
 
         # Eliminación en el repositorio
-        self.repository.delete(entity_id)
+        self.repository.delete(id=entity_id)
 
         return True

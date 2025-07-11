@@ -123,7 +123,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         try:
             # Llamar al servicio de creación con los datos proporcionados
             repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, external_id=external_id,data=serializer.validated_data)
+            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, external_id=external_id, data=serializer.validated_data)
 
             # Serializar el nuevo registro creado
             response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
