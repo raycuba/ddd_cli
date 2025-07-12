@@ -32,7 +32,10 @@ class [[ entity_name.capitalize() ]]Repository:
         # Aplicar filtros si se proporcionan
         if filters:
             if "nombre" in filters and filters["nombre"] != "":
-                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])        
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])      
+                
+        # Tener en cuenta los campos reales que se necesitan en el listado
+        instance_list = instance_list.only("id", "nombre", "created_at")
 
         # Convertir a entidades usando el Mapper genérico
         return [Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity) for instance in instance_list]        

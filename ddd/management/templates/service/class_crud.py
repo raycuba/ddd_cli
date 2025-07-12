@@ -36,6 +36,16 @@ class [[ entity_name.capitalize() ]]Service:
         return [entity.to_dict() for entity in entity_list]      
 
 
+    def count_all_[[ entity_name.lower() ]](self, filters: Optional[dict] = None) -> int:
+        """
+        Cuenta todas las instancias de [[ entity_name.lower() ]].
+
+        :param filters: Filtros opcionales para la consulta.
+        :return: Número total de instancias.
+        """
+        return self.repository.count_all(filters=filters)
+
+
     def create_[[ entity_name.lower() ]](self, external_id: Optional[int], data, adicionalData=None) -> dict:
         """
         Crea una nueva instancia de [[ entity_name.lower() ]].

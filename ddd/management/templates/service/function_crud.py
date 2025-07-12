@@ -13,6 +13,17 @@ def list_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Rep
     return [entity.to_dict() for entity in entity_list]  
 
 
+def count_all_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, filters: Optional[dict] = None) -> int:
+    """
+    Cuenta todas las instancias de [[ entity_name.lower() ]].
+
+    :param repository: Repositorio que maneja la persistencia de [[ entity_name.lower() ]].
+    :param filters: Filtros opcionales para la consulta.
+    :return: Número total de instancias.
+    """
+    return repository.count_all(filters=filters)
+
+
 def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, external_id: Optional[int], data, adicionalData=None) -> dict:
     """
     Crea una nueva instancia de [[ entity_name.lower() ]].
