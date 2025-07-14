@@ -347,6 +347,13 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
         required=False
     )
 
+    # === Campos de solo lectura ===
+    read_only_field = forms.CharField(
+        label=_("Campo de solo lectura"),
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+    )
+
     # === Campos personalizados ===
     custom_field = forms.CharField(
         label=_("Campo personalizado"),
