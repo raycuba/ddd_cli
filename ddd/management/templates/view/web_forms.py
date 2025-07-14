@@ -147,6 +147,16 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
         }
     )
 
+    # Campo de archivo (para subir una foto)
+    attributeImage = forms.ImageField(
+        label="Image",
+        required=False,  # La imagen no es obligatoria
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+            'accept': 'image/*',  # Restringe el tipo de archivo a imágenes
+        }),
+    )         
+
     def clean_attributeName(self):
         '''
         Esta validacion es solo para el campo 'attributeName'
