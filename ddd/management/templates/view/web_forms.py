@@ -48,6 +48,30 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
         ]
     )
 
+    # Campo de contraseña
+    attributePassword = forms.CharField(
+        label="Password",
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Create a password',
+            'minlength': '8',
+        }),
+        validators=[
+            MinLengthValidator(8, "Password must be at least 8 characters long"),
+        ]
+    )
+
+    attributePhoto = forms.ImageField(
+        label="Image",
+        required=False,  # La photo no es obligatoria
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+            'accept': 'image/*',  # Restringe el tipo de archivo a imágenes
+        }), 
+        help_text="Formatos permitidos: JPG, PNG" # Esta ayuda se mostrará debajo del campo
+    )   
+
 
     def clean_attributeName(self):
         '''
@@ -359,7 +383,7 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     ) 
 
     # Campo de contraseña
-    password_field = forms.CharField(
+    attributePassword = forms.CharField(
         label="Password",
         required=True,
         widget=forms.PasswordInput(attrs={
