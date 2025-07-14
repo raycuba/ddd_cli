@@ -35,24 +35,6 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
         ]
     )
 
-    # Campo de texto (Category)
-    attributeCategory = forms.CharField(
-        label='Category',
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'minlength': '4',  # Mínima longitud en el navegador
-            'maxlength': '250',  # Máxima longitud en el navegador      
-            'pattern': r'^[A-Za-z\s]*$',  # Expresión regular en el navegador           
-            'title': 'The name can only contain letters and spaces.'
-        }),
-        validators=[
-            MinLengthValidator(4, "The name must be at least 4 characters"),
-            MaxLengthValidator(250, "The name must not exceed 250 characters"),
-            RegexValidator(r'^[A-Za-z\s]*$', "The name can only contain letters and spaces"),
-        ]          
-    ) 
-
     # Campo de correo electrónico
     attributeEmail = forms.EmailField(
         label="Email",
@@ -66,96 +48,6 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
         ]
     )
 
-    # Campo de contraseña
-    attributePassword = forms.CharField(
-        label="Password",
-        required=True,
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Create a password',
-            'minlength': '8',
-        }),
-        validators=[
-            MinLengthValidator(8, "Password must be at least 8 characters long"),
-        ]
-    )
-
-    # Campo numérico
-    attributeAge = forms.IntegerField(
-        label="Age",
-        required=True,
-        widget=forms.NumberInput(attrs={
-            'class': 'form-control',
-            'min': '18',  # HTML5 validación
-            'max': '100',  # HTML5 validación
-            'placeholder': 'Enter your age',
-        }),
-        validators=[
-            MinValueValidator(18, "You must be at least 18 years old"),
-            MaxValueValidator(100, "The age must not exceed 100"),
-        ]
-    )
-
-    # Campo de fecha
-    attributeBirthDate = forms.DateField(
-        label="Birth Date",
-        required=True,
-        widget=forms.DateInput(attrs={
-            'class': 'form-control',
-            'type': 'date',  # HTML5 tipo fecha
-        })
-    )
-
-    # Selección desplegable
-    attributeCountry = forms.ChoiceField(
-        label="Country",
-        required=True,
-        choices=[
-            ('', 'Select your country'),
-            ('us', 'United States'),
-            ('es', 'Spain'),
-            ('mx', 'Mexico'),
-        ],
-        widget=forms.Select(attrs={
-            'class': 'form-control form-select',
-        })  
-    )
-
-    # Opciones de radio
-    attributeGender = forms.ChoiceField(
-        label="Gender",
-        required=True,
-        choices=[
-            ('male', 'Male'),
-            ('female', 'Female'),
-            ('other', 'Other'),
-        ],
-        widget=forms.RadioSelect(attrs={
-            'class': 'form-check-input',
-        })
-    )
-
-    # Casillas de verificación
-    attributeTerms = forms.BooleanField(
-        label="I accept the terms and conditions",
-        required=True,
-        widget=forms.CheckboxInput(attrs={
-            'class': 'form-check-input',
-        }),
-        error_messages={
-            'required': "You must accept the terms and conditions to proceed",
-        }
-    )
-
-    # Campo de archivo (para subir una foto)
-    attributeImage = forms.ImageField(
-        label="Image",
-        required=False,  # La imagen no es obligatoria
-        widget=forms.ClearableFileInput(attrs={
-            'class': 'form-control',
-            'accept': 'image/*',  # Restringe el tipo de archivo a imágenes
-        }),
-    )         
 
     def clean_attributeName(self):
         '''
@@ -261,6 +153,294 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
 
 
 
+"""
+    Ejemplo completo de formulario con todos los tipos de campo y widget más comunes.
+
+
+    # === Campos de texto ===
+    char_field = forms.CharField(
+        label=_("Nombre"),
+        max_length=100,
+        required=True,
+        help_text=_("Ej: Juan Pérez"),
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        validators=[
+            MinLengthValidator(3),
+            MaxLengthValidator(100),
+            RegexValidator(r'^[A-Za-zñÑáéíóúÁÉÍÓÚ ]+$', "Solo letras y espacios.")
+        ]
+    )
+
+    text_area = forms.CharField(
+        label=_("Descripción"),
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        required=False
+    )
+
+    # === Campos numéricos ===
+    integer_field = forms.IntegerField(
+        label=_("Edad"),
+        required=True,
+        widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        validators=[MinValueValidator(0), MaxValueValidator(120)]
+    )
+
+    decimal_field = forms.DecimalField(
+        label=_("Precio"),
+        max_digits=10,
+        decimal_places=2,
+        required=False,
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+
+    # === Campos de fecha y hora ===
+    date_field = forms.DateField(
+        label=_("Fecha de nacimiento"),
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        required=True
+    )
+
+    datetime_field = forms.DateTimeField(
+        label=_("Fecha y hora"),
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+        required=False
+    )
+
+    time_field = forms.TimeField(
+        label=_("Hora"),
+        widget=forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+        required=False
+    )
+
+    # === Campos de selección ===
+    choice_field = forms.ChoiceField(
+        label=_("País"),
+        choices=[
+            ('', 'Selecciona un país'),
+            ('es', 'España'),
+            ('mx', 'México'),
+            ('co', 'Colombia')
+        ],
+        widget=forms.Select(attrs={'class': 'form-control form-select'}),
+        required=True
+    )
+
+    multiple_choice_field = forms.MultipleChoiceField(
+        label=_("Hobbies"),
+        choices=[
+            ('reading', 'Leer'),
+            ('sports', 'Deportes'),
+            ('music', 'Música')
+        ],
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        required=False
+    )
+
+    # === Campos booleanos ===
+    boolean_field = forms.BooleanField(
+        label=_("¿Acepta términos?"),
+        required=True,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        error_messages={'required': "Debe aceptar los términos"}
+    )
+
+    null_boolean_field = forms.NullBooleanField(
+        label=_("¿Ha visitado antes?"),
+        widget=forms.Select(choices=[
+            (None, '---'),
+            (True, 'Sí'),
+            (False, 'No')
+        ], attrs={'class': 'form-control form-select'}),
+        required=False
+    )
+
+    # === Campos de archivo ===
+    file_field = forms.FileField(
+        label=_("Archivo"),
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'form-control'}),
+        validators=[forms.FileExtensionValidator(['pdf', 'docx'], "Solo archivos PDF o DOCX")]
+    )
+
+    attributeImage = forms.ImageField(
+        label="Image",
+        required=False,  # La imagen no es obligatoria
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+            'accept': 'image/*',  # Restringe el tipo de archivo a imágenes
+        }),
+        help_text="Formatos permitidos: JPG, PNG"
+    )   
+
+
+    # === Campos especiales ===
+    email_field = forms.EmailField(
+        label=_("Correo electrónico"),
+        required=True,
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+        validators=[EmailValidator("Correo inválido")]
+    )
+
+    url_field = forms.URLField(
+        label="Website",
+        required=False,  # Este campo no es obligatorio
+        widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your website URL',
+        }),
+        validators=[
+            RegexValidator(
+                r'^(https?|ftp)://[^\s/$.?#].[^\s]*$',
+                "Please enter a valid URL starting with http://, https://, or ftp://"
+            ),
+        ]
+    )
+
+    slug_field = forms.SlugField(
+        label=_("Slug (URL)"),
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        help_text=_("Solo letras, números y guiones")
+    )
+
+    ip_field = forms.GenericIPAddressField(
+        label=_("Dirección IP"),
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+    uuid_field = forms.UUIDField(
+        label=_("UUID"),
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        help_text=_("Formato: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx")
+    )
+
+    # === Campos ocultos ===
+    hidden_field = forms.CharField(
+        widget=forms.HiddenInput(),
+        initial="valor_oculto",
+        required=False
+    )
+
+    # === Campos personalizados ===
+    custom_field = forms.CharField(
+        label=_("Campo personalizado"),
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        validators=[
+            RegexValidator(r'^[A-Za-z0-9_]+$', "Solo letras, números y guiones bajos permitidos.")
+        ]
+    )
+    custom_field.widget.attrs.update({
+        'placeholder': 'Ingrese un valor personalizado',
+        'title': 'Este es un campo personalizado con validación específica.'
+    })  
+
+    # === Ejemplos practicos de campos adicionales ===
+
+    # Campo de solo texto sin números (Category)
+    attributeCategory = forms.CharField(
+        label='Category',
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'minlength': '4',  # Mínima longitud en el navegador
+            'maxlength': '250',  # Máxima longitud en el navegador      
+            'pattern': r'^[A-Za-z\s]*$',  # Expresión regular en el navegador           
+            'title': 'The name can only contain letters and spaces.'
+        }),
+        validators=[
+            MinLengthValidator(4, "The name must be at least 4 characters"),
+            MaxLengthValidator(250, "The name must not exceed 250 characters"),
+            RegexValidator(r'^[A-Za-z\s]*$', "The name can only contain letters and spaces"),
+        ]          
+    ) 
+
+    # Campo de contraseña
+    password_field = forms.CharField(
+        label="Password",
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Create a password',
+            'minlength': '8',
+        }),
+        validators=[
+            MinLengthValidator(8, "Password must be at least 8 characters long"),
+        ]
+    )
+
+    # Campo numérico
+    attributeAge = forms.IntegerField(
+        label="Age",
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'min': '18',  # HTML5 validación
+            'max': '100',  # HTML5 validación
+            'placeholder': 'Enter your age',
+        }),
+        validators=[
+            MinValueValidator(18, "You must be at least 18 years old"),
+            MaxValueValidator(100, "The age must not exceed 100"),
+        ]
+    )
+
+    # Campo de fecha
+    attributeBirthDate = forms.DateField(
+        label="Birth Date",
+        required=True,
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',  # HTML5 tipo fecha
+        })
+    )
+
+    # Selección desplegable
+    attributeCountry = forms.ChoiceField(
+        label="Country",
+        required=True,
+        choices=[
+            ('', 'Select your country'),
+            ('us', 'United States'),
+            ('es', 'Spain'),
+            ('mx', 'Mexico'),
+        ],
+        widget=forms.Select(attrs={
+            'class': 'form-control form-select',
+        })  
+    )
+
+    # Opciones de radio
+    attributeGender = forms.ChoiceField(
+        label="Gender",
+        required=True,
+        choices=[
+            ('male', 'Male'),
+            ('female', 'Female'),
+            ('other', 'Other'),
+        ],
+        widget=forms.RadioSelect(attrs={
+            'class': 'form-check-input',
+        })
+    )
+
+    # Casillas de verificación
+    attributeTerms = forms.BooleanField(
+        label="I accept the terms and conditions",
+        required=True,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        }),
+        error_messages={
+            'required': "You must accept the terms and conditions to proceed",
+        }
+    )      
+
+
+"""
 
             
 '''
