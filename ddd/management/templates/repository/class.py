@@ -104,16 +104,20 @@ class [[ entity_name.capitalize() ]]Repository:
         #convertir a dict
         data = entity.to_dict()        
 
-        # Eliminar las claves 'id' y 'uuid' si existen en el diccionario
+        # Eliminar las claves 'id' y 'uuid' de la data
         data.pop('id', None)
-        data.pop('uuid', None)        
+        data.pop('uuid', None)      
+
+        # Eliminar de la data las propiedades que requieren un tratamiento especial   
+        data.pop('external_id', None)        
+        data.pop('adicionalData', None)            
 
         # Si se proporciona un ID de otra entidad, agregarlo al diccionario
         # django crea el campo 'external_id' automáticamente si la relación es ForeignKey => otherEntity
         if external_id is not None:
-            data['external_id'] = external_id
+            data['external_id'] = external_id    
 
-        # Crear el registro
+        # Crear el registro a partir de los campos presentes en la 'data'
         instance = [[ entity_name.capitalize() ]](**data)
 
         # Si adicionalData, agregar datos adicionales
