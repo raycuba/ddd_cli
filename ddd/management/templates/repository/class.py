@@ -105,11 +105,8 @@ class [[ entity_name.capitalize() ]]Repository:
         #convertir a dict
         data = entity.to_dict()        
 
-        # Eliminar las claves 'id' y 'uuid' de la data
-        data = clean_dict_of_keys(data, keys=['id', 'uuid'])   
-
         # Eliminar de la data las propiedades que requieren un tratamiento especial
-        data = clean_dict_of_keys(data, keys=['external_id', 'adicionalData'])
+        data = clean_dict_of_keys(data, keys=entity.SPECIAL_FIELDS)
 
         # Si se proporciona un ID de otra entidad, agregarlo al diccionario
         # django crea el campo 'external_id' automáticamente si la relación es ForeignKey => otherEntity
@@ -154,9 +151,7 @@ class [[ entity_name.capitalize() ]]Repository:
             # Actualizar cada campo de la entidad en el modelo
             for key, value in entity.to_dict().items():
                 if hasattr(instance, key):
-                    if key != 'id' and key != 'uuid': # No actualizar campos especiales
-                        # Los campos especiales son aquellos que nunca cambian como: id, uuid, created_at, updated_at, etc.
-                        # o aquellos que tienen una forma especial de ser guardados como: photo, password, etc.
+                    if not key in instance.SPECIAL_FIELDS: # No actualizar campos especiales
                         setattr(instance, key, value)
 
             # Si adicionalData, agregar datos adicionales

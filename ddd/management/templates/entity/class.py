@@ -7,6 +7,14 @@ class [[ entity_name.capitalize() ]]Entity:
     con [[ entity_name.lower() ]] en el sistema.
     """
 
+    # Lista de campos especiales
+    # Los campos especiales son aquellos que no deben ser actualizados directamente
+    # o que requieren un tratamiento especial al ser guardados.
+    # Por ejemplo: id, uuid, external_id, etc.
+    SPECIAL_FIELDS = (
+        'id', 'uuid', 'external_id'
+    )    
+
     # Identificadores
     id: Optional[int] = None  # ID relacionado con la base de datos
     uuid: Optional[UUID] = None
