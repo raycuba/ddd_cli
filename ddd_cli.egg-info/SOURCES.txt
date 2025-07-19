@@ -27,7 +27,6 @@ ddd/management/templates/entity/class.py
 ddd/management/templates/entity/exceptions.py
 ddd/management/templates/entity/imports.py
 ddd/management/templates/repository/class.py
-ddd/management/templates/repository/mappers.py
 ddd/management/templates/routers/api_apiview_urls.py
 ddd/management/templates/routers/api_viewset_urls.py
 ddd/management/templates/routers/web_urls.py
@@ -45,7 +44,9 @@ ddd/management/templates/templates/web_create_register.html
 ddd/management/templates/templates/web_detail_register.html
 ddd/management/templates/templates/web_edit_register.html
 ddd/management/templates/templates/web_list_register.html
+ddd/management/templates/utils/clean_dict_of_keys.py
 ddd/management/templates/utils/get_value.py
+ddd/management/templates/utils/mappers.py
 ddd/management/templates/view/web_forms.py
 ddd/management/templates/view/web_views.py
 ddd_cli.egg-info/PKG-INFO

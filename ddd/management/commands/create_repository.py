@@ -13,9 +13,11 @@ class CreateRepositoryCommand:
 
     def create_repository(self, app_path, entity_name, **kwargs):
             """Crea un nuevo repositorio"""
+            utils_dir = os.path.join(app_path, 'utils')
             repository_dir = os.path.join(app_path, 'infrastructure')
             repository_path = os.path.join(repository_dir, entity_name.lower() + '_repository.py')
-            mappers_path = os.path.join(repository_dir, 'mappers.py')
+            mappers_path = os.path.join(utils_dir, 'mappers.py')
+            clean_dict_of_keys_path = os.path.join(utils_dir, 'clean_dict_of_keys.py')
 
             # decodficar app_path
             app_name, last_app_name, app_route, relative_app_path = decodeAppPath(app_path)
@@ -23,9 +25,9 @@ class CreateRepositoryCommand:
             # Crear directorios si no existen
             try:
                 os.makedirs(repository_dir, exist_ok=True)
-
-                # Crear archivos __init__.py
                 create__init__files(repository_dir)
+                os.makedirs(utils_dir, exist_ok=True)
+                create__init__files(utils_dir)
 
             except OSError as e:
                 print(Fore.RED + f"Failed to create directory '{repository_dir}': {e}" + Style.RESET_ALL)
@@ -37,7 +39,10 @@ class CreateRepositoryCommand:
                 return
             
             # Crear archivo de mappers.py        
-            readWriteTemplate(templateName = 'repository', fileName='mappers.py', render_params={}, repository_path=mappers_path, failIfError=False)
+            readWriteTemplate(templateName = 'utils', fileName='mappers.py', render_params={}, repository_path=mappers_path, failIfError=False)
+            # Crear archivo clean_dict_of_keys.py
+            readWriteTemplate(templateName = 'utils', fileName='clean_dict_of_keys.py', render_params={}, repository_path=clean_dict_of_keys_path, failIfError=False)
+
             
             #renderizar class
             readWriteTemplate(templateName = 'repository', fileName='class.py', render_params={'entity_name':entity_name, 'app_name':app_name}, repository_path=repository_path, failIfError=True)

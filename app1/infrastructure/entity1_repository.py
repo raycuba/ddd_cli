@@ -1,19 +1,20 @@
+
 from typing import List, Optional
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.forms import ValidationError
 
 # importa las entidades utilizadas aqui
-from ..models import [[ entity_name.capitalize() ]]
+from ..models import Entity1
 from ..utils.mappers import Mapper
 from ..utils.clean_dict_of_keys import clean_dict_of_keys
-from ..domain.entities import [[ entity_name.capitalize() ]]Entity
+from ..domain.entities import Entity1Entity
 from ..domain.exceptions import EntityNotFoundError
 
 
-class [[ entity_name.capitalize() ]]Repository:
+class Entity1Repository:
     """
-    Repositorio para manejar la persistencia de datos de la entidad: [[ entity_name.lower() ]].
+    Repositorio para manejar la persistencia de datos de la entidad: entity1.
     
     Este repositorio incluye:
     - Validación de existencia de registros.
@@ -22,13 +23,13 @@ class [[ entity_name.capitalize() ]]Repository:
     """
 
     @staticmethod
-    def get_all(filters: Optional[dict] = None) -> List[ [[ entity_name.capitalize() ]]Entity ]:
+    def get_all(filters: Optional[dict] = None) -> List[ Entity1Entity ]:
         """
         Obtiene todos los registros de la entidad.
         :return: Lista de registros de la entidad.
         """
 
-        instance_list = [[ entity_name.capitalize() ]].objects.all()    
+        instance_list = Entity1.objects.all()    
 
         # Aplicar filtros si se proporcionan
         if filters:
@@ -39,11 +40,11 @@ class [[ entity_name.capitalize() ]]Repository:
         instance_list = instance_list.only("id", "nombre", "created_at")
 
         # Convertir a entidades usando el Mapper genérico
-        return [Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity) for instance in instance_list]        
+        return [Mapper.model_to_entity(instance, Entity1Entity) for instance in instance_list]        
 
 
     @staticmethod
-    def get_by_id(id) -> Optional[ [[ entity_name.capitalize() ]]Entity ]:
+    def get_by_id(id) -> Optional[ Entity1Entity ]:
         """
         Obtiene un registro por su ID.
         
@@ -52,10 +53,10 @@ class [[ entity_name.capitalize() ]]Repository:
         """
 
         try:
-            instance = [[ entity_name.capitalize() ]].objects.get(id=id)
-            return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
+            instance = Entity1.objects.get(id=id)
+            return Mapper.model_to_entity(instance, Entity1Entity)
 
-        except [[ entity_name.capitalize() ]].DoesNotExist:
+        except Entity1.DoesNotExist:
             return None
 
 
@@ -69,7 +70,7 @@ class [[ entity_name.capitalize() ]]Repository:
         :return: True si existe un registro con el valor dado, False en caso contrario.
         """
 
-        return [[ entity_name.capitalize() ]].objects.filter(**{field_name: value}).exists()
+        return Entity1.objects.filter(**{field_name: value}).exists()
 
 
     @staticmethod
@@ -81,7 +82,7 @@ class [[ entity_name.capitalize() ]]Repository:
         :return: Número de registros que cumplen las condiciones.
         """
 
-        instance_list = [[ entity_name.capitalize() ]].objects.all()    
+        instance_list = Entity1.objects.all()    
 
         # Aplicar filtros si se proporcionan
         if filters:
@@ -92,7 +93,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def create(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int], adicionalData=None) -> [[ entity_name.capitalize() ]]Entity:
+    def create(entity: Entity1Entity, external_id: Optional[int], adicionalData=None) -> Entity1Entity:
         """
         Crea un nuevo registro.
 
@@ -117,7 +118,7 @@ class [[ entity_name.capitalize() ]]Repository:
             data['external_id'] = external_id    
 
         # Crear el registro a partir de los campos presentes en la 'data'
-        instance = [[ entity_name.capitalize() ]](**data)
+        instance = Entity1(**data)
 
         # Si adicionalData, agregar datos adicionales
         if adicionalData:
@@ -133,11 +134,11 @@ class [[ entity_name.capitalize() ]]Repository:
         except ValueError as e:
             raise ValueError(f"An error occurred while processing the value: {e}")
         
-        return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
+        return Mapper.model_to_entity(instance, Entity1Entity)
 
 
     @staticmethod
-    def save(entity: [[ entity_name.capitalize() ]]Entity, adicionalData=None) -> [[ entity_name.capitalize() ]]Entity:
+    def save(entity: Entity1Entity, adicionalData=None) -> Entity1Entity:
         """
         Guarda los cambios en una entidad existente.
 
@@ -149,7 +150,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
         try:
             # Recuperar el modelo existente basado en el ID de la entidad
-            instance = [[ entity_name.capitalize() ]].objects.get(id=entity.id)
+            instance = Entity1.objects.get(id=entity.id)
 
             # Actualizar cada campo de la entidad en el modelo
             for key, value in entity.to_dict().items():
@@ -170,10 +171,10 @@ class [[ entity_name.capitalize() ]]Repository:
             instance.save()
             
             # Convertir el modelo actualizado de vuelta a una entidad
-            return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
+            return Mapper.model_to_entity(instance, Entity1Entity)
 
-        except [[ entity_name.capitalize() ]].DoesNotExist:
-            raise EntityNotFoundError(f"No [[ entity_name.lower() ]] found with ID {id}")
+        except Entity1.DoesNotExist:
+            raise EntityNotFoundError(f"No entity1 found with ID {id}")
 
         except ValidationError as e:
             raise ValueError(f"Validation error occurred: {e.message_dict}")
@@ -189,12 +190,12 @@ class [[ entity_name.capitalize() ]]Repository:
         """
 
         try:
-            instance = [[ entity_name.capitalize() ]].objects.get(id=id)
+            instance = Entity1.objects.get(id=id)
             instance.delete()
             return True
 
-        except [[ entity_name.capitalize() ]].DoesNotExist:
-            raise EntityNotFoundError(f"No [[ entity_name.lower() ]] found with ID {id}")
+        except Entity1.DoesNotExist:
+            raise EntityNotFoundError(f"No entity1 found with ID {id}")
 
 
 '''
