@@ -120,10 +120,13 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         # Obtener el ID de la entidad relacionada si existe
         external_id = request.data.get('external_id', None)
 
+        # Si se proporcionan IDs de entidades relacionadas, agregarlos
+        externals = request.data.get('externals', None)
+
         try:
             # Llamar al servicio de creación con los datos proporcionados
             repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, external_id=external_id, data=serializer.validated_data)
+            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el nuevo registro creado
             response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
@@ -162,10 +165,16 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
             # Si la validación falla, retornar un error 400 BAD REQUEST
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        # Obtener el ID de la entidad relacionada si existe
+        external_id = request.data.get('external_id', None)
+
+        # Si se proporcionan IDs de entidades relacionadas, agregarlos
+        externals = request.data.get('externals', None)            
+
         try:
             # Llamar al servicio de actualización con el ID y los nuevos datos
             repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=serializer.validated_data)
+            [[ entity_name.lower() ]] = update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el registro actualizado
             response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])

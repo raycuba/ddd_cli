@@ -92,12 +92,13 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def create(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int], adicionalData=None) -> [[ entity_name.capitalize() ]]Entity:
+    def create(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> [[ entity_name.capitalize() ]]Entity:
         """
         Crea un nuevo registro.
 
         :param entity: Entidad con los datos necesarios para crear el registro.
         :param external_id: ID del padre si es necesario (opcional).
+        :param externals: Lista de IDs de entidades relacionadas (opcional).
         :param adicionalData: Datos adicionales a incluir en la creación.
         :return: La entidad creada.
         :raises ValueError: Si los datos no son válidos.
@@ -108,13 +109,18 @@ class [[ entity_name.capitalize() ]]Repository:
         # Eliminar de la data las propiedades que requieren un tratamiento especial
         data = clean_dict_of_keys(data, keys=entity.SPECIAL_FIELDS)
 
-        # Si se proporciona un ID de otra entidad, agregarlo al diccionario
-        # django crea el campo 'external_id' automáticamente si la relación es ForeignKey => otherEntity
-        if external_id is not None:
-            data['external_id'] = external_id    
-
         # Crear el registro a partir de los campos presentes en la 'data'
         instance = [[ entity_name.capitalize() ]](**data)
+
+        # Si se proporciona un ID de otra entidad, actualizarlo
+        # django crea el campo 'external_id' automáticamente si la relación es ForeignKey => otherEntity
+        if external_id is not None:
+            instance.external_id = external_id
+
+        # Si se proporcionan IDs de entidades relacionadas, agregarlos
+        if externals is not None:
+            # Asignar directamente los IDs
+            instance.externals.set(externals)
 
         # Si adicionalData, agregar datos adicionales
         if adicionalData:
@@ -134,11 +140,14 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def save(entity: [[ entity_name.capitalize() ]]Entity, adicionalData=None) -> [[ entity_name.capitalize() ]]Entity:
+    def save(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> [[ entity_name.capitalize() ]]Entity:
         """
         Guarda los cambios en una entidad existente.
 
         :param entity: Entidad con los datos a actualizar (debe traer el id en los campos).
+        :param external_id: ID del padre si es necesario (opcional).
+        :param externals: Lista de IDs de entidades relacionadas (opcional).
+        :param adicionalData: Datos adicionales a incluir en la actualización.
         :return: La entidad guardada.
         :raises EntityNotFoundError: Si no existe el registro con el ID dado.
         :raises ValueError: Si los datos no son válidos.
@@ -153,6 +162,15 @@ class [[ entity_name.capitalize() ]]Repository:
                 if hasattr(instance, key):
                     if not key in instance.SPECIAL_FIELDS: # No actualizar campos especiales
                         setattr(instance, key, value)
+
+            # Si se proporciona un ID de otra entidad, actualizarlo
+            if external_id is not None:
+                instance.external_id = external_id
+
+            # Si se proporcionan IDs de entidades relacionadas, actualizarlos
+            if externals is not None:
+                # Asignar directamente los IDs
+                instance.externals.set(externals)
 
             # Si adicionalData, agregar datos adicionales
             if adicionalData:
@@ -210,13 +228,9 @@ Para la traduccion de relaciones entre entidades, se pueden utilizar los siguien
     def external_uuid(self):
         return str(self.external.uuid) if self.external else None
 
-- `externals_ids`: Para relaciones de muchos a muchos (ManyToManyField).
+- `externals`: Para relaciones de muchos a muchos (ManyToManyField).
     Para relaciones de muchos a muchos:
         ej: externals = models.ManyToManyField(OtherEntity, related_name='related_entities')
-    es necesario definir en el model de Django una propiedad 'external_ids' que retorne una lista de IDs relacionados.
-    @property
-    def externals_ids(self):
-        return list(self.externals.values_list('id', flat=True))
 
 - `externals_uuids`: Para relaciones de muchos a muchos basadas en UUID adicional aparte del ID.
         ej: externals = models.ManyToManyField(OtherEntity, related_name='related_entities')

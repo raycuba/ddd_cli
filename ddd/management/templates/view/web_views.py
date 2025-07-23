@@ -60,9 +60,12 @@ def [[ entity_name.lower() ]]_create(request):
             # Obtener el ID de la entidad relacionada si existe
             external_id = request.POST.get('external_id', None)
 
+            # Obtener la lista de ids de externals seleccionadas
+            externals_ids = form_data.get('externals', [])
+
             try:
                 # LLamar al servicio de creación
-                create_[[ entity_name.lower() ]](repository=repository, external_id=external_id, data=form_data)
+                create_[[ entity_name.lower() ]](repository=repository, data=form_data, external_id=external_id, externals=externals_ids)
 
                 # Mostrar mensaje de éxito y redirigir
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]]")
@@ -115,8 +118,14 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
                 # ejemplo: photo = request.FILES.get('photo', None)
                 # y los enviamos como parametros al servicio de actualizacion
 
+                # Obtener el ID de la entidad relacionada si existe
+                external_id = request.POST.get('external_id', None)
+
+                # Obtener la lista de ids de externals seleccionadas
+                externals_ids = form_data.get('externals', [])                
+
                 # LLamar al servicio de actualización
-                update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data)
+                update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data, external_id=external_id, externals=externals_ids)
 
                 # Mostrar mensaje de éxito
                 messages.success(request, f"Successfully updated [[ entity_name.lower() ]]")

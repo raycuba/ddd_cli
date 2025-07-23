@@ -135,10 +135,13 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         # Obtener el ID de la entidad relacionada si existe
         external_id = request.data.get('external_id', None)
 
+        # Si se proporcionan IDs de entidades relacionadas, agregarlos
+        externals = request.data.get('externals', None)        
+
         try:
             # Llamar al servicio para crear el registro
             repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, external_id=external_id, data=serializer.validated_data)
+            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el nuevo registro creado
             response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
@@ -177,10 +180,16 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Si la validación falla, retornar un error 400 BAD REQUEST
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        # Obtener el ID de la entidad relacionada si existe
+        external_id = request.data.get('external_id', None)
+
+        # Si se proporcionan IDs de entidades relacionadas, agregarlos
+        externals = request.data.get('externals', None)                  
+
         try:
             # Llamar al servicio para actualizar el registro
             repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = update_[[ entity_name.lower() ]](repository=repository, entity_id=pk, data=serializer.validated_data)
+            [[ entity_name.lower() ]] = update_[[ entity_name.lower() ]](repository=repository, entity_id=pk, data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el registro actualizado
             response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])

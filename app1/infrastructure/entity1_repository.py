@@ -216,13 +216,17 @@ Para la traduccion de relaciones entre entidades, se pueden utilizar los siguien
     def external_uuid(self):
         return str(self.external.uuid) if self.external else None
 
-- `externals_ids`: Para relaciones de muchos a muchos (ManyToManyField).
+- `externals`: Para relaciones de muchos a muchos (ManyToManyField).
     Para relaciones de muchos a muchos:
         ej: externals = models.ManyToManyField(OtherEntity, related_name='related_entities')
-    es necesario definir en el model de Django una propiedad 'external_ids' que retorne una lista de IDs relacionados.
-    @property
-    def externals_ids(self):
-        return list(self.externals.values_list('id', flat=True))
+    el model de Django crea automáticamente el campo `externals` este campo es accesible como un atributo de la entidad.
+    este campo es una lista de instancias de la entidad relacionada 
+    Para obtenerlos se puede con el uso de un mapper se puede convertir a una lista de ids:
+        externals = list(instance.externals.values_list('id', flat=True))
+    para asignarlos se puede hacer algo como:
+        instance.externals.set([other_entity1, other_entity2, ...])
+        o se puede usar directamente una lista de IDs:
+        instance.externals.set([1, 2, 3])  # Asignar IDs de otras entidades relacionadas
 
 - `externals_uuids`: Para relaciones de muchos a muchos basadas en UUID adicional aparte del ID.
         ej: externals = models.ManyToManyField(OtherEntity, related_name='related_entities')

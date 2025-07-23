@@ -46,11 +46,13 @@ class [[ entity_name.capitalize() ]]Service:
         return self.repository.count_all(filters=filters)
 
 
-    def create_[[ entity_name.lower() ]](self, external_id: Optional[int], data, adicionalData=None) -> dict:
+    def create_[[ entity_name.lower() ]](self, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None, adicionalData=None) -> dict:
         """
         Crea una nueva instancia de [[ entity_name.lower() ]].
 
         :param data: Diccionario o DTO con los datos necesarios para crear la instancia.
+        :param external_id: ID del padre si es necesario (opcional).
+        :param externals: Lista de IDs de entidades relacionadas (opcional).
         :param adicionalData: Datos adicionales a incluir en la creación.
         :return: La entidad creada.
         :raises ValueError: Si las reglas de negocio no se cumplen.
@@ -64,7 +66,7 @@ class [[ entity_name.capitalize() ]]Service:
         entity.validate()       
 
         # Guardar en el repositorio
-        saved_entity = self.repository.create(entity=entity, external_id=external_id, adicionalData=adicionalData)
+        saved_entity = self.repository.create(entity=entity, external_id=external_id, externals=externals, adicionalData=adicionalData)
 
         return saved_entity.to_dict()
 
@@ -84,12 +86,14 @@ class [[ entity_name.capitalize() ]]Service:
         return entity.to_dict()
 
 
-    def update_[[ entity_name.lower() ]](self, entity_id: int, data, adicionalData=None) -> dict:
+    def update_[[ entity_name.lower() ]](self, entity_id: int, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None,adicionalData=None) -> dict:
         """
         Actualiza una instancia existente de [[ entity_name.lower() ]].
 
         :param entity_id: ID de la instancia a actualizar.
         :param data: Diccionario o DTO con los datos a actualizar.
+        :param external_id: ID del padre si es necesario (opcional).
+        :param externals: Lista de IDs de entidades relacionadas (opcional).
         :param adicionalData: Datos adicionales a incluir en la actualización.
         :return: La entidad actualizada.
         :raises ValueError: Si no se encuentra la instancia o las reglas de negocio no se cumplen.
@@ -104,8 +108,8 @@ class [[ entity_name.capitalize() ]]Service:
         entity.validate()   
 
         # Guardar en el repositorio
-        updated_entity = self.repository.save(entity=entity, adicionalData=adicionalData)
-        
+        updated_entity = self.repository.save(entity=entity, external_id=external_id, externals=externals, adicionalData=adicionalData)
+
         return updated_entity.to_dict()
 
 

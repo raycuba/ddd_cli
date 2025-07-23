@@ -22,6 +22,15 @@ class [[ serializer_name.capitalize() ]]DTOSerializer(serializers.Serializer):
         help_text="ID de la entidad externa asociada"
     )
 
+    externals = serializers.ListField(
+        required=False,
+        allow_empty=True,
+        allow_null=True,
+        child=serializers.IntegerField(),
+        write_only=True,            
+        help_text="Lista de IDs de entidades externas asociadas"
+    )
+
     
     # Métodos create y update son obligatorios al usar `serializers.Serializer`
     def create(self, validated_data):
@@ -117,7 +126,7 @@ class [[ serializer_name.capitalize() ]]DTOSerializer(serializers.Serializer):
         )
 
         # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
-        externals_ids = serializers.ListField(
+        externals = serializers.ListField(
             required=False,
             allow_empty=True,
             allow_null=True,

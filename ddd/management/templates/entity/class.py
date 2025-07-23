@@ -12,7 +12,7 @@ class [[ entity_name.capitalize() ]]Entity:
     # o que requieren un tratamiento especial al ser guardados.
     # Por ejemplo: id, uuid, external_id, etc.
     SPECIAL_FIELDS = (
-        'id', 'uuid', 'external_id'
+        'id', 'uuid', 'external_id', 'externals'
     )    
 
     # Identificadores
@@ -25,6 +25,9 @@ class [[ entity_name.capitalize() ]]Entity:
 
     # Relaciones
     external_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
+
+    # Relaciones Many-to-Many o Reverse FK
+    externals: Optional[List[int]] = None  # Lista de IDs de entidades relacionadas
 
     # Descomentar si se quiere hacer una validacion estricta
     #def __post_init__(self):
@@ -107,7 +110,7 @@ class [[ entity_name.capitalize() ]]Entity:
     - Atributos de relación
         external_id: Optional[int] = None  # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
         external_uuid: Optional[str] = None  # UUID externo
-        externals_ids: Optional[List[int]] = None  # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
+        externals: Optional[List[int]] = None  # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
         externals_uuids: Optional[List[str]] = None  # Lista de UUIDs externos
 
     Nota: en un @dataclass lo mejor es que los atributos sean opcionales,
