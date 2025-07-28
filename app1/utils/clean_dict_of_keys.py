@@ -1,5 +1,5 @@
 
-def clean_dict_of_keys(data: dict, keys=[]) -> dict:
+def clean_dict_of_keys(data: dict, keys=()) -> dict:
     """
     Limpia un diccionario eliminando claves específicas.
 

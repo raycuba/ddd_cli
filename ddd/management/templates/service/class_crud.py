@@ -3,6 +3,8 @@ class [[ entity_name.capitalize() ]]Service:
     Servicio para manejar las operaciones CRUD relacionadas con [[ entity_name.lower() ]].
 
     Métodos disponibles:
+        - list_[[ entity_name.lower() ]]: Lista todas las instancias de [[ entity_name.lower() ]].
+        - count_all_[[ entity_name.lower() ]]: Cuenta todas las instancias de [[ entity_name.lower() ]].
         - create_[[ entity_name.lower() ]]: Crea una nueva instancia de [[ entity_name.lower() ]].
         - retrieve_[[ entity_name.lower() ]]: Recupera una instancia de [[ entity_name.lower() ]] por ID.
         - update_[[ entity_name.lower() ]]: Actualiza una instancia existente de [[ entity_name.lower() ]].
@@ -10,7 +12,7 @@ class [[ entity_name.capitalize() ]]Service:
     """
 
     #Si necesitas mantener un estado de lista de entidades
-    [[ entity_name.capitalize() ]]_list = []    
+    [[ entity_name.lower() ]]_list = []    
 
 
     def __init__(self, repository: [[ entity_name.capitalize() ]]Repository):

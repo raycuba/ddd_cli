@@ -93,12 +93,13 @@ class Entity1Repository:
 
 
     @staticmethod
-    def create(entity: Entity1Entity, external_id: Optional[int], adicionalData=None) -> Entity1Entity:
+    def create(entity: Entity1Entity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> Entity1Entity:
         """
         Crea un nuevo registro.
 
         :param entity: Entidad con los datos necesarios para crear el registro.
         :param external_id: ID del padre si es necesario (opcional).
+        :param externals: Lista de IDs de entidades relacionadas (opcional).
         :param adicionalData: Datos adicionales a incluir en la creación.
         :return: La entidad creada.
         :raises ValueError: Si los datos no son válidos.
@@ -106,19 +107,21 @@ class Entity1Repository:
         #convertir a dict
         data = entity.to_dict()        
 
-        # Eliminar las claves 'id' y 'uuid' de la data
-        data = clean_dict_of_keys(data, keys=['id', 'uuid'])   
-
         # Eliminar de la data las propiedades que requieren un tratamiento especial
-        data = clean_dict_of_keys(data, keys=['external_id', 'adicionalData'])
-
-        # Si se proporciona un ID de otra entidad, agregarlo al diccionario
-        # django crea el campo 'external_id' automáticamente si la relación es ForeignKey => otherEntity
-        if external_id is not None:
-            data['external_id'] = external_id    
+        data = clean_dict_of_keys(data, keys=entity.SPECIAL_FIELDS)
 
         # Crear el registro a partir de los campos presentes en la 'data'
         instance = Entity1(**data)
+
+        # Si se proporciona un ID de otra entidad, actualizarlo
+        # django crea el campo 'external_id' automáticamente si la relación es ForeignKey => otherEntity
+        if external_id is not None:
+            instance.external_id = external_id
+
+        # Si se proporcionan IDs de entidades relacionadas, agregarlos
+        if externals is not None:
+            # Asignar directamente los IDs
+            instance.externals.set(externals)
 
         # Si adicionalData, agregar datos adicionales
         if adicionalData:
@@ -138,11 +141,14 @@ class Entity1Repository:
 
 
     @staticmethod
-    def save(entity: Entity1Entity, adicionalData=None) -> Entity1Entity:
+    def save(entity: Entity1Entity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> Entity1Entity:
         """
         Guarda los cambios en una entidad existente.
 
         :param entity: Entidad con los datos a actualizar (debe traer el id en los campos).
+        :param external_id: ID del padre si es necesario (opcional).
+        :param externals: Lista de IDs de entidades relacionadas (opcional).
+        :param adicionalData: Datos adicionales a incluir en la actualización.
         :return: La entidad guardada.
         :raises EntityNotFoundError: Si no existe el registro con el ID dado.
         :raises ValueError: Si los datos no son válidos.
@@ -155,10 +161,17 @@ class Entity1Repository:
             # Actualizar cada campo de la entidad en el modelo
             for key, value in entity.to_dict().items():
                 if hasattr(instance, key):
-                    if key != 'id' and key != 'uuid': # No actualizar campos especiales
-                        # Los campos especiales son aquellos que nunca cambian como: id, uuid, created_at, updated_at, etc.
-                        # o aquellos que tienen una forma especial de ser guardados como: photo, password, etc.
+                    if not key in instance.SPECIAL_FIELDS: # No actualizar campos especiales
                         setattr(instance, key, value)
+
+            # Si se proporciona un ID de otra entidad, actualizarlo
+            if external_id is not None:
+                instance.external_id = external_id
+
+            # Si se proporcionan IDs de entidades relacionadas, actualizarlos
+            if externals is not None:
+                # Asignar directamente los IDs
+                instance.externals.set(externals)
 
             # Si adicionalData, agregar datos adicionales
             if adicionalData:
@@ -219,14 +232,6 @@ Para la traduccion de relaciones entre entidades, se pueden utilizar los siguien
 - `externals`: Para relaciones de muchos a muchos (ManyToManyField).
     Para relaciones de muchos a muchos:
         ej: externals = models.ManyToManyField(OtherEntity, related_name='related_entities')
-    el model de Django crea automáticamente el campo `externals` este campo es accesible como un atributo de la entidad.
-    este campo es una lista de instancias de la entidad relacionada 
-    Para obtenerlos se puede con el uso de un mapper se puede convertir a una lista de ids:
-        externals = list(instance.externals.values_list('id', flat=True))
-    para asignarlos se puede hacer algo como:
-        instance.externals.set([other_entity1, other_entity2, ...])
-        o se puede usar directamente una lista de IDs:
-        instance.externals.set([1, 2, 3])  # Asignar IDs de otras entidades relacionadas
 
 - `externals_uuids`: Para relaciones de muchos a muchos basadas en UUID adicional aparte del ID.
         ej: externals = models.ManyToManyField(OtherEntity, related_name='related_entities')
@@ -234,4 +239,207 @@ Para la traduccion de relaciones entre entidades, se pueden utilizar los siguien
     @property
     def externals_uuids(self):
         return list(self.externals.values_list('uuid', flat=True))
+'''
+
+'''
+### 💡 ¿Por qué ir más allá de los repositorios básicos?
+Este repositorio ya implementa una base sólida para DDD en Django: 
+mapeo de entidades, validaciones, manejo de relaciones (`external_id`, `externals`) y encapsulación del ORM.  
+Sin embargo, a medida que el dominio crezca, 
+métodos como `get_all()` o `create()` pueden volverse insuficientes o ineficientes.
+
+En DDD, el repositorio debe hablar el **lenguaje del negocio**, no solo ofrecer operaciones CRUD genéricas.  
+Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherencia con esta plantilla.
+
+### 🚀 Cómo enriquecer este repositorio (sin romper su diseño actual)
+#### 1. 🗣️ **Métodos específicos orientados al dominio**
+    En lugar de exponer solo filtros genéricos por `nombre`, puedes agregar métodos que expresen reglas de negocio:
+        @staticmethod
+        def get_activos():
+            return Entity1.objects.filter(estado='activo')
+
+        @staticmethod
+        def find_by_slug(slug: str) -> OptionalEntity1Entity:
+            try:
+                instance = Entity1.objects.get(slug=slug)
+                return Mapper.model_to_entity(instance, Entity1Entity)
+            except Entity1.DoesNotExist:
+                return None
+
+    Estos métodos se integran naturalmente con `get_by_id()` y `get_all()`, y evitan que la lógica de negocio se repita en servicios.
+
+#### 2. 🔍 **QuerySets y Managers personalizados**
+    Puedes encapsular lógica común (como filtros por estado o relaciones) en un `Manager` personalizado:
+        class Entity1Manager(models.Manager):
+            def activos(self):
+                return self.filter(estado='activo')
+            def con_relacion(self):
+                return self.select_related('external').prefetch_related('externals')
+
+        class Entity1(models.Model):
+            ...
+            objects = Entity1Manager()
+
+    Luego, en el repositorio:
+        @staticmethod
+        def get_all(filters=None):
+            instance_list = Entity1.objects.activos()  # Usa tu Manager
+            if filters and "nombre" in filters:
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instance_list]
+
+        @staticmethod
+        def get_all_with_relations():
+            instance_list = Entity1.objects.activos().con_relacion() # Usa tu Manager
+            if filters:
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instance_list]
+
+    Así mantienes el diseño actual, pero con mejor rendimiento y expresividad.
+
+#### 3. 📦 **Paginación + optimización de consultas**
+    La plantilla ya usa `.only()` para optimizar carga. Puedes extenderlo con paginación:
+
+        @staticmethod
+        def get_paginated(page: int, size: int, filters=None):
+            offset = (page - 1) * size
+            limit = offset + size
+            instance_list = Entity1.objects.all()
+            if filters and "nombre" in filters:
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
+            instance_list = instance_list.only("id", "nombre", "created_at")[offset:limit]
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instance_list]
+
+    Ideal para APIs o listados grandes.
+
+#### 4. 🔄 **Separación de lectura y escritura (CQRS básico)**
+    Aunque la plantilla combina lectura y escritura, puedes dividirla cuando el sistema escala:
+
+        class Entity1ReadRepository:
+            @staticmethod
+            def get_all(...):  # Igual al actual
+            @staticmethod
+            def count_all(...):  # Ya implementado
+
+        class Entity1WriteRepository:
+            @staticmethod
+            def create(...):   # Usa `adicionalData` para lógica especial
+            @staticmethod
+            def save(...):     # Con validaciones y relaciones
+            @staticmethod
+            def delete(...):   # Con manejo de errores
+
+    Esto permite optimizar consultas (lectura) sin afectar la lógica de mutación (escritura).
+
+#### 5. 🧠 **Consultas complejas bien encapsuladas**
+    Cuando necesites agregaciones o filtros avanzados, encapsúlalos en métodos del repositorio:
+
+        from django.db.models import Count
+        @staticmethod
+        def get_con_muchos_externals(min_relaciones=3):
+            instances = Entity1.objects.annotate(
+                total_externals=Count('externals')
+            ).filter(total_externals__gt=min_relaciones)
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instances]
+
+    Así mantienes el mapeo y la coherencia del dominio.
+
+#### 6. **Uso de `select_related` y `prefetch_related`**
+    La plantilla no los usa aún, pero son fáciles de integrar en `get_all()` o nuevos métodos:
+
+        @staticmethod
+        def get_all_with_relations():
+            instance_list = Entity1.objects.select_related('external').prefetch_related('externals')
+            if filters:
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instance_list]
+
+    Evita el problema N+1 cuando accedes a relaciones.
+
+#### 7. **Consultas RAW o expresiones ORM avanzadas**
+    Usa `Q`, `F`, `Subquery`, o SQL crudo **dentro del repositorio** cuando el ORM no alcance:
+
+        from django.db.models import Q, 
+        @staticmethod
+        def search_advanced(query):
+            instances = Entity1.objects.filter(
+                Q(nombre__icontains=query) | Q(descripcion__icontains=query)
+            )
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instances]
+
+        @staticmethod
+        def reactivar_registros():
+            Entity1.objects.filter(estado='inactivo').update(estado=F('estado_anterior'))
+
+        @staticmethod
+        def busqueda_compleja_sql():
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM app_entity1 WHERE estado = %s", ['activo'])
+                rows = cursor.fetchall()
+            return [Mapper.model_to_entity(row, Entity1Entity) for row in rows]
+
+    El repositorio sigue siendo el único punto de acceso al ORM.
+
+#### 8. **Manejo de excepciones y errores**
+    La plantilla ya captura `DoesNotExist` y `ValidationError`. Puedes mejorarla:
+
+        try:
+            # Lógica que puede generar excepciones
+            pass
+
+        except ValidationError as e:
+            raise ValueError(f"Error de validación en entity1: {e.message_dict}")
+        except Exception as e:
+            # Evita exponer errores internos
+            raise ValueError(f"No se pudo guardar el entity1: operación no permitida.")
+
+    Así proteges la capa de dominio de detalles técnicos.
+
+#### 9. **Documentación y claridad**
+    Los métodos del repositorio deben reflejar intenciones del negocio, no solo operaciones técnicas:
+        @staticmethod
+        def get_all(filters=None) -> ListEntity1Entity:
+            """
+            Obtiene todos los entity1 que coincidan con los filtros.
+            Usa `.only()` para optimizar rendimiento.
+            :param filters: Diccionario con filtros (ej. {"nombre": "juan"}).
+            :return: Lista de entidades Entity1.
+            """
+    Esto hace que el repositorio sea autoexplicativo.
+
+#### 10. **Pruebas unitarias y de integración**
+    Cada método debe tener pruebas. Ejemplo con `create()`:
+        from django.test import TestCase
+        from .repositories import UserRepository    
+
+        class UserRepositoryTests(TestCase):
+            def setUp(self):
+                # Configuración inicial para las pruebas, si es necesario
+                pass
+        
+            def test_create_con_external_y_externals(self):
+                entity = Entity1Entity(nombre="Test")
+                created = Entity1Repository.create(
+                    entity=entity,
+                    external_id=1,
+                    externals=[1, 2],
+                    adicionalData={"archivo": "file.pdf"}
+                )
+                self.assertIsNotNone(created.id)
+                self.assertEqual(created.nombre, "Test")
+
+                # Verifica relaciones
+                instance = Entity1.objects.get(id=created.id)
+                self.assertEqual(instance.external_id, 1)
+                self.assertEqual(instance.externals.count(), 2)
+
+    Así aseguras que `external_id`, `externals` y `adicionalData` funcionen como esperas.
+
+### ✅ Conclusión
+Esta plantilla ya cumple con lo esencial para DDD en Django.  
+Las recomendaciones no son "extras", sino **posibles evoluciones naturales** que puedes aplicar **cuando el dominio lo requiera**.
+
+El repositorio sigue siendo el traductor entre tu modelo de negocio y Django ORM.  
+Hazlo más expresivo, no más complejo.
 '''

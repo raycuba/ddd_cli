@@ -1,3 +1,17 @@
+"""
+Servicio para manejar las operaciones CRUD relacionadas con [[ entity_name.lower() ]].
+
+Métodos disponibles:
+    - list_[[ entity_name.lower() ]]: Lista todas las instancias de [[ entity_name.lower() ]].
+    - count_all_[[ entity_name.lower() ]]: Cuenta todas las instancias de [[ entity_name.lower() ]].
+    - create_[[ entity_name.lower() ]]: Crea una nueva instancia de [[ entity_name.lower() ]].
+    - retrieve_[[ entity_name.lower() ]]: Recupera una instancia de [[ entity_name.lower() ]] por ID.
+    - update_[[ entity_name.lower() ]]: Actualiza una instancia existente de [[ entity_name.lower() ]].
+    - delete_[[ entity_name.lower() ]]: Elimina una instancia de [[ entity_name.lower() ]].
+"""
+
+#Si necesitas mantener un estado de lista de entidades
+[[ entity_name.lower() ]]_list = []   
 
 def list_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, filters: Optional[dict] = None) -> List[dict]:
     """
