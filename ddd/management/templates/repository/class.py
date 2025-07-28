@@ -239,3 +239,206 @@ Para la traduccion de relaciones entre entidades, se pueden utilizar los siguien
     def externals_uuids(self):
         return list(self.externals.values_list('uuid', flat=True))
 '''
+
+'''
+### 💡 ¿Por qué ir más allá de los repositorios básicos?
+Este repositorio ya implementa una base sólida para DDD en Django: 
+mapeo de entidades, validaciones, manejo de relaciones (`external_id`, `externals`) y encapsulación del ORM.  
+Sin embargo, a medida que el dominio crezca, 
+métodos como `get_all()` o `create()` pueden volverse insuficientes o ineficientes.
+
+En DDD, el repositorio debe hablar el **lenguaje del negocio**, no solo ofrecer operaciones CRUD genéricas.  
+Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherencia con esta plantilla.
+
+### 🚀 Cómo enriquecer este repositorio (sin romper su diseño actual)
+#### 1. 🗣️ **Métodos específicos orientados al dominio**
+    En lugar de exponer solo filtros genéricos por `nombre`, puedes agregar métodos que expresen reglas de negocio:
+        @staticmethod
+        def get_activos():
+            return [[ entity_name.capitalize() ]].objects.filter(estado='activo')
+
+        @staticmethod
+        def find_by_slug(slug: str) -> Optional[[ entity_name.capitalize() ]]Entity:
+            try:
+                instance = [[ entity_name.capitalize() ]].objects.get(slug=slug)
+                return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
+            except [[ entity_name.capitalize() ]].DoesNotExist:
+                return None
+
+    Estos métodos se integran naturalmente con `get_by_id()` y `get_all()`, y evitan que la lógica de negocio se repita en servicios.
+
+#### 2. 🔍 **QuerySets y Managers personalizados**
+    Puedes encapsular lógica común (como filtros por estado o relaciones) en un `Manager` personalizado:
+        class [[ entity_name.capitalize() ]]Manager(models.Manager):
+            def activos(self):
+                return self.filter(estado='activo')
+            def con_relacion(self):
+                return self.select_related('external').prefetch_related('externals')
+
+        class [[ entity_name.capitalize() ]](models.Model):
+            ...
+            objects = [[ entity_name.capitalize() ]]Manager()
+
+    Luego, en el repositorio:
+        @staticmethod
+        def get_all(filters=None):
+            instance_list = [[ entity_name.capitalize() ]].objects.activos()  # Usa tu Manager
+            if filters and "nombre" in filters:
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
+            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instance_list]
+
+        @staticmethod
+        def get_all_with_relations():
+            instance_list = [[ entity_name.capitalize() ]].objects.activos().con_relacion() # Usa tu Manager
+            if filters:
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
+            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instance_list]
+
+    Así mantienes el diseño actual, pero con mejor rendimiento y expresividad.
+
+#### 3. 📦 **Paginación + optimización de consultas**
+    La plantilla ya usa `.only()` para optimizar carga. Puedes extenderlo con paginación:
+
+        @staticmethod
+        def get_paginated(page: int, size: int, filters=None):
+            offset = (page - 1) * size
+            limit = offset + size
+            instance_list = [[ entity_name.capitalize() ]].objects.all()
+            if filters and "nombre" in filters:
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
+            instance_list = instance_list.only("id", "nombre", "created_at")[offset:limit]
+            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instance_list]
+
+    Ideal para APIs o listados grandes.
+
+#### 4. 🔄 **Separación de lectura y escritura (CQRS básico)**
+    Aunque la plantilla combina lectura y escritura, puedes dividirla cuando el sistema escala:
+
+        class [[ entity_name.capitalize() ]]ReadRepository:
+            @staticmethod
+            def get_all(...):  # Igual al actual
+            @staticmethod
+            def count_all(...):  # Ya implementado
+
+        class [[ entity_name.capitalize() ]]WriteRepository:
+            @staticmethod
+            def create(...):   # Usa `adicionalData` para lógica especial
+            @staticmethod
+            def save(...):     # Con validaciones y relaciones
+            @staticmethod
+            def delete(...):   # Con manejo de errores
+
+    Esto permite optimizar consultas (lectura) sin afectar la lógica de mutación (escritura).
+
+#### 5. 🧠 **Consultas complejas bien encapsuladas**
+    Cuando necesites agregaciones o filtros avanzados, encapsúlalos en métodos del repositorio:
+
+        from django.db.models import Count
+        @staticmethod
+        def get_con_muchos_externals(min_relaciones=3):
+            instances = [[ entity_name.capitalize() ]].objects.annotate(
+                total_externals=Count('externals')
+            ).filter(total_externals__gt=min_relaciones)
+            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instances]
+
+    Así mantienes el mapeo y la coherencia del dominio.
+
+#### 6. **Uso de `select_related` y `prefetch_related`**
+    La plantilla no los usa aún, pero son fáciles de integrar en `get_all()` o nuevos métodos:
+
+        @staticmethod
+        def get_all_with_relations():
+            instance_list = [[ entity_name.capitalize() ]].objects.select_related('external').prefetch_related('externals')
+            if filters:
+                instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
+            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instance_list]
+
+    Evita el problema N+1 cuando accedes a relaciones.
+
+#### 7. **Consultas RAW o expresiones ORM avanzadas**
+    Usa `Q`, `F`, `Subquery`, o SQL crudo **dentro del repositorio** cuando el ORM no alcance:
+
+        from django.db.models import Q, 
+        @staticmethod
+        def search_advanced(query):
+            instances = [[ entity_name.capitalize() ]].objects.filter(
+                Q(nombre__icontains=query) | Q(descripcion__icontains=query)
+            )
+            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instances]
+
+        @staticmethod
+        def reactivar_registros():
+            [[ entity_name.capitalize() ]].objects.filter(estado='inactivo').update(estado=F('estado_anterior'))
+
+        @staticmethod
+        def busqueda_compleja_sql():
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM app_[[ entity_name.lower() ]] WHERE estado = %s", ['activo'])
+                rows = cursor.fetchall()
+            return [Mapper.model_to_entity(row, [[ entity_name.capitalize() ]]Entity) for row in rows]
+
+    El repositorio sigue siendo el único punto de acceso al ORM.
+
+#### 8. **Manejo de excepciones y errores**
+    La plantilla ya captura `DoesNotExist` y `ValidationError`. Puedes mejorarla:
+
+        try:
+            # Lógica que puede generar excepciones
+            pass
+
+        except ValidationError as e:
+            raise ValueError(f"Error de validación en [[ entity_name.lower() ]]: {e.message_dict}")
+        except Exception as e:
+            # Evita exponer errores internos
+            raise ValueError(f"No se pudo guardar el [[ entity_name.lower() ]]: operación no permitida.")
+
+    Así proteges la capa de dominio de detalles técnicos.
+
+#### 9. **Documentación y claridad**
+    Los métodos del repositorio deben reflejar intenciones del negocio, no solo operaciones técnicas:
+        @staticmethod
+        def get_all(filters=None) -> List[[ entity_name.capitalize() ]]Entity:
+            """
+            Obtiene todos los [[ entity_name.lower() ]] que coincidan con los filtros.
+            Usa `.only()` para optimizar rendimiento.
+            :param filters: Diccionario con filtros (ej. {"nombre": "juan"}).
+            :return: Lista de entidades [[ entity_name.capitalize() ]].
+            """
+    Esto hace que el repositorio sea autoexplicativo.
+
+#### 10. **Pruebas unitarias y de integración**
+    Cada método debe tener pruebas. Ejemplo con `create()`:
+        from django.test import TestCase
+        from .repositories import UserRepository    
+
+        class UserRepositoryTests(TestCase):
+            def setUp(self):
+                # Configuración inicial para las pruebas, si es necesario
+                pass
+        
+            def test_create_con_external_y_externals(self):
+                entity = [[ entity_name.capitalize() ]]Entity(nombre="Test")
+                created = [[ entity_name.capitalize() ]]Repository.create(
+                    entity=entity,
+                    external_id=1,
+                    externals=[1, 2],
+                    adicionalData={"archivo": "file.pdf"}
+                )
+                self.assertIsNotNone(created.id)
+                self.assertEqual(created.nombre, "Test")
+
+                # Verifica relaciones
+                instance = [[ entity_name.capitalize() ]].objects.get(id=created.id)
+                self.assertEqual(instance.external_id, 1)
+                self.assertEqual(instance.externals.count(), 2)
+
+    Así aseguras que `external_id`, `externals` y `adicionalData` funcionen como esperas.
+
+### ✅ Conclusión
+Esta plantilla ya cumple con lo esencial para DDD en Django.  
+Las recomendaciones no son "extras", sino **posibles evoluciones naturales** que puedes aplicar **cuando el dominio lo requiera**.
+
+El repositorio sigue siendo el traductor entre tu modelo de negocio y Django ORM.  
+Hazlo más expresivo, no más complejo.
+'''
