@@ -121,9 +121,8 @@ class [[ entity_name.capitalize() ]]Service:
         :return: True/False (depende del exito de la operacion)
         :raises ValueError: Si no se encuentra la instancia.
         """
-        # Recuperar la entidad
-        entity = self.repository.get_by_id(id=entity_id)
-        if not entity:
+        # Verifica si la entidad existe
+        if not self.repository.exists_by_field(field_name="id", value=entity_id):
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
 
         # Eliminación en el repositorio
