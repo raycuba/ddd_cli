@@ -2,9 +2,8 @@ MANIFEST.in
 README.md
 setup.py
 app1/__init__.py
-app1/entity1_forms.py
-app1/entity1_urls.py
-app1/entity1_views.py
+app1/domain/__init__.py
+app1/domain/services.py
 app1/infrastructure/__init__.py
 app1/infrastructure/entity1_repository.py
 app1/utils/__init__.py

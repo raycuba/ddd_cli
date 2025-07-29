@@ -10,9 +10,6 @@ Métodos disponibles:
     - delete_[[ entity_name.lower() ]]: Elimina una instancia de [[ entity_name.lower() ]].
 """
 
-#Si necesitas mantener un estado de lista de entidades
-[[ entity_name.lower() ]]_list = []   
-
 def list_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]Repository, filters: Optional[dict] = None) -> List[dict]:
     """
     Lista instancias de [[ entity_name.lower() ]].
