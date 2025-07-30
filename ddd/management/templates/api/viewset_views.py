@@ -12,13 +12,7 @@ from serializers import [[ entity_name.capitalize() ]]Serializer
 from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
 
 # importar servicios específicos del dominio
-from [[ app_name.lower() ]].domain.services import (
-    list_[[ entity_name.lower() ]],
-    create_[[ entity_name.lower() ]],
-    retrieve_[[ entity_name.lower() ]],
-    update_[[ entity_name.lower() ]],
-    delete_[[ entity_name.lower() ]],
-)
+from [[ app_name.lower() ]].domain.services import [[ entity_name.capitalize() ]]Service
 
 # Importar repositorios específicos de la infraestructura
 from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
@@ -57,10 +51,11 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         - Se valida y adapta la solicitud.
         - Se utiliza el servicio `list_[[ entity_name.lower() ]]` para manejar la lógica.
         """
+
         try:
             # Llamar al servicio para recuperar todos los registros
-            repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]]List = list_[[ entity_name.lower() ]](repository=repository)
+            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+            [[ entity_name.lower() ]]List = [[ entity_name.lower() ]]Service.list()
 
             # Serializar la lista de registros
             response_serializer_list = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]]List, many=True)
@@ -91,10 +86,11 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         - Valida y adapta la solicitud al dominio.
         - Utiliza el servicio `retrieve_[[ entity_name.lower() ]]` para manejar la lógica.
         """
+
         try:
             # Llamar al servicio para recuperar un registro específico
-            repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=pk)
+            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+            [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.retrieve(entity_id=pk)
 
             # Serializar el registro recuperado
             response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
@@ -140,8 +136,8 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
 
         try:
             # Llamar al servicio para crear el registro
-            repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, data=serializer.validated_data, external_id=external_id, externals=externals)
+            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+            [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.create(data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el nuevo registro creado
             response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
@@ -188,8 +184,8 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
 
         try:
             # Llamar al servicio para actualizar el registro
-            repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = update_[[ entity_name.lower() ]](repository=repository, entity_id=pk, data=serializer.validated_data, external_id=external_id, externals=externals)
+            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+            [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.update(entity_id=pk, data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el registro actualizado
             response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
@@ -222,8 +218,8 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         """
         try:
             # Llamar al servicio para eliminar el registro
-            repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = delete_[[ entity_name.lower() ]](repository=repository, entity_id=pk)
+            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+            [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.delete(entity_id=pk)
 
             # Retornar un estado HTTP 204 NO CONTENT para confirmar la eliminación
             return Response(status=status.HTTP_204_NO_CONTENT)

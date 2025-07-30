@@ -3,12 +3,12 @@ class [[ entity_name.capitalize() ]]Service:
     Servicio para manejar las operaciones CRUD relacionadas con [[ entity_name.lower() ]].
 
     Métodos disponibles:
-        - list_[[ entity_name.lower() ]]: Lista todas las instancias de [[ entity_name.lower() ]].
-        - count_all_[[ entity_name.lower() ]]: Cuenta todas las instancias de [[ entity_name.lower() ]].
-        - create_[[ entity_name.lower() ]]: Crea una nueva instancia de [[ entity_name.lower() ]].
-        - retrieve_[[ entity_name.lower() ]]: Recupera una instancia de [[ entity_name.lower() ]] por ID.
-        - update_[[ entity_name.lower() ]]: Actualiza una instancia existente de [[ entity_name.lower() ]].
-        - delete_[[ entity_name.lower() ]]: Elimina una instancia de [[ entity_name.lower() ]].
+        - list: Lista todas las instancias de [[ entity_name.lower() ]].
+        - count_all: Cuenta todas las instancias de [[ entity_name.lower() ]].
+        - create: Crea una nueva instancia de [[ entity_name.lower() ]].
+        - retrieve: Recupera una instancia de [[ entity_name.lower() ]] por ID.
+        - update: Actualiza una instancia existente de [[ entity_name.lower() ]].
+        - delete: Elimina una instancia de [[ entity_name.lower() ]].
     """
 
     #Si necesitas mantener un estado de lista de entidades
@@ -21,14 +21,15 @@ class [[ entity_name.capitalize() ]]Service:
 
         :param repository: Repositorio que maneja la persistencia de [[ entity_name.lower() ]].
         """
+
         self.repository = repository    
 
 
-    def list_[[ entity_name.lower() ]](self, filters: Optional[dict] = None) -> List[dict]:
+    def list(self, filters: Optional[dict] = None) -> List[dict]:
         """
         Lista instancias de [[ entity_name.lower() ]].
-    
-        :param repository: Repositorio que maneja la persistencia de [[ entity_name.lower() ]].
+
+        :param filters: Filtros opcionales para la consulta.
         :return: Lista de la entidad.
         :raises ValueError: Si las reglas de negocio no se cumplen.
         """
@@ -38,17 +39,18 @@ class [[ entity_name.capitalize() ]]Service:
         return [entity.to_dict() for entity in entity_list]      
 
 
-    def count_all_[[ entity_name.lower() ]](self, filters: Optional[dict] = None) -> int:
+    def count_all(self, filters: Optional[dict] = None) -> int:
         """
         Cuenta todas las instancias de [[ entity_name.lower() ]].
 
         :param filters: Filtros opcionales para la consulta.
         :return: Número total de instancias.
         """
+
         return self.repository.count_all(filters=filters)
 
 
-    def create_[[ entity_name.lower() ]](self, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None, adicionalData=None) -> dict:
+    def create(self, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None, adicionalData=None) -> dict:
         """
         Crea una nueva instancia de [[ entity_name.lower() ]].
 
@@ -59,8 +61,9 @@ class [[ entity_name.capitalize() ]]Service:
         :return: La entidad creada.
         :raises ValueError: Si las reglas de negocio no se cumplen.
         """
+
         # Validación de reglas de negocio (opcional)
-        if repository.exists_by_field(field_name="attributeName", value=data['attributeName']):
+        if self.repository.exists_by_field(field_name="attributeName", value=data['attributeName']):
             raise ValueError("An instance with this attributeName already exists")
 
         #crear y validar la entidad
@@ -73,7 +76,7 @@ class [[ entity_name.capitalize() ]]Service:
         return saved_entity.to_dict()
 
 
-    def retrieve_[[ entity_name.lower() ]](self, entity_id: int) -> dict:
+    def retrieve(self, entity_id: int) -> dict:
         """
         Recupera una instancia de [[ entity_name.lower() ]] por su ID.
 
@@ -81,6 +84,7 @@ class [[ entity_name.capitalize() ]]Service:
         :return: La entidad recuperada.
         :raises ValueError: Si no se encuentra la instancia.
         """
+
         entity = self.repository.get_by_id(id=entity_id)
         if not entity:
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
@@ -88,7 +92,7 @@ class [[ entity_name.capitalize() ]]Service:
         return entity.to_dict()
 
 
-    def update_[[ entity_name.lower() ]](self, entity_id: int, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None,adicionalData=None) -> dict:
+    def update(self, entity_id: int, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None,adicionalData=None) -> dict:
         """
         Actualiza una instancia existente de [[ entity_name.lower() ]].
 
@@ -100,6 +104,7 @@ class [[ entity_name.capitalize() ]]Service:
         :return: La entidad actualizada.
         :raises ValueError: Si no se encuentra la instancia o las reglas de negocio no se cumplen.
         """
+
         # Recuperar la entidad
         entity = self.repository.get_by_id(id=entity_id)
         if not entity:
@@ -115,7 +120,7 @@ class [[ entity_name.capitalize() ]]Service:
         return updated_entity.to_dict()
 
 
-    def delete_[[ entity_name.lower() ]](self, entity_id: int) -> bool:
+    def delete(self, entity_id: int) -> bool:
         """
         Elimina una instancia de [[ entity_name.lower() ]].
 
@@ -123,6 +128,7 @@ class [[ entity_name.capitalize() ]]Service:
         :return: True/False (depende del exito de la operacion)
         :raises ValueError: Si no se encuentra la instancia.
         """
+        
         # Verifica si la entidad existe
         if not self.repository.exists_by_field(field_name="id", value=entity_id):
             raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")

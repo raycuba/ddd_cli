@@ -32,6 +32,7 @@ def count_all_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() 
     :param filters: Filtros opcionales para la consulta.
     :return: Número total de instancias.
     """
+
     return repository.count_all(filters=filters)
 
 
@@ -47,6 +48,7 @@ def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     :return: La entidad creada.
     :raises ValueError: Si las reglas de negocio no se cumplen.
     """
+
     # Validación de reglas de negocio (opcional)
     if repository.exists_by_field(field_name="attributeName", value=data['attributeName']):
         raise ValueError("An instance with this attributeName already exists")
@@ -70,6 +72,7 @@ def retrieve_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]
     :return: La entidad recuperada.
     :raises ValueError: Si no se encuentra la instancia.
     """
+
     entity = repository.get_by_id(id=entity_id)
     if not entity:
         raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")
@@ -90,6 +93,7 @@ def update_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     :return: La entidad actualizada.
     :raises ValueError: Si no se encuentra la instancia o las reglas de negocio no se cumplen.
     """
+
     # Recuperar la entidad
     entity = repository.get_by_id(id=entity_id)
     if not entity:
@@ -114,6 +118,7 @@ def delete_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     :return: True/False (depende del exito de la operacion)
     :raises ValueError: Si no se encuentra la instancia.
     """
+    
     # Verifica si la entidad existe
     if not repository.exists_by_field(field_name="id", value=entity_id):
         raise ValueError(f"No [[ entity_name.lower() ]] found with ID {entity_id}")

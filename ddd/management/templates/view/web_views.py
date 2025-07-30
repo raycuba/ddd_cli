@@ -9,13 +9,7 @@ from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
 from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]CreateForm, [[ entity_name.capitalize() ]]EditGetForm, [[ entity_name.capitalize() ]]EditPostForm, [[ entity_name.capitalize() ]]ViewForm
 
 # Importar servicios específicos del dominio
-from [[ app_name.lower() ]].domain.services import (
-    list_[[ entity_name.lower() ]],
-    create_[[ entity_name.lower() ]],
-    retrieve_[[ entity_name.lower() ]],
-    update_[[ entity_name.lower() ]],
-    delete_[[ entity_name.lower() ]],
-)
+from [[ app_name.lower() ]].domain.services import [[ entity_name.capitalize() ]]Service
 
 # Importar repositorios específicos de la infraestructura
 from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
@@ -30,8 +24,8 @@ def [[ entity_name.lower() ]]_list(request):
 
     # Obtener la lista del repositorio
     try:
-        repository = [[ entity_name.capitalize() ]]Repository()
-        [[ entity_name.lower() ]]List = list_[[ entity_name.lower() ]](repository=repository)
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+        [[ entity_name.lower() ]]List = [[ entity_name.lower() ]]Service.list()
 
     except (ValueError, EntityNotFoundError) as e:
         # Manejo de errores específicos del dominio
@@ -55,7 +49,7 @@ def [[ entity_name.lower() ]]_create(request):
 
         if form.is_valid():
             form_data = form.cleaned_data
-            repository = [[ entity_name.capitalize() ]]Repository()
+            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
 
             # Obtener el ID de la entidad relacionada si existe
             external_id = request.POST.get('external_id', None)
@@ -65,7 +59,7 @@ def [[ entity_name.lower() ]]_create(request):
 
             try:
                 # LLamar al servicio de creación
-                create_[[ entity_name.lower() ]](repository=repository, data=form_data, external_id=external_id, externals=externals_ids)
+                [[ entity_name.lower() ]]Service.create(data=form_data, external_id=external_id, externals=externals_ids)
 
                 # Mostrar mensaje de éxito y redirigir
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]]")
@@ -93,11 +87,11 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
         # Redireccion si no se proporciona un ID
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-    repository = [[ entity_name.capitalize() ]]Repository()
+    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
 
     try:
         # Obtener los datos de la entidad desde el servicio
-        [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
+        [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.retrieve(entity_id=id)
 
     except (ValueError, EntityNotFoundError) as e:
         # Manejar errores específicos del dominio
@@ -125,7 +119,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
                 externals_ids = form_data.get('externals', [])                
 
                 # LLamar al servicio de actualización
-                update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=form_data, external_id=external_id, externals=externals_ids)
+                [[ entity_name.lower() ]]Service.update(entity_id=id, data=form_data, external_id=external_id, externals=externals_ids)
 
                 # Mostrar mensaje de éxito
                 messages.success(request, f"Successfully updated [[ entity_name.lower() ]]")
@@ -159,10 +153,11 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
     if id is None:
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-    repository = [[ entity_name.capitalize() ]]Repository()
+    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+
     try:
         # Obtener los datos de la entidad desde el servicio
-        [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
+        [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.retrieve(entity_id=id)
 
     except (ValueError, EntityNotFoundError) as e:
         # Manejar errores específicos del dominio
@@ -186,10 +181,11 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
         messages.error(request, "Non Valid id to delete")
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-    repository = [[ entity_name.capitalize() ]]Repository()
+    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+
     try:
         # LLamar al servicio de eliminación
-        delete_[[ entity_name.lower() ]](repository=repository, entity_id=id)
+        [[ entity_name.lower() ]]Service.delete(entity_id=id)
         messages.success(request, f"Successfully deleted [[ entity_name.lower() ]]")
         
     except (ValueError, EntityNotFoundError) as e:

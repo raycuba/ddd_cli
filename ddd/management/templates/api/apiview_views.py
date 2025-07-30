@@ -12,13 +12,7 @@ from serializers import [[ entity_name.capitalize() ]]DTOSerializer
 from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
 
 # Importar servicios específicos del dominio
-from [[ app_name.lower() ]].domain.services import (
-    list_[[ entity_name.lower() ]],
-    create_[[ entity_name.lower() ]],
-    retrieve_[[ entity_name.lower() ]],
-    update_[[ entity_name.lower() ]],
-    delete_[[ entity_name.lower() ]],
-)
+from [[ app_name.lower() ]].domain.services import [[ entity_name.capitalize() ]]Service
 
 # Importar repositorios específicos de la infraestructura
 from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
@@ -58,11 +52,13 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         - Si no se proporciona `id`, recupera todos los registros.
         """
 
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+
         if id:
             # Recuperar un registro específico por ID
             try:
-                repository = [[ entity_name.capitalize() ]]Repository()
-                [[ entity_name.lower() ]] = retrieve_[[ entity_name.lower() ]](repository=repository, entity_id=id)
+
+                [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.retrieve(entity_id=id)
 
                 # Serializar el registro recuperado
                 response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
@@ -78,8 +74,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         else:
             # Recuperar todos los registros
             try:
-                repository = [[ entity_name.capitalize() ]]Repository()
-                [[ entity_name.lower() ]]List = list_[[ entity_name.lower() ]](repository=repository)
+                [[ entity_name.lower() ]]List = [[ entity_name.lower() ]]Service.list()
 
                 # Serializar la lista de registros
                 response_serializer_list = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]]List, many=True)
@@ -123,10 +118,11 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         # Si se proporcionan IDs de entidades relacionadas, agregarlos
         externals = request.data.get('externals', None)
 
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio        
+
         try:
             # Llamar al servicio de creación con los datos proporcionados
-            repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = create_[[ entity_name.lower() ]](repository=repository, data=serializer.validated_data, external_id=external_id, externals=externals)
+            [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.create(data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el nuevo registro creado
             response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
@@ -169,12 +165,13 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         external_id = request.data.get('external_id', None)
 
         # Si se proporcionan IDs de entidades relacionadas, agregarlos
-        externals = request.data.get('externals', None)            
+        externals = request.data.get('externals', None)       
+        
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio        
 
         try:
             # Llamar al servicio de actualización con el ID y los nuevos datos
-            repository = [[ entity_name.capitalize() ]]Repository()
-            [[ entity_name.lower() ]] = update_[[ entity_name.lower() ]](repository=repository, entity_id=id, data=serializer.validated_data, external_id=external_id, externals=externals)
+            [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.update(entity_id=id, data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el registro actualizado
             response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
@@ -205,12 +202,12 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         - Valida el ID proporcionado.
         - Llama al servicio de eliminación para manejar la lógica de negocio.
         """
+        
         try:
-            # Instanciar el repositorio
-            repository = [[ entity_name.capitalize() ]]Repository()
+            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
 
             # Llamar al servicio de eliminación con el ID proporcionado
-            [[ entity_name.lower() ]] = delete_[[ entity_name.lower() ]](repository=repository, entity_id=id)
+            [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.delete(entity_id=id)
 
             # Retornar una respuesta sin contenido con estado HTTP 204 NO CONTENT
             return Response(status=status.HTTP_204_NO_CONTENT)
