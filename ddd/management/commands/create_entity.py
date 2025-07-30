@@ -14,9 +14,12 @@ class CreateEntityCommand:
 
     def create_entity(self, app_path, entity_name, split=False, **kwargs):
         """Crea una nueva entidad"""
+        exceptions_dir = os.path.join(app_path, 'domain') 
+        exceptions_path = os.path.join(exceptions_dir, 'exceptions.py')        
+
         entities_dir = os.path.join(app_path, 'domain') if not split else os.path.join(app_path, 'domain', 'entities')
         entities_path = os.path.join(entities_dir, 'entities.py') if not split else os.path.join(entities_dir, entity_name.lower() + '_entity.py')
-        exceptions_path = os.path.join(entities_dir, 'exceptions.py') if not split else os.path.join(entities_dir, entity_name.lower() + '_exceptions.py')
+
 
         # Crear directorios si no existen
         try:

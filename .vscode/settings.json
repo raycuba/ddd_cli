@@ -3,5 +3,6 @@
     "jinja2.variableStart": "[[",
     "jinja2.variableEnd": "]]",
     "jinja2.blockStart": "[%",
-    "jinja2.blockEnd": "%]"
+    "jinja2.blockEnd": "%]",
+    "workbench.views.timeline.enabled": false
 }
