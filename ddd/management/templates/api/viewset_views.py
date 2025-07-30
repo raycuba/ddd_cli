@@ -52,9 +52,10 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         - Se utiliza el servicio `list_[[ entity_name.lower() ]]` para manejar la lógica.
         """
 
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+
         try:
             # Llamar al servicio para recuperar todos los registros
-            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
             [[ entity_name.lower() ]]List = [[ entity_name.lower() ]]Service.list()
 
             # Serializar la lista de registros
@@ -87,9 +88,10 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         - Utiliza el servicio `retrieve_[[ entity_name.lower() ]]` para manejar la lógica.
         """
 
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+
         try:
             # Llamar al servicio para recuperar un registro específico
-            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
             [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.retrieve(entity_id=pk)
 
             # Serializar el registro recuperado
@@ -132,11 +134,12 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         external_id = request.data.get('external_id', None)
 
         # Si se proporcionan IDs de entidades relacionadas, agregarlos
-        externals = request.data.get('externals', None)        
+        externals = request.data.get('externals', None)   
+        
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
 
         try:
             # Llamar al servicio para crear el registro
-            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
             [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.create(data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el nuevo registro creado
@@ -182,9 +185,10 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         # Si se proporcionan IDs de entidades relacionadas, agregarlos
         externals = request.data.get('externals', None)                  
 
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+
         try:
             # Llamar al servicio para actualizar el registro
-            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
             [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.update(entity_id=pk, data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el registro actualizado
@@ -216,9 +220,11 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         - Valida y adapta la solicitud.
         - Llama al servicio `delete_[[ entity_name.lower() ]]` para manejar la eliminación.
         """
+
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+
         try:
             # Llamar al servicio para eliminar el registro
-            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
             [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.delete(entity_id=pk)
 
             # Retornar un estado HTTP 204 NO CONTENT para confirmar la eliminación

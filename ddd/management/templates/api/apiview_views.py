@@ -203,9 +203,9 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         - Llama al servicio de eliminación para manejar la lógica de negocio.
         """
         
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+        
         try:
-            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
-
             # Llamar al servicio de eliminación con el ID proporcionado
             [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.delete(entity_id=id)
 

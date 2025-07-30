@@ -22,9 +22,10 @@ def [[ entity_name.lower() ]]_list(request):
 
     [[ entity_name.lower() ]]List = [] #inicialize list
 
+    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+
     # Obtener la lista del repositorio
     try:
-        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
         [[ entity_name.lower() ]]List = [[ entity_name.lower() ]]Service.list()
 
     except (ValueError, EntityNotFoundError) as e:
