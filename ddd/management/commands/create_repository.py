@@ -40,6 +40,7 @@ class CreateRepositoryCommand:
             
             # Crear archivo de mappers.py        
             readWriteTemplate(templateName = 'utils', fileName='mappers.py', render_params={}, repository_path=mappers_path, failIfError=False)
+            
             # Crear archivo clean_dict_of_keys.py
             readWriteTemplate(templateName = 'utils', fileName='clean_dict_of_keys.py', render_params={}, repository_path=clean_dict_of_keys_path, failIfError=False)
 
