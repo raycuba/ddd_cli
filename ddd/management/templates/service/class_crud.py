@@ -12,7 +12,7 @@ class [[ entity_name.capitalize() ]]Service:
     """
 
     #Si necesitas mantener un estado de lista de entidades
-    [[ entity_name.lower() ]]_list = []    
+    # [[ entity_name.lower() ]]_list = []    
 
 
     def __init__(self, repository: [[ entity_name.capitalize() ]]Repository):
