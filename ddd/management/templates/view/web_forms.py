@@ -139,7 +139,7 @@ class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]Ba
         # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
 
         #impedimos que el attributeEmail sea editable 
-        self.attributeEmail.widget.attrs.update({
+        self.fields['attributeEmail'].widget.attrs.update({
             'readonly': 'True'
         })
 
