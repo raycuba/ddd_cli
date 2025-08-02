@@ -18,6 +18,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     def __init__(self, *_args, **kwargs):
         super().__init__(*_args, **kwargs)
 
+        # Definimos los campos del formulario de manera dinámica
         # Campo de texto y numeros (Nombre)
         self.fields['attributeName'] = forms.CharField(
             label="Name",
@@ -75,6 +76,7 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             help_text="Formatos permitidos: JPG, PNG" # Esta ayuda se mostrará debajo del campo
         )   
 
+
     def clean_attributeName(self):
         '''
         Esta validacion es solo para el campo 'attributeName'
@@ -127,7 +129,7 @@ class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]Ba
     Formulario para editar mediante GET una instancia de [[ entity_name.lower() ]]. 
     """
     #Agregamos un campo adicional para 'id' Oculto para el Formulario
-    id = forms.IntegerField(
+    self.fields['id'] = forms.IntegerField(
         label='ID',
         required=False,
         widget=forms.HiddenInput()
