@@ -113,13 +113,14 @@ class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]Bas
     """
     Formulario para crear una nueva instancia de [[ entity_name.lower() ]]. Sin modificaciones adicionales.
     """
-    #Permitimos que el attributeEmail sea editable
-    [[ entity_name.capitalize() ]]BaseForm.base_fields['attributeEmail'].widget.attrs.update({
-        'readonly': False,
-    })
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)        
+        super().__init__(*args, **kwargs)       
+        
+        #Permitimos que el attributeEmail sea editable
+        self.fields['attributeEmail'].widget.attrs.update({
+            'readonly': False,
+        })
 
         # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
 
@@ -128,15 +129,16 @@ class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]Ba
     """
     Formulario para editar mediante GET una instancia de [[ entity_name.lower() ]]. 
     """
-    #Agregamos un campo adicional para 'id' Oculto para el Formulario
-    self.fields['id'] = forms.IntegerField(
-        label='ID',
-        required=False,
-        widget=forms.HiddenInput()
-    )
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)     
+        super().__init__(*args, **kwargs)   
+        
+        #Agregamos un campo adicional para 'id' Oculto para el Formulario
+        self.fields['id'] = forms.IntegerField(
+            label='ID',
+            required=False,
+            widget=forms.HiddenInput()
+        )
 
         # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
 
