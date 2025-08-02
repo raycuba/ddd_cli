@@ -73,6 +73,21 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     )   
 
 
+    def __init__(self, *_args, _=None, **kwargs):
+        super().__init__(*_args, **kwargs)
+        self._apply_translations()
+
+    def _apply_translations(self):
+
+        # Aquí aplicamos las traducciones a los campos del formulario
+        for field_name, field in self.fields.items():
+            field.label = _(field.label)
+            field.help_text = _(field.help_text) if field.help_text else ""
+
+        # Aplicamos traducciones especificadas
+        self.fields['attributeName'].label = _("Name")
+        self.fields['attributeEmail'].label = _("Email")
+
     def clean_attributeName(self):
         '''
         Esta validacion es solo para el campo 'attributeName'
