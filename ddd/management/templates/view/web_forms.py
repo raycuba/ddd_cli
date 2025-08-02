@@ -15,78 +15,65 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     Formulario base para la entidad [[ entity_name.lower() ]].
     """
 
-    # Campo de texto y numeros (Nombre)
-    attributeName = forms.CharField(
-        label="Name",
-        max_length=100,
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Enter your full name',
-            'minlength': '3',  # HTML5 validación
-            'maxlength': '100',  # HTML5 validación
-            'pattern': r'^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$',  # Expresión regular en el navegador
-            'title': 'The name must only contain letters, numbers, and spaces.'  # Mensaje de ayuda                          
-        }),
-        validators=[
-            MinLengthValidator(3, "The name must be at least 3 characters"),
-            MaxLengthValidator(100, "The name must not exceed 100 characters"),
-            RegexValidator(r'^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$', 'The name must only contain letters, numbers, and spaces.'),
-        ]
-    )
-
-    # Campo de correo electrónico
-    attributeEmail = forms.EmailField(
-        label="Email",
-        required=True,
-        widget=forms.EmailInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Enter your email',
-        }),
-        validators=[
-            EmailValidator("Please enter a valid email address"),
-        ]
-    )
-
-    # Campo de contraseña
-    attributePassword = forms.CharField(
-        label="Password",
-        required=True,
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Create a password',
-            'minlength': '8',
-        }),
-        validators=[
-            MinLengthValidator(8, "Password must be at least 8 characters long"),
-        ]
-    )
-
-    attributePhoto = forms.ImageField(
-        label="Image",
-        required=False,  # La photo no es obligatoria
-        widget=forms.ClearableFileInput(attrs={
-            'class': 'form-control',
-            'accept': 'image/*',  # Restringe el tipo de archivo a imágenes
-        }), 
-        help_text="Formatos permitidos: JPG, PNG" # Esta ayuda se mostrará debajo del campo
-    )   
-
-
-    def __init__(self, *_args, _=None, **kwargs):
+    def __init__(self, *_args, **kwargs):
         super().__init__(*_args, **kwargs)
-        self._apply_translations()
 
-    def _apply_translations(self):
+        # Campo de texto y numeros (Nombre)
+        self.fields['attributeName'] = forms.CharField(
+            label="Name",
+            max_length=100,
+            required=True,
+            widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your full name',
+                'minlength': '3',  # HTML5 validación
+                'maxlength': '100',  # HTML5 validación
+                'pattern': r'^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$',  # Expresión regular en el navegador
+                'title': 'The name must only contain letters, numbers, and spaces.'  # Mensaje de ayuda                          
+            }),
+            validators=[
+                MinLengthValidator(3, "The name must be at least 3 characters"),
+                MaxLengthValidator(100, "The name must not exceed 100 characters"),
+                RegexValidator(r'^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]*$', 'The name must only contain letters, numbers, and spaces.'),
+            ]
+        )
 
-        # Aquí aplicamos las traducciones a los campos del formulario
-        for field_name, field in self.fields.items():
-            field.label = _(field.label)
-            field.help_text = _(field.help_text) if field.help_text else ""
+        # Campo de correo electrónico
+        self.fields['attributeEmail'] = forms.EmailField(
+            label="Email",
+            required=True,
+            widget=forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your email',
+            }),
+            validators=[
+                EmailValidator("Please enter a valid email address"),
+            ]
+        )
 
-        # Aplicamos traducciones especificadas
-        self.fields['attributeName'].label = _("Name")
-        self.fields['attributeEmail'].label = _("Email")
+        # Campo de contraseña
+        self.fields['attributePassword'] = forms.CharField(
+            label="Password",
+            required=True,
+            widget=forms.PasswordInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Create a password',
+                'minlength': '8',
+            }),
+            validators=[
+                MinLengthValidator(8, "Password must be at least 8 characters long"),
+            ]
+        )
+
+        self.fields['attributePhoto'] = forms.ImageField(
+            label="Image",
+            required=False,  # La photo no es obligatoria
+            widget=forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*',  # Restringe el tipo de archivo a imágenes
+            }), 
+            help_text="Formatos permitidos: JPG, PNG" # Esta ayuda se mostrará debajo del campo
+        )   
 
     def clean_attributeName(self):
         '''
@@ -195,9 +182,8 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
 """
     Ejemplo completo de formulario con todos los tipos de campo y widget más comunes.
 
-
     # === Campos de texto ===
-    char_field = forms.CharField(
+    self.fields['char_field'] = forms.CharField(
         label=_("Nombre"),
         max_length=100,
         required=True,
@@ -210,21 +196,21 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
         ]
     )
 
-    text_area = forms.CharField(
+    self.fields['text_area'] = forms.CharField(
         label=_("Descripción"),
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         required=False
     )
 
     # === Campos numéricos ===
-    integer_field = forms.IntegerField(
+    self.fields['integer_field'] = forms.IntegerField(
         label=_("Edad"),
         required=True,
         widget=forms.NumberInput(attrs={'class': 'form-control'}),
         validators=[MinValueValidator(0), MaxValueValidator(120)]
     )
 
-    decimal_field = forms.DecimalField(
+    self.fields['decimal_field'] = forms.DecimalField(
         label=_("Precio"),
         max_digits=10,
         decimal_places=2,
@@ -233,26 +219,26 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     )
 
     # === Campos de fecha y hora ===
-    date_field = forms.DateField(
+    self.fields['date_field'] = forms.DateField(
         label=_("Fecha de nacimiento"),
         widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         required=True
     )
 
-    datetime_field = forms.DateTimeField(
+    self.fields['datetime_field'] = forms.DateTimeField(
         label=_("Fecha y hora"),
         widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
         required=False
     )
 
-    time_field = forms.TimeField(
+    self.fields['time_field'] = forms.TimeField(
         label=_("Hora"),
         widget=forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
         required=False
     )
 
     # === Campos de selección ===
-    choice_field = forms.ChoiceField(
+    self.fields['choice_field'] = forms.ChoiceField(
         label=_("País"),
         choices=[
             ('', 'Selecciona un país'),
@@ -264,7 +250,7 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
         required=True
     )
 
-    multiple_choice_field = forms.MultipleChoiceField(
+    self.fields['multiple_choice_field'] = forms.MultipleChoiceField(
         label=_("Hobbies"),
         choices=[
             ('reading', 'Leer'),
@@ -276,14 +262,14 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     )
 
     # === Campos booleanos ===
-    boolean_field = forms.BooleanField(
+    self.fields['boolean_field'] = forms.BooleanField(
         label=_("¿Acepta términos?"),
         required=True,
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         error_messages={'required': "Debe aceptar los términos"}
     )
 
-    null_boolean_field = forms.NullBooleanField(
+    self.fields['null_boolean_field'] = forms.NullBooleanField(
         label=_("¿Ha visitado antes?"),
         widget=forms.Select(choices=[
             (None, '---'),
@@ -294,14 +280,14 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     )
 
     # === Campos de archivo ===
-    file_field = forms.FileField(
+    self.fields['file_field'] = forms.FileField(
         label=_("Archivo"),
         required=False,
         widget=forms.FileInput(attrs={'class': 'form-control'}),
         validators=[forms.FileExtensionValidator(['pdf', 'docx'], "Solo archivos PDF o DOCX")]
     )
 
-    attributeImage = forms.ImageField(
+    self.fields['image_field'] = forms.ImageField(
         label="Image",
         required=False,  # La imagen no es obligatoria
         widget=forms.ClearableFileInput(attrs={
@@ -313,14 +299,14 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
 
 
     # === Campos especiales ===
-    email_field = forms.EmailField(
+    self.fields['email_field'] = forms.EmailField(
         label=_("Correo electrónico"),
         required=True,
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
         validators=[EmailValidator("Correo inválido")]
     )
 
-    url_field = forms.URLField(
+    self.fields['url_field'] = forms.URLField(
         label="Website",
         required=False,  # Este campo no es obligatorio
         widget=forms.URLInput(attrs={
@@ -335,20 +321,20 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
         ]
     )
 
-    slug_field = forms.SlugField(
+    self.fields['slug_field'] = forms.SlugField(
         label=_("Slug (URL)"),
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         help_text=_("Solo letras, números y guiones")
     )
 
-    ip_field = forms.GenericIPAddressField(
+    self.fields['ip_field'] = forms.GenericIPAddressField(
         label=_("Dirección IP"),
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
-    uuid_field = forms.UUIDField(
+    self.fields['uuid_field'] = forms.UUIDField(
         label=_("UUID"),
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}),
@@ -356,21 +342,21 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     )
 
     # === Campos ocultos ===
-    hidden_field = forms.CharField(
+    self.fields['hidden_field'] = forms.CharField(
         widget=forms.HiddenInput(),
         initial="valor_oculto",
         required=False
     )
 
     # === Campos de solo lectura ===
-    read_only_field = forms.CharField(
+    self.fields['read_only_field'] = forms.CharField(
         label=_("Campo de solo lectura"),
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
     )
 
     # === Campos personalizados ===
-    custom_field = forms.CharField(
+    self.fields['custom_field'] = forms.CharField(
         label=_("Campo personalizado"),
         max_length=50,
         required=False,
@@ -387,7 +373,7 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     # === Ejemplos practicos de campos adicionales ===
 
     # Campo de solo texto sin números (Category)
-    attributeCategory = forms.CharField(
+    self.fields['attributeCategory'] = forms.CharField(
         label='Category',
         required=True,
         widget=forms.TextInput(attrs={
@@ -405,7 +391,7 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     ) 
 
     # Campo de contraseña
-    attributePassword = forms.CharField(
+    self.fields['attributePassword'] = forms.CharField(
         label="Password",
         required=True,
         widget=forms.PasswordInput(attrs={
@@ -419,7 +405,7 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     )
 
     # Campo numérico
-    attributeAge = forms.IntegerField(
+    self.fields['attributeAge'] = forms.IntegerField(
         label="Age",
         required=True,
         widget=forms.NumberInput(attrs={
@@ -435,7 +421,7 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     )
 
     # Campo de fecha
-    attributeBirthDate = forms.DateField(
+    self.fields['attributeBirthDate'] = forms.DateField(
         label="Birth Date",
         required=True,
         widget=forms.DateInput(attrs={
@@ -445,7 +431,7 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     )
 
     # Selección desplegable
-    attributeCountry = forms.ChoiceField(
+    self.fields['attributeCountry'] = forms.ChoiceField(
         label="Country",
         required=True,
         choices=[
@@ -460,7 +446,7 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     )
 
     # Opciones de radio
-    attributeGender = forms.ChoiceField(
+    self.fields['attributeGender'] = forms.ChoiceField(
         label="Gender",
         required=True,
         choices=[
@@ -474,7 +460,7 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
     )
 
     # Casillas de verificación
-    attributeTerms = forms.BooleanField(
+    self.fields['attributeTerms'] = forms.BooleanField(
         label="I accept the terms and conditions",
         required=True,
         widget=forms.CheckboxInput(attrs={
@@ -485,6 +471,13 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
         }
     )      
 
+    Nota: la razon de construir los campos de manera dinamica en el constructor es que
+    permite fabricar formularios de manera flexible y reutilizable,
+    especialmente cuando se trabaja con datos que pueden cambiar o ser configurables
+    en tiempo de ejecución tales como traducciones, opciones de selección, etc.
+    Esto es especialmente útil en aplicaciones que requieren internacionalización o personalización
+    de la interfaz de usuario, ya que permite adaptar los formularios a diferentes contextos
+    o preferencias del usuario sin necesidad de modificar el código fuente del formulario.
 
 """
 
