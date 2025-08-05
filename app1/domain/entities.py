@@ -1,10 +1,15 @@
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional
+from uuid import UUID, uuid4
+from exceptions import *
+
 @dataclass
-class [[ entity_name.capitalize() ]]Entity:
+class Entity1Entity:
     """
-    Entidad del dominio para [[ entity_name.lower() ]].
+    Entidad del dominio para entity1.
 
     Esta clase representa la lógica de negocio central y las reglas asociadas 
-    con [[ entity_name.lower() ]] en el sistema.
+    con entity1 en el sistema.
     """
 
     # Lista de campos especiales
@@ -43,10 +48,10 @@ class [[ entity_name.capitalize() ]]Entity:
         - Validaciones intrínsecas al momento de creación/modificación
         """
         if not self.attributeName or len(self.attributeName) < 3:
-            raise [[ entity_name.capitalize() ]]ValueError("El attributeName debe tener al menos 3 caracteres")
+            raise Entity1ValueError("El attributeName debe tener al menos 3 caracteres")
 
         if self.attributeEmail and len(self.attributeEmail) > 500:
-            raise [[ entity_name.capitalize() ]]ValueError("El attributeEmail no puede superar los 500 caracteres")
+            raise Entity1ValueError("El attributeEmail no puede superar los 500 caracteres")
  
 
     def update(self, data:dict, addMode:bool = False) -> None:
@@ -55,7 +60,7 @@ class [[ entity_name.capitalize() ]]Entity:
         si addMode = True permite añadir campos nuevos
         :param data: Diccionario con los nuevos valores para los atributos.
         :param addMode: Si es True, permite añadir nuevos campos que no existan en la entidad.
-        :raises [[ entity_name.capitalize() ]]ValueError: Si hay un error de estructura en los datos.
+        :raises Entity1ValueError: Si hay un error de estructura en los datos.
         """
         # Actualizar cada campo proporcionado en 'data'
         for key, value in data.items():
@@ -63,7 +68,7 @@ class [[ entity_name.capitalize() ]]Entity:
                 try:
                     setattr(self, key, value)             
                 except TypeError as e:
-                    raise [[ entity_name.capitalize() ]]ValueError(key, f"Error de estructura en los datos: {str(e)}") from e
+                    raise Entity1ValueError(key, f"Error de estructura en los datos: {str(e)}") from e
 
         self.validate()    
 
@@ -76,7 +81,7 @@ class [[ entity_name.capitalize() ]]Entity:
 
         
     @staticmethod
-    def from_dict(data: dict) -> "[[ entity_name.capitalize() ]]Entity":
+    def from_dict(data: dict) -> "Entity1Entity":
         """
         Crea una instancia de la entidad a partir de un diccionario.
         """
@@ -85,9 +90,9 @@ class [[ entity_name.capitalize() ]]Entity:
 
         # construir la entidad
         try:
-            entity = [[ entity_name.capitalize() ]]Entity(**data)
+            entity = Entity1Entity(**data)
         except TypeError as e:
-            raise [[ entity_name.capitalize() ]]ValueError("Error al construir la entidad", str(e)) from e
+            raise Entity1ValueError("Error al construir la entidad", str(e)) from e
 
         return entity
         

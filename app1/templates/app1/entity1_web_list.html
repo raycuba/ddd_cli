@@ -1,0 +1,45 @@
+
+{% extends 'layout.html' %}
+
+{% block title %}
+Django form list
+{% endblock %}
+
+{% block content %}
+    <h1 class="title">List of</h1>
+
+    {% include 'app1/_web_global_errors.html' %}
+
+    <!--Codigo de Listado-->
+    <table class="table table-striped border datatable">
+        <thead>
+          <tr>       
+            <th>AttributeName</th>
+            <th>AttributeEmail</th>            
+            <th>AttributeRole</th>                       
+            <th>AttributeStatus</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+
+            {% for entity1 in entity1_list %}
+            <tr class="align-middle">              
+                <td>{{entity1.attributeName}}</td>                
+                <td>{{entity1.attributeEmail}}</td>
+                <td>
+                    {% if entity1.attributeRole == 'adm' %} Administrator {% elif entity1.attributeRole == 'man' %} Manager {% elif entity1.attributeRole == 'emp' %} Employee {% endif %}
+                </td>
+                <td>{{entity1.attributeStatus}}</td>
+                <td>
+                    <a class="btn btn-success" href="">Edit</a>
+                    <a class="btn btn-success" href="">View</a>
+                    <a class="btn btn-success" href="">Delete</a>
+                </td>
+            </tr>    
+            {% endfor %}
+
+        </tbody>
+    </table>    
+
+{% endblock %} 

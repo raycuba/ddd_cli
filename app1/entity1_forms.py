@@ -1,3 +1,4 @@
+
 from django import forms
 from django.core import validators
 from django.core.validators import (
@@ -10,9 +11,9 @@ from django.core.validators import (
 )
 
 
-class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
+class Entity1BaseForm(forms.Form):
     """
-    Formulario base para la entidad [[ entity_name.lower() ]].
+    Formulario base para la entidad entity1.
     """
 
     def __init__(self, *_args, **kwargs):
@@ -118,9 +119,9 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             raise forms.ValidationError("Passwords do not match")
 
 
-class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]BaseForm):
+class Entity1CreateForm(Entity1BaseForm):
     """
-    Formulario para crear una nueva instancia de [[ entity_name.lower() ]]. Sin modificaciones adicionales.
+    Formulario para crear una nueva instancia de entity1. Sin modificaciones adicionales.
     """
 
     def __init__(self, *args, **kwargs):
@@ -134,9 +135,9 @@ class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]Bas
         # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
 
 
-class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]BaseForm):
+class Entity1EditGetForm(Entity1BaseForm):
     """
-    Formulario para editar mediante GET una instancia de [[ entity_name.lower() ]]. 
+    Formulario para editar mediante GET una instancia de entity1. 
     """
 
     def __init__(self, *args, **kwargs):
@@ -157,9 +158,9 @@ class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]Ba
         })
 
 
-class [[ entity_name.capitalize() ]]EditPostForm([[ entity_name.capitalize() ]]BaseForm):
+class Entity1EditPostForm(Entity1BaseForm):
     """
-    Formulario para editar mediante POST una instancia de [[ entity_name.lower() ]]. 
+    Formulario para editar mediante POST una instancia de entity1. 
     """
 
     def __init__(self, *args, **kwargs):
@@ -173,9 +174,9 @@ class [[ entity_name.capitalize() ]]EditPostForm([[ entity_name.capitalize() ]]B
                 del self.fields[field]      
 
 
-class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseForm):
+class Entity1ViewForm(Entity1BaseForm):
     """
-    Formulario de solo lectura para Visualizar una instancia de [[ entity_name.lower() ]]
+    Formulario de solo lectura para Visualizar una instancia de entity1
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

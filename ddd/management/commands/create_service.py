@@ -6,14 +6,14 @@ class CreateServiceCommand:
         parser = subparsers.add_parser("create-service", help='Create a new service')
         parser.add_argument("app_path", type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument("entity_name", type=str, help='The name of the entity')
-        parser.add_argument("--function-format", action="store_true", help="Create a file with function format")   
+        #parser.add_argument("--function-format", action="store_true", help="Create a file with function format")   
         parser.add_argument("--split", action="store_true", help='Create a separate file for this service')
         parser.set_defaults(func=self.execute)         
 
     def execute(self, args):
-        self.create_service(args.app_path, args.entity_name, args.function_format, args.split)
+        self.create_service(args.app_path, args.entity_name, args.split)
 
-    def create_service(self, app_path, entity_name="Entity", function_format=False, split=False, **kwargs):
+    def create_service(self, app_path, entity_name="Entity", split=False, **kwargs):
         """Crea un nuevo servicio"""
         services_dir = os.path.join(app_path, 'domain') if not split else os.path.join(app_path, 'domain', 'services')
         services_path = os.path.join(services_dir, 'services.py') if not split else os.path.join(services_dir, entity_name.lower() + '_service.py')
@@ -44,13 +44,9 @@ class CreateServiceCommand:
                 f.write(rendered_content_imports + '\n')
             print(f"Imports of Service for '{entity_name}' created at {services_path}")
 
-        if not function_format:
-            #renderizar class con crud
-            rendered_content_class = renderTemplate(templateName = 'service', fileName='class_crud.py', render_params={'entity_name':entity_name})
 
-        else:
-            #renderizar funcion con crud
-            rendered_content_class = renderTemplate(templateName = 'service', fileName='function_crud.py', render_params={'entity_name':entity_name})
+        #renderizar class con crud
+        rendered_content_class = renderTemplate(templateName = 'service', fileName='class_crud.py', render_params={'entity_name':entity_name})
       
 
         # Escribir class en el archivo

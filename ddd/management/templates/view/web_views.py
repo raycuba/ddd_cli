@@ -2,11 +2,29 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
 
-# Importar excepciones específicas de dominio
-from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
+# importa las excepciones personalizadas
+from .domain.exceptions import (
+    [[ entity_name.capitalize() ]]ValueError,
+    [[ entity_name.capitalize() ]]ValidationError,
+    [[ entity_name.capitalize() ]]AlreadyExistsError,
+    [[ entity_name.capitalize() ]]NotFoundError,
+    [[ entity_name.capitalize() ]]OperationNotAllowedError,
+    [[ entity_name.capitalize() ]]PermissionError
+)
+
+# importa las excepciones de repositorio
+from .infrastructure.exceptions import (
+    ConnectionDataBaseError,
+    RepositoryError
+)
 
 # Importar formularios específicos de la entidad
-from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import [[ entity_name.capitalize() ]]CreateForm, [[ entity_name.capitalize() ]]EditGetForm, [[ entity_name.capitalize() ]]EditPostForm, [[ entity_name.capitalize() ]]ViewForm
+from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import (
+    [[ entity_name.capitalize() ]]CreateForm, 
+    [[ entity_name.capitalize() ]]EditGetForm, 
+    [[ entity_name.capitalize() ]]EditPostForm, 
+    [[ entity_name.capitalize() ]]ViewForm
+)
 
 # Importar servicios específicos del dominio
 from [[ app_name.lower() ]].domain.services import [[ entity_name.capitalize() ]]Service
@@ -28,9 +46,12 @@ def [[ entity_name.lower() ]]_list(request):
     try:
         [[ entity_name.lower() ]]List = [[ entity_name.lower() ]]Service.list()
 
-    except (ValueError, EntityNotFoundError) as e:
-        # Manejo de errores específicos del dominio
+    except ([[ entity_name.capitalize() ]]ValueError) as e:
         messages.error(request,  str(e))
+    except (ConnectionDataBaseError, RepositoryError) as e:
+        messages.error(request, "There was an error accessing the database or repository: " + str(e))
+    except Exception as e:
+        messages.error(request, "An unexpected error occurred: " + str(e))
 
     # Renderizar la plantilla con la lista
     return render(request, '[[ relative_app_path.lower() ]]/[[ entity_name.lower() ]]_web_list.html', {
@@ -66,9 +87,14 @@ def [[ entity_name.lower() ]]_create(request):
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]]")
                 return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-            except (ValueError, EntityNotFoundError) as e:
-                # Manejar errores específicos del dominio
-                form.add_error(None, str(e))
+            except [[ entity_name.capitalize() ]]AlreadyExistsError as e:
+                messages.error(request, "Already Exists Error: " + str(e))
+            except ([[ entity_name.capitalize() ]]ValueError, [[ entity_name.capitalize() ]]ValidationError) as e:
+                form.add_error(None, "Validation Error: " + str(e))
+            except (ConnectionDataBaseError, RepositoryError) as e:
+                messages.error(request, "There was an error accessing the database or repository: " + str(e))
+            except Exception as e:
+                messages.error(request, "An unexpected error occurred: " + str(e))
         else:
             messages.error(request, "There were errors in the form. Please correct them")
     else:
@@ -94,9 +120,17 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
         # Obtener los datos de la entidad desde el servicio
         [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.retrieve(entity_id=id)
 
-    except (ValueError, EntityNotFoundError) as e:
-        # Manejar errores específicos del dominio
-        messages.error(request,  str(e))
+    except [[ entity_name.capitalize() ]]NotFoundError as e:
+        messages.error(request,  "Not Found Error: " + str(e))
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
+    except [[ entity_name.capitalize() ]]ValueError as e:
+        messages.error(request,  "Value Error: " + str(e))
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
+    except (ConnectionDataBaseError, RepositoryError) as e:
+        messages.error(request, "There was an error accessing the database or repository: " + str(e))
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
+    except Exception as e:
+        messages.error(request, "An unexpected error occurred: " + str(e))
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
     if request.method == "POST":
@@ -128,8 +162,14 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
                 # Redireccionar a la lista de [[ entity_name.lower() ]]s
                 return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-            except (ValueError, EntityNotFoundError) as e:
-                form.add_error(None, str(e))
+            except [[ entity_name.capitalize() ]]NotFoundError as e:
+                messages.error(request,  "Not Found Error: " + str(e))                
+            except ([[ entity_name.capitalize() ]]ValueError, [[ entity_name.capitalize() ]]ValidationError) as e:
+                form.add_error(None, "Validation Error: " + str(e))
+            except (ConnectionDataBaseError, RepositoryError) as e:
+                messages.error(request, "There was an error accessing the database or repository: " + str(e))
+            except Exception as e:
+                messages.error(request, "An unexpected error occurred: " + str(e))
 
         else:
             messages.error(request, "There were errors in the form. Please correct them")
@@ -160,9 +200,17 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
         # Obtener los datos de la entidad desde el servicio
         [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.retrieve(entity_id=id)
 
-    except (ValueError, EntityNotFoundError) as e:
-        # Manejar errores específicos del dominio
+    except [[ entity_name.capitalize() ]]NotFoundError as e:
+        messages.error(request,  "Not Found Error: " + str(e))        
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
+    except [[ entity_name.capitalize() ]]ValueError as e:
         messages.error(request,  str(e))
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
+    except (ConnectionDataBaseError, RepositoryError) as e:
+        messages.error(request, "There was an error accessing the database or repository: " + str(e))
+        return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
+    except Exception as e:
+        messages.error(request, "An unexpected error occurred: " + str(e))
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
     # Renderizar la plantilla con el formulario de vista
@@ -188,10 +236,15 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
         # LLamar al servicio de eliminación
         [[ entity_name.lower() ]]Service.delete(entity_id=id)
         messages.success(request, f"Successfully deleted [[ entity_name.lower() ]]")
-        
-    except (ValueError, EntityNotFoundError) as e:
-        # Manejar errores específicos del dominio
-        messages.error(request,  str(e))
+
+    except [[ entity_name.capitalize() ]]NotFoundError as e:
+        messages.error(request,  "Not Found Error: " + str(e))             
+    except ([[ entity_name.capitalize() ]]ValueError, [[ entity_name.capitalize() ]]ValidationError) as e:
+        messages.error(request,  "Validation Error: " + str(e))
+    except (ConnectionDataBaseError, RepositoryError) as e:
+        messages.error(request, "There was an error accessing the database or repository: " + str(e))
+    except Exception as e:
+        messages.error(request, "An unexpected error occurred: " + str(e))
 
     return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 

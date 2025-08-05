@@ -1,3 +1,4 @@
+
 from typing import List, Optional
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import DatabaseError, IntegrityError, transaction
@@ -5,20 +6,20 @@ from django.db.models import Q
 from django.forms import ValidationError
 
 # importa las entidades utilizadas aqui
-from ..models import [[ entity_name.capitalize() ]]
+from ..models import Entity1
 from .mappers import Mapper
 from ..utils.clean_dict_of_keys import clean_dict_of_keys
 from ..utils.is_integer import is_integer
-from ..domain.entities import [[ entity_name.capitalize() ]]Entity
+from ..domain.entities import Entity1Entity
 
 # importa las excepciones personalizadas
 from ..domain.exceptions import (
-    [[ entity_name.capitalize() ]]ValueError,
-    [[ entity_name.capitalize() ]]ValidationError,
-    [[ entity_name.capitalize() ]]AlreadyExistsError,
-    [[ entity_name.capitalize() ]]NotFoundError,
-    [[ entity_name.capitalize() ]]OperationNotAllowedError,
-    [[ entity_name.capitalize() ]]PermissionError
+    Entity1ValueError,
+    Entity1ValidationError,
+    Entity1AlreadyExistsError,
+    Entity1NotFoundError,
+    Entity1OperationNotAllowedError,
+    Entity1PermissionError
 )
 
 # importa las excepciones de repositorio
@@ -28,9 +29,9 @@ from .exceptions import (
 )
 
 
-class [[ entity_name.capitalize() ]]Repository:
+class Entity1Repository:
     """
-    Repositorio para manejar la persistencia de datos de la entidad: [[ entity_name.lower() ]].
+    Repositorio para manejar la persistencia de datos de la entidad: entity1.
     
     Este repositorio incluye:
     - Validación de existencia de registros.
@@ -39,27 +40,27 @@ class [[ entity_name.capitalize() ]]Repository:
     """
 
     @staticmethod
-    def get_all(filters: Optional[dict] = None) -> List[ [[ entity_name.capitalize() ]]Entity ]:
+    def get_all(filters: Optional[dict] = None) -> List[ Entity1Entity ]:
         """
         Obtiene todos los registros de la entidad.
 
         params:
             filters (dict, optional): Filtros a aplicar en la consulta.
         returns: 
-            List[ [[ entity_name.capitalize() ]]Entity ]: Lista de entidades recuperadas.
+            List[ Entity1Entity ]: Lista de entidades recuperadas.
         raises:
-            [[ entity_name.capitalize() ]]ValueError: Si los filtros no son un diccionario o None.
+            Entity1ValueError: Si los filtros no son un diccionario o None.
             ConnectionDataBaseError: Si hay un error al conectar a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
 
         try:
-            instance_list = [[ entity_name.capitalize() ]].objects.all()    
+            instance_list = Entity1.objects.all()    
 
             # Aplicar filtros si se proporcionan
             if filters is not None:
                 if not isinstance(filters, dict):
-                    raise [[ entity_name.capitalize() ]]ValueError("filters", "filters debe ser un diccionario o None")
+                    raise Entity1ValueError("filters", "filters debe ser un diccionario o None")
                 if "nombre" in filters and filters["nombre"].strip():
                     instance_list = instance_list.filter(nombre__icontains=filters["nombre"])      
                     
@@ -67,7 +68,7 @@ class [[ entity_name.capitalize() ]]Repository:
             instance_list = instance_list.only("id", "nombre", "created_at")
 
             # Convertir a entidades usando el Mapper genérico
-            return [Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity) for instance in instance_list]        
+            return [Mapper.model_to_entity(instance, Entity1Entity) for instance in instance_list]        
 
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e
@@ -76,7 +77,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def get_by_id(id) -> Optional[ [[ entity_name.capitalize() ]]Entity ]:
+    def get_by_id(id) -> Optional[ Entity1Entity ]:
         """
         Obtiene un registro por su ID.
         
@@ -85,22 +86,22 @@ class [[ entity_name.capitalize() ]]Repository:
         returns: 
             El entidad encontrada o None si no existe.
         raises:
-            [[ entity_name.capitalize() ]]ValueError: Si el ID no es un entero.         
-            [[ entity_name.capitalize() ]]NotFoundError: Si no existe el registro con el ID dado.
+            Entity1ValueError: Si el ID no es un entero.         
+            Entity1NotFoundError: Si no existe el registro con el ID dado.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
 
         # Validar que el ID sea un entero
         if not is_integer(id):
-            raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="El ID debe ser un entero.")
+            raise Entity1ValueError(field="id", detail="El ID debe ser un entero.")
 
         try:
-            instance = [[ entity_name.capitalize() ]].objects.get(id=id)
-            return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
+            instance = Entity1.objects.get(id=id)
+            return Mapper.model_to_entity(instance, Entity1Entity)
 
-        except [[ entity_name.capitalize() ]].DoesNotExist as e:
-            raise [[ entity_name.capitalize() ]]NotFoundError(id=id) from e
+        except Entity1.DoesNotExist as e:
+            raise Entity1NotFoundError(id=id) from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e    
         except Exception as e:
@@ -118,7 +119,7 @@ class [[ entity_name.capitalize() ]]Repository:
         returns:
             True si existe un registro con el valor dado, False en caso contrario.
         raises:
-            [[ entity_name.capitalize() ]]ValueError: Si el campo no es válido.
+            Entity1ValueError: Si el campo no es válido.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
@@ -126,10 +127,10 @@ class [[ entity_name.capitalize() ]]Repository:
         ALLOWED_FIELDS = ['nombre', 'email', 'ruc', 'codigo']  # define según tu entidad
         
         if field_name not in ALLOWED_FIELDS:
-            raise [[ entity_name.capitalize() ]]ValueError(field=field_name, detail=f"El campo '{field_name}' no es válido para verificar existencia.")
+            raise Entity1ValueError(field=field_name, detail=f"El campo '{field_name}' no es válido para verificar existencia.")
 
         try:
-            return [[ entity_name.capitalize() ]].objects.filter(**{field_name: value}).exists()
+            return Entity1.objects.filter(**{field_name: value}).exists()
 
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e
@@ -147,18 +148,18 @@ class [[ entity_name.capitalize() ]]Repository:
         returns:
             Número de registros que cumplen las condiciones.
         raises: 
-            [[ entity_name.capitalize() ]]ValueError: Si los filtros no son un diccionario o None.
+            Entity1ValueError: Si los filtros no son un diccionario o None.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.       
             RepositoryError: Si ocurre un error inesperado (interno del sistema). 
         """     
 
         try:
-            instance_list = [[ entity_name.capitalize() ]].objects.all()    
+            instance_list = Entity1.objects.all()    
 
             # Aplicar filtros si se proporcionan
             if filters is not None:
                 if not isinstance(filters, dict):
-                    raise [[ entity_name.capitalize() ]]ValueError(field="filters", detail="filters debe ser un diccionario o None")               
+                    raise Entity1ValueError(field="filters", detail="filters debe ser un diccionario o None")               
                 if "nombre" in filters and filters["nombre"].strip():
                     instance_list = instance_list.filter(nombre__icontains=filters["nombre"])            
 
@@ -171,7 +172,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def create(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> [[ entity_name.capitalize() ]]Entity:
+    def create(entity: Entity1Entity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> Entity1Entity:
         """
         Crea un nuevo registro.
 
@@ -183,16 +184,16 @@ class [[ entity_name.capitalize() ]]Repository:
         returns: 
             La entidad creada.
         raises:
-            [[ entity_name.capitalize() ]]ValueError: Si la entidad es nula o no tiene el método 'to_dict'.
-            [[ entity_name.capitalize() ]]ValidationError: Si los datos no son válidos.
-            [[ entity_name.capitalize() ]]AlreadyExistsError: Si ya existe un registro con el mismo nombre.
+            Entity1ValueError: Si la entidad es nula o no tiene el método 'to_dict'.
+            Entity1ValidationError: Si los datos no son válidos.
+            Entity1AlreadyExistsError: Si ya existe un registro con el mismo nombre.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.   
             RepositoryError: Si ocurre un error inesperado (interno del sistema).     
         """
 
         # Validar la entidad de entrada
         if not entity or not hasattr(entity, "to_dict"):
-            raise [[ entity_name.capitalize() ]]ValueError("[[ entity_name.capitalize() ]]", "Entidad nula o no tiene el método 'to_dict'")
+            raise Entity1ValueError("Entity1", "Entidad nula o no tiene el método 'to_dict'")
 
         try:
             #convertir a dict
@@ -202,7 +203,7 @@ class [[ entity_name.capitalize() ]]Repository:
             data = clean_dict_of_keys(data, keys=entity.SPECIAL_FIELDS)
 
             # Crear el registro a partir de los campos presentes en la 'data'
-            instance = [[ entity_name.capitalize() ]](**data)
+            instance = Entity1(**data)
 
             with transaction.atomic():
                 # Asegurar que todas las operaciones se realicen en una transacción
@@ -229,24 +230,24 @@ class [[ entity_name.capitalize() ]]Repository:
                 instance.save()
 
         except (TypeError, ValueError) as e:
-            raise [[ entity_name.capitalize() ]]ValueError("data", f"Error de estructura en los datos: {str(e)}") from e
+            raise Entity1ValueError("data", f"Error de estructura en los datos: {str(e)}") from e
         except ValidationError as e:
-            raise [[ entity_name.capitalize() ]]ValidationError(f"Validation error occurred: {e.message_dict}") from e
+            raise Entity1ValidationError(f"Validation error occurred: {e.message_dict}") from e
         except IntegrityError as e:
             if 'duplicate' in str(e).lower() or 'unique constraint' in str(e).lower():
-                raise [[ entity_name.capitalize() ]]AlreadyExistsError('attributeName', instance.attributeName)  # Ajusta según el campo único
+                raise Entity1AlreadyExistsError('attributeName', instance.attributeName)  # Ajusta según el campo único
             # Otro error de integridad → regla de negocio?
-            raise [[ entity_name.capitalize() ]]ValidationError({"integridad": "Datos duplicados o inconsistentes"})            
+            raise Entity1ValidationError({"integridad": "Datos duplicados o inconsistentes"})            
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e
         except Exception as e:
             raise RepositoryError(f"Error al crear el registro: {str(e)}") from e
         
-        return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
+        return Mapper.model_to_entity(instance, Entity1Entity)
 
 
     @staticmethod
-    def update(entity: [[ entity_name.capitalize() ]]Entity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> [[ entity_name.capitalize() ]]Entity:
+    def update(entity: Entity1Entity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> Entity1Entity:
         """
         Guarda los cambios en una entidad existente.
 
@@ -258,23 +259,23 @@ class [[ entity_name.capitalize() ]]Repository:
         returns:
             La entidad guardada.
         raises: 
-            [[ entity_name.capitalize() ]]NotFoundError: Si no existe el registro con el ID dado.
-            [[ entity_name.capitalize() ]]ValueError: Si la entidad es nula o no tiene el método 'to_dict'.
-            [[ entity_name.capitalize() ]]ValidationError: Si los datos no son válidos.
+            Entity1NotFoundError: Si no existe el registro con el ID dado.
+            Entity1ValueError: Si la entidad es nula o no tiene el método 'to_dict'.
+            Entity1ValidationError: Si los datos no son válidos.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.   
             RepositoryError: Si ocurre un error inesperado (interno del sistema).     
         """    
 
         # Validar la entidad de entrada
         if not entity or not hasattr(entity, "to_dict"):
-            raise [[ entity_name.capitalize() ]]ValueError("[[ entity_name.capitalize() ]]", "Entidad nula o no tiene el método 'to_dict'")
+            raise Entity1ValueError("Entity1", "Entidad nula o no tiene el método 'to_dict'")
 
         if not entity.id or not is_integer(entity.id):
-            raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="El ID debe ser un entero.")                        
+            raise Entity1ValueError(field="id", detail="El ID debe ser un entero.")                        
 
         try:
             # Recuperar el modelo existente basado en el ID de la entidad
-            instance = [[ entity_name.capitalize() ]].objects.get(id=entity.id)
+            instance = Entity1.objects.get(id=entity.id)
 
             with transaction.atomic():
                 # Asegurar que todas las operaciones se realicen en una transacción
@@ -305,14 +306,14 @@ class [[ entity_name.capitalize() ]]Repository:
                 instance.save() 
             
             # Convertir el modelo actualizado de vuelta a una entidad
-            return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
+            return Mapper.model_to_entity(instance, Entity1Entity)
 
-        except [[ entity_name.capitalize() ]].DoesNotExist as e:
-            raise [[ entity_name.capitalize() ]]NotFoundError(id=entity.id) from e
+        except Entity1.DoesNotExist as e:
+            raise Entity1NotFoundError(id=entity.id) from e
         except (TypeError, ValueError) as e:
-            raise [[ entity_name.capitalize() ]]ValueError("data", f"Error de estructura en los datos: {str(e)}") from e
+            raise Entity1ValueError("data", f"Error de estructura en los datos: {str(e)}") from e
         except ValidationError as e:
-            raise [[ entity_name.capitalize() ]]ValidationError(f"Validation error occurred: {e.message_dict}") from e
+            raise Entity1ValidationError(f"Validation error occurred: {e.message_dict}") from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e            
         except Exception as e:
@@ -327,9 +328,9 @@ class [[ entity_name.capitalize() ]]Repository:
         params: 
             id: ID del registro a eliminar.
         raises: 
-            [[ entity_name.capitalize() ]]NotFoundError: Si no existe el registro con el ID dado.
-            [[ entity_name.capitalize() ]]ValueError: Si el ID no es un entero.
-            [[ entity_name.capitalize() ]]ValidationError: Si los datos no son válidos
+            Entity1NotFoundError: Si no existe el registro con el ID dado.
+            Entity1ValueError: Si el ID no es un entero.
+            Entity1ValidationError: Si los datos no son válidos
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.      
             RepositoryError: Si ocurre un error inesperado (interno del sistema).  
         returns: 
@@ -337,17 +338,17 @@ class [[ entity_name.capitalize() ]]Repository:
         """
 
         if not is_integer(id):
-            raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="El ID debe ser un entero.")
+            raise Entity1ValueError(field="id", detail="El ID debe ser un entero.")
 
         try:
-            instance = [[ entity_name.capitalize() ]].objects.get(id=id)
+            instance = Entity1.objects.get(id=id)
             instance.delete()
             return True
 
-        except [[ entity_name.capitalize() ]].DoesNotExist as e:
-            raise [[ entity_name.capitalize() ]]NotFoundError(id=id) from e
+        except Entity1.DoesNotExist as e:
+            raise Entity1NotFoundError(id=id) from e
         except ValidationError as e:
-            raise [[ entity_name.capitalize() ]]ValidationError(f"Validation error occurred: {e.message_dict}") from e
+            raise Entity1ValidationError(f"Validation error occurred: {e.message_dict}") from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e            
         except Exception as e:
@@ -399,44 +400,44 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
     En lugar de exponer solo filtros genéricos por `nombre`, puedes agregar métodos que expresen reglas de negocio:
         @staticmethod
         def get_activos():
-            return [[ entity_name.capitalize() ]].objects.filter(estado='activo')
+            return Entity1.objects.filter(estado='activo')
 
         @staticmethod
-        def find_by_slug(slug: str) -> Optional[[ entity_name.capitalize() ]]Entity:
+        def find_by_slug(slug: str) -> OptionalEntity1Entity:
             try:
-                instance = [[ entity_name.capitalize() ]].objects.get(slug=slug)
-                return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
-            except [[ entity_name.capitalize() ]].DoesNotExist:
+                instance = Entity1.objects.get(slug=slug)
+                return Mapper.model_to_entity(instance, Entity1Entity)
+            except Entity1.DoesNotExist:
                 return None
 
     Estos métodos se integran naturalmente con `get_by_id()` y `get_all()`, y evitan que la lógica de negocio se repita en servicios.
 
 #### 2. 🔍 **QuerySets y Managers personalizados**
     Puedes encapsular lógica común (como filtros por estado o relaciones) en un `Manager` personalizado:
-        class [[ entity_name.capitalize() ]]Manager(models.Manager):
+        class Entity1Manager(models.Manager):
             def activos(self):
                 return self.filter(estado='activo')
             def con_relacion(self):
                 return self.select_related('external').prefetch_related('externals')
 
-        class [[ entity_name.capitalize() ]](models.Model):
+        class Entity1(models.Model):
             ...
-            objects = [[ entity_name.capitalize() ]]Manager()
+            objects = Entity1Manager()
 
     Luego, en el repositorio:
         @staticmethod
         def get_all(filters=None):
-            instance_list = [[ entity_name.capitalize() ]].objects.activos()  # Usa tu Manager
+            instance_list = Entity1.objects.activos()  # Usa tu Manager
             if filters and "nombre" in filters:
                 instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
-            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instance_list]
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instance_list]
 
         @staticmethod
         def get_all_with_relations():
-            instance_list = [[ entity_name.capitalize() ]].objects.activos().con_relacion() # Usa tu Manager
+            instance_list = Entity1.objects.activos().con_relacion() # Usa tu Manager
             if filters:
                 instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
-            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instance_list]
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instance_list]
 
     Así mantienes el diseño actual, pero con mejor rendimiento y expresividad.
 
@@ -447,24 +448,24 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
         def get_paginated(page: int, size: int, filters=None):
             offset = (page - 1) * size
             limit = offset + size
-            instance_list = [[ entity_name.capitalize() ]].objects.all()
+            instance_list = Entity1.objects.all()
             if filters and "nombre" in filters:
                 instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
             instance_list = instance_list.only("id", "nombre", "created_at")[offset:limit]
-            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instance_list]
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instance_list]
 
     Ideal para APIs o listados grandes.
 
 #### 4. 🔄 **Separación de lectura y escritura (CQRS básico)**
     Aunque la plantilla combina lectura y escritura, puedes dividirla cuando el sistema escala:
 
-        class [[ entity_name.capitalize() ]]ReadRepository:
+        class Entity1ReadRepository:
             @staticmethod
             def get_all(...):  # Igual al actual
             @staticmethod
             def count_all(...):  # Ya implementado
 
-        class [[ entity_name.capitalize() ]]WriteRepository:
+        class Entity1WriteRepository:
             @staticmethod
             def create(...):   # Usa `adicionalData` para lógica especial
             @staticmethod
@@ -480,10 +481,10 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
         from django.db.models import Count
         @staticmethod
         def get_con_muchos_externals(min_relaciones=3):
-            instances = [[ entity_name.capitalize() ]].objects.annotate(
+            instances = Entity1.objects.annotate(
                 total_externals=Count('externals')
             ).filter(total_externals__gt=min_relaciones)
-            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instances]
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instances]
 
     Así mantienes el mapeo y la coherencia del dominio.
 
@@ -492,10 +493,10 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
 
         @staticmethod
         def get_all_with_relations():
-            instance_list = [[ entity_name.capitalize() ]].objects.select_related('external').prefetch_related('externals')
+            instance_list = Entity1.objects.select_related('external').prefetch_related('externals')
             if filters:
                 instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
-            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instance_list]
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instance_list]
 
     Evita el problema N+1 cuando accedes a relaciones.
 
@@ -505,34 +506,34 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
         from django.db.models import Q, 
         @staticmethod
         def search_advanced(query):
-            instances = [[ entity_name.capitalize() ]].objects.filter(
+            instances = Entity1.objects.filter(
                 Q(nombre__icontains=query) | Q(descripcion__icontains=query)
             )
-            return [Mapper.model_to_entity(inst, [[ entity_name.capitalize() ]]Entity) for inst in instances]
+            return [Mapper.model_to_entity(inst, Entity1Entity) for inst in instances]
 
         @staticmethod
         def reactivar_registros():
-            [[ entity_name.capitalize() ]].objects.filter(estado='inactivo').update(estado=F('estado_anterior'))
+            Entity1.objects.filter(estado='inactivo').update(estado=F('estado_anterior'))
 
         @staticmethod
         def busqueda_compleja_sql():
             from django.db import connection
             with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM app_[[ entity_name.lower() ]] WHERE estado = %s", ['activo'])
+                cursor.execute("SELECT * FROM app_entity1 WHERE estado = %s", ['activo'])
                 rows = cursor.fetchall()
-            return [Mapper.model_to_entity(row, [[ entity_name.capitalize() ]]Entity) for row in rows]
+            return [Mapper.model_to_entity(row, Entity1Entity) for row in rows]
 
     El repositorio sigue siendo el único punto de acceso al ORM.
 
 #### 8. **Documentación y claridad**
     Los métodos del repositorio deben reflejar intenciones del negocio, no solo operaciones técnicas:
         @staticmethod
-        def get_all(filters=None) -> List[[ entity_name.capitalize() ]]Entity:
+        def get_all(filters=None) -> ListEntity1Entity:
             """
-            Obtiene todos los [[ entity_name.lower() ]] que coincidan con los filtros.
+            Obtiene todos los entity1 que coincidan con los filtros.
             Usa `.only()` para optimizar rendimiento.
             :param filters: Diccionario con filtros (ej. {"nombre": "juan"}).
-            :return: Lista de entidades [[ entity_name.capitalize() ]].
+            :return: Lista de entidades Entity1.
             """
     Esto hace que el repositorio sea autoexplicativo.
 
@@ -547,8 +548,8 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
                 pass
         
             def test_create_con_external_y_externals(self):
-                entity = [[ entity_name.capitalize() ]]Entity(nombre="Test")
-                created = [[ entity_name.capitalize() ]]Repository.create(
+                entity = Entity1Entity(nombre="Test")
+                created = Entity1Repository.create(
                     entity=entity,
                     external_id=1,
                     externals=[1, 2],
@@ -558,7 +559,7 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
                 self.assertEqual(created.nombre, "Test")
 
                 # Verifica relaciones
-                instance = [[ entity_name.capitalize() ]].objects.get(id=created.id)
+                instance = Entity1.objects.get(id=created.id)
                 self.assertEqual(instance.external_id, 1)
                 self.assertEqual(instance.externals.count(), 2)
 

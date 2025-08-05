@@ -16,8 +16,10 @@ class CreateRepositoryCommand:
             utils_dir = os.path.join(app_path, 'utils')
             repository_dir = os.path.join(app_path, 'infrastructure')
             repository_path = os.path.join(repository_dir, entity_name.lower() + '_repository.py')
-            mappers_path = os.path.join(utils_dir, 'mappers.py')
+            mappers_path = os.path.join(repository_dir, 'mappers.py')
+            exceptions_path = os.path.join(repository_dir, 'exceptions.py')
             clean_dict_of_keys_path = os.path.join(utils_dir, 'clean_dict_of_keys.py')
+            is_integer_path = os.path.join(utils_dir, 'is_integer.py')
 
             # decodficar app_path
             app_name, last_app_name, app_route, relative_app_path = decodeAppPath(app_path)
@@ -39,16 +41,17 @@ class CreateRepositoryCommand:
                 return
             
             # Crear archivo de mappers.py        
-            readWriteTemplate(templateName = 'utils', fileName='mappers.py', render_params={}, repository_path=mappers_path, failIfError=False)
-            
+            readWriteTemplate(templateName = 'repository', fileName='mappers.py', render_params={'entity_name':entity_name, 'app_name':app_name}, repository_path=mappers_path, failIfError=False)
+
+            # Crear archivo de exceptions.py
+            readWriteTemplate(templateName = 'repository', fileName='exceptions.py', render_params={}, repository_path=exceptions_path, failIfError=False)
+
             # Crear archivo clean_dict_of_keys.py
             readWriteTemplate(templateName = 'utils', fileName='clean_dict_of_keys.py', render_params={}, repository_path=clean_dict_of_keys_path, failIfError=False)
 
-            
-            #renderizar class
-            readWriteTemplate(templateName = 'repository', fileName='class.py', render_params={'entity_name':entity_name, 'app_name':app_name}, repository_path=repository_path, failIfError=True)
+            # Crear archivo is_integer.py
+            readWriteTemplate(templateName = 'utils', fileName='is_integer.py', render_params={}, repository_path=is_integer_path, failIfError=False)
 
-            # # Escribir class en el archivo
-            # with open(repository_path, 'w') as f:
-            #     f.write('\n' + rendered_content_class + '\n')
+            #renderizar classc
+            readWriteTemplate(templateName = 'repository', fileName='class.py', render_params={'entity_name':entity_name, 'app_name':app_name}, repository_path=repository_path, failIfError=True)
             print(f"Class Repository of Entity '{entity_name}' created at {repository_path}")

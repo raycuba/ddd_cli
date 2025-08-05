@@ -5,6 +5,7 @@ from django.db import models
 from datetime import datetime, date
 import decimal
 import uuid
+from ..domain.exceptions import *
 
 T = TypeVar("T")
 
@@ -48,7 +49,7 @@ class Mapper:
         """
 
         if not model_instance:
-            raise ValueError("Model instance cannot be None")
+            raise [[ entity_name.capitalize() ]]ValueError("Model instance cannot be None", "Cannot convert None to entity")
 
         entity_field_names = {f.name for f in fields(entity_class)}
 

@@ -20,4 +20,13 @@ from typing import List, Optional
 
 # importa las entidades utilizadas aqui
 from .entities import [[ entity_name.capitalize() ]]Entity
+from .exceptions import (
+    [[ entity_name.capitalize() ]]ValueError,
+    [[ entity_name.capitalize() ]]ValidationError,
+    [[ entity_name.capitalize() ]]AlreadyExistsError,
+    [[ entity_name.capitalize() ]]NotFoundError,
+    [[ entity_name.capitalize() ]]OperationNotAllowedError,
+    [[ entity_name.capitalize() ]]PermissionError
+)
+from ..infrastructure.exceptions import RepositoryError, ConnectionDataBaseError
 from ..infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository

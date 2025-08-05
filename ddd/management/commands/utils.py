@@ -80,10 +80,14 @@ def readWriteTemplate(templateName: str, fileName:str, render_params: dict, repo
         with open(repository_path, 'w') as f:
             f.write('\n' + rendered_content + '\n') 
 
+        print(f"Written file from: {templateName}/{fileName} to: {repository_path}.")
+
     except Exception as e:
         if failIfError:
             raise Exception(e.args)
-        
+        else: 
+            print(f"Error occurred writing to file: {fileName} -> ", e)
+
 def decodeAppPath(app_path: str) -> tuple:
     """
     Convierte una ruta de aplicación (ej: apps/manager/app1) a:
