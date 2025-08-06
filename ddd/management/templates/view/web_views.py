@@ -27,7 +27,7 @@ from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import (
 )
 
 # Importar servicios específicos del dominio
-from [[ app_name.lower() ]].services.services import [[ entity_name.capitalize() ]]Service
+from [[ app_name.lower() ]].services.[[ entity_name.lower() ]]_service import [[ entity_name.capitalize() ]]Service
 
 # Importar repositorios específicos de la infraestructura
 from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository

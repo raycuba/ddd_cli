@@ -6,17 +6,15 @@ class CreateServiceCommand:
         parser = subparsers.add_parser("create-service", help='Create a new service')
         parser.add_argument("app_path", type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument("entity_name", type=str, help='The name of the entity')
-        #parser.add_argument("--function-format", action="store_true", help="Create a file with function format")   
-        parser.add_argument("--split", action="store_true", help='Create a separate file for this service')
         parser.set_defaults(func=self.execute)         
 
     def execute(self, args):
-        self.create_service(args.app_path, args.entity_name, args.split)
+        self.create_service(args.app_path, args.entity_name)
 
-    def create_service(self, app_path, entity_name="Entity", split=False, **kwargs):
+    def create_service(self, app_path, entity_name="Entity", **kwargs):
         """Crea un nuevo servicio"""
         services_dir = os.path.join(app_path, 'services')
-        services_path = os.path.join(services_dir, 'services.py') if not split else os.path.join(services_dir, entity_name.lower() + '_service.py')
+        services_path = os.path.join(services_dir, entity_name.lower() + '_service.py')
 
         # Crear directorios si no existen
         try:
@@ -28,8 +26,8 @@ class CreateServiceCommand:
             print(Fore.RED + f"Failed to create directory '{services_dir}': {e}" + Style.RESET_ALL)
             return
         
-        #si split y ya existe el archivo mostrar error
-        if split and os.path.exists(services_path):
+        #si ya existe el archivo mostrar error
+        if os.path.exists(services_path):
             print(Fore.RED + f"The file '{services_path}' already exists. A separate file cannot be created" + Style.RESET_ALL)
             return
 

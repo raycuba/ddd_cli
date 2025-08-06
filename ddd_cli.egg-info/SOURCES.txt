@@ -2,9 +2,6 @@ MANIFEST.in
 README.md
 setup.py
 app1/__init__.py
-app1/entity1_forms.py
-app1/entity1_urls.py
-app1/entity1_views.py
 app1/domain/__init__.py
 app1/domain/entities.py
 app1/domain/exceptions.py
@@ -13,7 +10,7 @@ app1/infrastructure/entity1_repository.py
 app1/infrastructure/exceptions.py
 app1/infrastructure/mappers.py
 app1/services/__init__.py
-app1/services/services.py
+app1/services/entity1_service.py
 app1/utils/__init__.py
 app1/utils/clean_dict_of_keys.py
 app1/utils/is_integer.py
