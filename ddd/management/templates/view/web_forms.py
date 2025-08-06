@@ -549,4 +549,9 @@ Cuando se llama al método is_valid() de un formulario, Django realiza las sigui
     Si no hay errores, los valores procesados y validados se almacenan en el atributo 'form.cleaned_data', 
     que es un diccionario con los datos del formulario que pasaron la validación.
 
+Nota: raise forms.ValidationError no detiene la ejecución del código,
+sino que agrega el error al formulario, permitiendo que se maneje adecuadamente en la plantilla o en la vista.
+Esto permite que el formulario se pueda volver a renderizar con los errores
+y que el usuario pueda corregir los datos ingresados.
+
 '''

@@ -8,8 +8,21 @@ from rest_framework.permissions import IsAuthenticated
 # importar serializers
 from serializers import [[ entity_name.capitalize() ]]Serializer
 
-# importar excepciones especificas de dominio
-from [[ app_name.lower() ]].domain.exceptions import EntityNotFoundError
+# importa las excepciones personalizadas
+from .domain.exceptions import (
+    [[ entity_name.capitalize() ]]ValueError,
+    [[ entity_name.capitalize() ]]ValidationError,
+    [[ entity_name.capitalize() ]]AlreadyExistsError,
+    [[ entity_name.capitalize() ]]NotFoundError,
+    [[ entity_name.capitalize() ]]OperationNotAllowedError,
+    [[ entity_name.capitalize() ]]PermissionError
+)
+
+# importa las excepciones de repositorio
+from .infrastructure.exceptions import (
+    ConnectionDataBaseError,
+    RepositoryError
+)
 
 # importar servicios específicos del dominio
 from [[ app_name.lower() ]].domain.services import [[ entity_name.capitalize() ]]Service
@@ -65,9 +78,15 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Retornar los datos serializados con un estado HTTP 200 OK
             return Response(response_serializer_list.data, status=status.HTTP_200_OK)
 
-        except (ValueError, EntityNotFoundError) as e:
-            # Manejar errores de lógica de negocio
-            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except ([[ entity_name.capitalize() ]]ValueError) as e:
+            # Manejar errores de validación si los datos no son válidos
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except (ConnectionDataBaseError, RepositoryError) as e:
+            # Manejar errores de conexión a la base de datos o repositorio
+            return Response({"error": "Database or repository error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            # Manejar cualquier otro error inesperado
+            return Response({"error": "Unexpected error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
     @swagger_auto_schema(
@@ -101,9 +120,18 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Retornar el resultado con un estado HTTP 200 OK
             return Response(response_serializer.data, status=status.HTTP_200_OK)
 
-        except (ValueError, EntityNotFoundError) as e:
-            # Manejar errores si el registro no existe
+        except [[ entity_name.capitalize() ]]NotFoundError as e:
+            # Manejar errores si no se encuentra el registro
             return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except [[ entity_name.capitalize() ]]ValueError as e:
+            # Manejar errores de validación si el ID no es válido
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except (ConnectionDataBaseError, RepositoryError) as e:
+            # Manejar errores de conexión a la base de datos o repositorio
+            return Response({"error": "Database or repository error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            # Manejar cualquier otro error inesperado
+            return Response({"error": "Unexpected error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
     @swagger_auto_schema(
@@ -149,9 +177,18 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Retornar el resultado con un estado HTTP 201 CREATED
             return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
-        except (ValueError, EntityNotFoundError) as e:
-            # Manejar errores en las reglas de negocio o validación
+        except [[ entity_name.capitalize() ]]AlreadyExistsError as e:
+            # Manejar errores si ya existe un registro con el mismo nombre
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except ([[ entity_name.capitalize() ]]ValueError, [[ entity_name.capitalize() ]]ValidationError) as e:
+            # Manejar errores de validación si los datos no son válidos
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except (ConnectionDataBaseError, RepositoryError) as e:
+            # Manejar errores de conexión a la base de datos o repositorio
+            return Response({"error": "Database or repository error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            # Manejar cualquier otro error inesperado
+            return Response({"error": "Unexpected error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
     @swagger_auto_schema(
@@ -198,9 +235,18 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Retornar el resultado con un estado HTTP 200 OK
             return Response(response_serializer.data, status=status.HTTP_200_OK)
 
-        except (ValueError, EntityNotFoundError) as e:
-            # Manejar errores en las reglas de negocio o validación
+        except [[ entity_name.capitalize() ]]NotFoundError as e:
+            # Manejar errores si no se encuentra el registro con el ID dado
+            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except ([[ entity_name.capitalize() ]]ValueError, [[ entity_name.capitalize() ]]ValidationError) as e:
+            # Manejar errores de validación si los datos no son válidos
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except (ConnectionDataBaseError, RepositoryError) as e:
+            # Manejar errores de conexión a la base de datos o repositorio
+            return Response({"error": "Database or repository error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            # Manejar cualquier otro error inesperado
+            return Response({"error": "Unexpected error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
     @swagger_auto_schema(
@@ -230,7 +276,16 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             # Retornar un estado HTTP 204 NO CONTENT para confirmar la eliminación
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        except (ValueError, EntityNotFoundError) as e:
-            # Manejar errores si el registro no existe o no se puede eliminar
+        except [[ entity_name.capitalize() ]]NotFoundError as e:
+            # Manejar errores si no se encuentra el registro con el ID dado
+            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except ([[ entity_name.capitalize() ]]ValueError, [[ entity_name.capitalize() ]]ValidationError) as e:
+            # Manejar errores de validación si el ID no es válido
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except (ConnectionDataBaseError, RepositoryError) as e:
+            # Manejar errores de conexión a la base de datos o repositorio
+            return Response({"error": "Database or repository error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            # Manejar cualquier otro error inesperado
+            return Response({"error": "Unexpected error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
