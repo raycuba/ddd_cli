@@ -15,7 +15,7 @@ class CreateServiceCommand:
 
     def create_service(self, app_path, entity_name="Entity", split=False, **kwargs):
         """Crea un nuevo servicio"""
-        services_dir = os.path.join(app_path, 'domain') if not split else os.path.join(app_path, 'domain', 'services')
+        services_dir = os.path.join(app_path, 'services')
         services_path = os.path.join(services_dir, 'services.py') if not split else os.path.join(services_dir, entity_name.lower() + '_service.py')
 
         # Crear directorios si no existen
@@ -37,7 +37,7 @@ class CreateServiceCommand:
         # si no existe el archivo template_imports
         if not os.path.exists(services_path):
             #renderizar imports
-            rendered_content_imports = renderTemplate(templateName = 'service', fileName='imports.py', render_params={'entity_name':entity_name})
+            rendered_content_imports = renderTemplate(templateName = 'services', fileName='imports.py', render_params={'entity_name':entity_name})
 
             # Escribir imports en el archivo
             with open(services_path, 'w') as f:
@@ -46,7 +46,7 @@ class CreateServiceCommand:
 
 
         #renderizar class con crud
-        rendered_content_class = renderTemplate(templateName = 'service', fileName='class_crud.py', render_params={'entity_name':entity_name})
+        rendered_content_class = renderTemplate(templateName = 'services', fileName='class_crud.py', render_params={'entity_name':entity_name})
       
 
         # Escribir class en el archivo

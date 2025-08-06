@@ -28,7 +28,7 @@ from app1.entity1_forms import (
 )
 
 # Importar servicios específicos del dominio
-from app1.domain.services import Entity1Service
+from app1.services.services import Entity1Service
 
 # Importar repositorios específicos de la infraestructura
 from app1.infrastructure.entity1_repository import Entity1Repository

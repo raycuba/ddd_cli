@@ -19,8 +19,8 @@ son utiles para:
 from typing import List, Optional
 
 # importa las entidades utilizadas aqui
-from .entities import [[ entity_name.capitalize() ]]Entity
-from .exceptions import (
+from ..domain.entities import [[ entity_name.capitalize() ]]Entity
+from ..domain.exceptions import (
     [[ entity_name.capitalize() ]]ValueError,
     [[ entity_name.capitalize() ]]ValidationError,
     [[ entity_name.capitalize() ]]AlreadyExistsError,

@@ -19,8 +19,8 @@ son utiles para:
 from typing import List, Optional
 
 # importa las entidades utilizadas aqui
-from .entities import Entity1Entity
-from .exceptions import (
+from ..domain.entities import Entity1Entity
+from ..domain.exceptions import (
     Entity1ValueError,
     Entity1ValidationError,
     Entity1AlreadyExistsError,

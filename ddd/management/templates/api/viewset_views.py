@@ -25,7 +25,7 @@ from .infrastructure.exceptions import (
 )
 
 # importar servicios específicos del dominio
-from [[ app_name.lower() ]].domain.services import [[ entity_name.capitalize() ]]Service
+from [[ app_name.lower() ]].services.services import [[ entity_name.capitalize() ]]Service
 
 # Importar repositorios específicos de la infraestructura
 from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
