@@ -1,0 +1,51 @@
+
+{% extends 'layout.html' %}
+
+{% block title %}
+Django form list
+{% endblock %}
+
+{% block content %}
+    <h1 class="title">List of</h1>
+
+    {% include 'app1/_web_global_errors.html' %}
+
+    <!--Codigo de Listado-->
+    <table class="table table-striped border datatable">
+        <thead>
+          <tr>       
+            <th>AttributeName</th>
+            <th>AttributeEmail</th>            
+            <th>AttributeRole</th>                       
+            <th>AttributeStatus</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+
+            {% for promotion in promotion_list %}
+            <tr class="align-middle">              
+                <td>{{promotion.attributeName}}</td>                
+                <td>{{promotion.attributeEmail}}</td>
+                <td>
+                    {% if promotion.attributeRole == 'adm' %} 
+                        Administrator 
+                    {% elif promotion.attributeRole == 'man' %} 
+                        Manager 
+                    {% elif promotion.attributeRole == 'emp' %} 
+                        Employee 
+                    {% endif %}
+                </td>
+                <td>{{promotion.attributeStatus}}</td>
+                <td>
+                    <a class="btn btn-success" href="">Edit</a>
+                    <a class="btn btn-success" href="">View</a>
+                    <a class="btn btn-success" href="">Delete</a>
+                </td>
+            </tr>    
+            {% endfor %}
+
+        </tbody>
+    </table>    
+
+{% endblock %} 
