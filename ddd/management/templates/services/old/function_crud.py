@@ -73,8 +73,6 @@ def retrieve_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]
     """
 
     entity = repository.get_by_id(id=entity_id)
-    if not entity:
-        raise [[ entity_name.capitalize() ]]NotFoundError(id=entity_id)
 
     return entity.to_dict()
 
@@ -95,9 +93,7 @@ def update_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
 
     # Recuperar la entidad
     entity = repository.get_by_id(id=entity_id)
-    if not entity:
-        raise [[ entity_name.capitalize() ]]NotFoundError(id=entity_id)
-
+    
     # actualizar la instancia y validar
     entity.update(data)     
     entity.validate()   
