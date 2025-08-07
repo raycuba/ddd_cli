@@ -6,7 +6,7 @@ from drf_yasg import openapi
 from rest_framework.permissions import IsAuthenticated
 
 # importar serializers
-from serializers import [[ entity_name.capitalize() ]]Serializer
+from serializers import [[ entity_name.capitalize() ]]DTOSerializer
 
 # importa las excepciones personalizadas
 from .domain.exceptions import (
@@ -51,7 +51,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         operation_summary="Retrieve a list or a specific [[ entity_name.lower() ]]",
         operation_description="Retrieve a list of all [[ entity_name.lower() ]] or a specific one by ID",
         responses={
-            200: [[ entity_name.capitalize() ]]Serializer,
+            200: [[ entity_name.capitalize() ]]DTOSerializer,
             404: "Not Found",
             400: "Bad Request"
         },
@@ -72,7 +72,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             [[ entity_name.lower() ]]List = [[ entity_name.lower() ]]Service.list()
 
             # Serializar la lista de registros
-            response_serializer_list = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]]List, many=True)
+            response_serializer_list = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]]List, many=True)
             response_serializer_list.is_valid(raise_exception=True)            
 
             # Retornar los datos serializados con un estado HTTP 200 OK
@@ -93,7 +93,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         operation_summary="Retrieve a specific [[ entity_name.lower() ]] by ID",
         operation_description="Retrieve a specific [[ entity_name.lower() ]] by its ID",
         responses={
-            200: [[ entity_name.capitalize() ]]Serializer,
+            200: [[ entity_name.capitalize() ]]DTOSerializer,
             404: "Not Found",
             400: "Bad Request"
         },
@@ -114,7 +114,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.retrieve(entity_id=pk)
 
             # Serializar el registro recuperado
-            response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
+            response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
             response_serializer.is_valid(raise_exception=True)            
 
             # Retornar el resultado con un estado HTTP 200 OK
@@ -137,9 +137,9 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
     @swagger_auto_schema(
         operation_summary="Create a new [[ entity_name.lower() ]]",
         operation_description="Create a new [[ entity_name.lower() ]] with the provided data",
-        request_body=[[ entity_name.capitalize() ]]Serializer,
+        request_body=[[ entity_name.capitalize() ]]DTOSerializer,
         responses={
-            201: [[ entity_name.capitalize() ]]Serializer,
+            201: [[ entity_name.capitalize() ]]DTOSerializer,
             400: "Bad Request"
         },
         tags=["[[ entity_name.lower() ]]"]
@@ -153,7 +153,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         """
         
         # Datos enviados en el cuerpo de la solicitud
-        serializer = [[ entity_name.capitalize() ]]Serializer(data=request.data)
+        serializer = [[ entity_name.capitalize() ]]DTOSerializer(data=request.data)
         if not serializer.is_valid():
             # Si la validación falla, retornar un error 400 BAD REQUEST
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -171,7 +171,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.create(data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el nuevo registro creado
-            response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
+            response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
             response_serializer.is_valid(raise_exception=True)            
 
             # Retornar el resultado con un estado HTTP 201 CREATED
@@ -194,9 +194,9 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
     @swagger_auto_schema(
         operation_summary="Update an existing [[ entity_name.lower() ]]",
         operation_description="Update an existing [[ entity_name.lower() ]] with the provided ID and data",
-        request_body=[[ entity_name.capitalize() ]]Serializer,
+        request_body=[[ entity_name.capitalize() ]]DTOSerializer,
         responses={
-            200: [[ entity_name.capitalize() ]]Serializer,
+            200: [[ entity_name.capitalize() ]]DTOSerializer,
             400: "Bad Request",
             404: "Not Found"
         },
@@ -211,7 +211,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         """
 
         # Datos enviados en el cuerpo de la solicitud
-        serializer = [[ entity_name.capitalize() ]]Serializer(data=request.data) 
+        serializer = [[ entity_name.capitalize() ]]DTOSerializer(data=request.data) 
         if not serializer.is_valid():
             # Si la validación falla, retornar un error 400 BAD REQUEST
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -229,7 +229,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
             [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.update(entity_id=pk, data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el registro actualizado
-            response_serializer = [[ entity_name.capitalize() ]]Serializer([[ entity_name.lower() ]])
+            response_serializer = [[ entity_name.capitalize() ]]DTOSerializer([[ entity_name.lower() ]])
             response_serializer.is_valid(raise_exception=True)            
 
             # Retornar el resultado con un estado HTTP 200 OK

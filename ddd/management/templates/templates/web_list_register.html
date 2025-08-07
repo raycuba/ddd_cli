@@ -27,7 +27,13 @@ Django form list
                 <td>{{[[ entity_name.lower() ]].attributeName}}</td>                
                 <td>{{[[ entity_name.lower() ]].attributeEmail}}</td>
                 <td>
-                    {% if [[ entity_name.lower() ]].attributeRole == 'adm' %} Administrator {% elif [[ entity_name.lower() ]].attributeRole == 'man' %} Manager {% elif [[ entity_name.lower() ]].attributeRole == 'emp' %} Employee {% endif %}
+                    {% if [[ entity_name.lower() ]].attributeRole == 'adm' %} 
+                        Administrator 
+                    {% elif [[ entity_name.lower() ]].attributeRole == 'man' %} 
+                        Manager 
+                    {% elif [[ entity_name.lower() ]].attributeRole == 'emp' %} 
+                        Employee 
+                    {% endif %}
                 </td>
                 <td>{{[[ entity_name.lower() ]].attributeStatus}}</td>
                 <td>

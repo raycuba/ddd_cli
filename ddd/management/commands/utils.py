@@ -20,25 +20,6 @@ def create__init__files(path):
         if path == '' or path == '/':
             break
 
-# def renderTemplate(templateName: str, fileName:str, render_params: dict) -> str:
-#     """
-#     Renderiza una plantilla con los parámetros proporcionados.
-#     """
-#     # Construir la ruta absoluta de la plantilla
-#     templates_dir = Path(__file__).resolve().parent.parent / "templates" / templateName
-#     template_path = templates_dir / fileName
-
-#     # Verificar si el archivo existe
-#     if not template_path.exists():
-#         raise FileNotFoundError(f"Template file {template_path} not found")
-
-#     # Cargar la plantilla imports
-#     template_imports = os.path.join(templates_dir, fileName)
-#     with open(template_imports, 'r') as template_file:
-#         template_content = template_file.read()
-
-#     # Renderizar la plantilla imports
-#     return Template(template_content).render(**render_params)
 
 def renderTemplate(templateName: str, fileName: str, render_params: dict) -> str:
     """
@@ -48,11 +29,11 @@ def renderTemplate(templateName: str, fileName: str, render_params: dict) -> str
     templates_dir = Path(__file__).resolve().parent.parent / "templates" / templateName
     template_path = templates_dir / fileName
 
-    # Verificar si el archivo existe
+    # Verificar si el template existe
     if not template_path.exists():
         raise FileNotFoundError(f"Template file {template_path} not found")
 
-    # Cargar el contenido de la plantilla
+    # Cargar el contenido del template
     with open(template_path, 'r') as template_file:
         template_content = template_file.read()
 
@@ -68,25 +49,53 @@ def renderTemplate(templateName: str, fileName: str, render_params: dict) -> str
     template = env.from_string(template_content)
     return template.render(**render_params)
 
-def readWriteTemplate(templateName: str, fileName:str, render_params: dict, repository_path: str, failIfError:bool= False):
+
+def readWriteTemplate(templateName: str, fileName:str, render_params: dict, repository_path: str, addition=False, failIfError:bool= False, simulate=False):
     """
-    Renderiza una plantilla con los parámetros proporcionados y escribe el archivo en repository_path
+    Renderiza un template con los parámetros proporcionados y escribe el archivo en repository_path
+
+    params:
+    - templateName: Nombre del template a renderizar
+    - fileName: Nombre de la plantilla a renderizar
+    - render_params: Diccionario con los parámetros para renderizar la plantilla
+    - repository_path: Ruta donde se escribirá el archivo renderizado
+    - addition: Si es True, añade el contenido al final del archivo en lugar de sobrescribirlo
+    - failIfError: Si es True, lanza una excepción si hay un error al escribir el archivo
+    - simulate: Si es True, simula la escritura del archivo
+
+    Raises:
+    - Exception: Si ocurre un error al renderizar o escribir el archivo y failIfError es True
     """
     msgPath = f"{templateName}/{fileName} -> {repository_path}"
+
+    if simulate: 
+        print('')
+        if not addition:
+            print(f"---Simulating file creation: {repository_path}...")
+    
+    if not simulate:
+        print(f"---Writing file: {msgPath}...")
+
     try:
         # Renderizar la plantilla
         rendered_content = renderTemplate(templateName = templateName, fileName=fileName, render_params=render_params)
 
-        # Escribir en el archivo
-        with open(repository_path, 'w') as f:
-            f.write('\n' + rendered_content + '\n') 
+        mode = 'a' if addition else 'w'
 
-        print(f"Written file from: {msgPath}.")
+        if not simulate:
+            # Escribir en el archivo
+            with open(repository_path, mode) as f:
+                f.write('\n' + rendered_content + '\n')
+            print(f"---Written.")
+
+        else:
+            print(rendered_content)
 
     except Exception as e:
         if failIfError:
-            print(f"Error writing file from: {msgPath} : ", e)
+            print(f"---Error : ", e)
             raise Exception(e.args)
+
 
 def decodeAppPath(app_path: str) -> tuple:
     """

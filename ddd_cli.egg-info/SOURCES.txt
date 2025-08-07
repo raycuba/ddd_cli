@@ -43,7 +43,7 @@ ddd/management/templates/routers/api_viewset_urls.py
 ddd/management/templates/routers/web_urls.py
 ddd/management/templates/serializer/class.py
 ddd/management/templates/serializer/imports.py
-ddd/management/templates/services/class_crud.py
+ddd/management/templates/services/class.py
 ddd/management/templates/services/imports.py
 ddd/management/templates/services/old/function_crud.py
 ddd/management/templates/templates/_web_form_errors.html

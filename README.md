@@ -5,7 +5,7 @@ This package adds custom commands to Django to make it easier to implement a Dom
 ## Available commands
 
 - `ddd create-entity [-h] [--split] app_path entity_name`
-- `ddd create-service [-h] [--function-format] [--split] app_path entity_name`
+- `ddd create-service [-h] app_path entity_name`
 - `ddd create-repository [-h] app_path entity_name`
 - `ddd create-dto [-h] [--split] app_path dto_name`
 - `ddd create-serializer [-h] [--split] app_path serializer_name`
