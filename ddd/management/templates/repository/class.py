@@ -213,12 +213,7 @@ class [[ entity_name.capitalize() ]]Repository:
                 if external_id is not None:
                     instance.external_id = external_id
 
-                # Si se proporcionan IDs de entidades relacionadas, agregarlos
-                if externals is not None:
-                    # Asignar directamente los IDs
-                    instance.externals.set(externals)
-
-                # Si adicionalData, agregar datos adicionales
+                # Si adicionalData, agregar datos adicionales que no sean relaciones
                 if adicionalData:
                     # Aquí puedes agregar lógica para manejar datos adicionales específicos
                     # Por ejemplo, guardar una foto, un password, o cualquier otro campo especial
@@ -228,10 +223,15 @@ class [[ entity_name.capitalize() ]]Repository:
                 instance.full_clean()  # Validaciones del modelo
                 instance.save()
 
+                # Si se proporcionan IDs de entidades relacionadas, agregarlos
+                if externals is not None:
+                    # Asignar directamente los IDs
+                    instance.externals.set(externals)                
+
         except (TypeError, ValueError) as e:
             raise [[ entity_name.capitalize() ]]ValueError("data", f"Error de estructura en los datos: {str(e)}") from e
         except ValidationError as e:
-            raise [[ entity_name.capitalize() ]]ValidationError(f"Validation error occurred: {e.message_dict}") from e
+            raise [[ entity_name.capitalize() ]]ValidationError(f"Error de validación: {e.message_dict}") from e
         except IntegrityError as e:
             if 'duplicate' in str(e).lower() or 'unique constraint' in str(e).lower():
                 raise [[ entity_name.capitalize() ]]AlreadyExistsError('attributeName', instance.attributeName)  # Ajusta según el campo único
@@ -290,12 +290,7 @@ class [[ entity_name.capitalize() ]]Repository:
                 if external_id is not None:
                     instance.external_id = external_id
 
-                # Si se proporcionan IDs de entidades relacionadas, actualizarlos
-                if externals is not None:
-                    # Asignar directamente los IDs
-                    instance.externals.set(externals)
-
-                # Si adicionalData, agregar datos adicionales
+                # Si adicionalData, agregar datos adicionales que no sean relaciones
                 if adicionalData:
                     # Aquí puedes agregar lógica para manejar datos adicionales específicos
                     # Por ejemplo, guardar una foto, un password, o cualquier otro campo especial
@@ -303,6 +298,11 @@ class [[ entity_name.capitalize() ]]Repository:
 
                 instance.full_clean()  # Validaciones del modelo Django
                 instance.save() 
+
+                # Si se proporcionan IDs de entidades relacionadas, actualizarlos
+                if externals is not None:
+                    # Asignar directamente los IDs
+                    instance.externals.set(externals)                
             
             # Convertir el modelo actualizado de vuelta a una entidad
             return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
@@ -312,7 +312,7 @@ class [[ entity_name.capitalize() ]]Repository:
         except (TypeError, ValueError) as e:
             raise [[ entity_name.capitalize() ]]ValueError("data", f"Error de estructura en los datos: {str(e)}") from e
         except ValidationError as e:
-            raise [[ entity_name.capitalize() ]]ValidationError(f"Validation error occurred: {e.message_dict}") from e
+            raise [[ entity_name.capitalize() ]]ValidationError(f"Error de validación: {e.message_dict}") from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e            
         except Exception as e:

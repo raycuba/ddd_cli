@@ -8,10 +8,6 @@ app1/promotion_views.py
 app1/domain/__init__.py
 app1/domain/entities.py
 app1/domain/exceptions.py
-app1/infrastructure/__init__.py
-app1/infrastructure/exceptions.py
-app1/infrastructure/mappers.py
-app1/infrastructure/promotion_repository.py
 app1/services/__init__.py
 app1/services/promotion_service.py
 app1/utils/__init__.py

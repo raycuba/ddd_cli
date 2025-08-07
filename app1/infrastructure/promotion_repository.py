@@ -214,12 +214,7 @@ class PromotionRepository:
                 if external_id is not None:
                     instance.external_id = external_id
 
-                # Si se proporcionan IDs de entidades relacionadas, agregarlos
-                if externals is not None:
-                    # Asignar directamente los IDs
-                    instance.externals.set(externals)
-
-                # Si adicionalData, agregar datos adicionales
+                # Si adicionalData, agregar datos adicionales que no sean relaciones
                 if adicionalData:
                     # Aquí puedes agregar lógica para manejar datos adicionales específicos
                     # Por ejemplo, guardar una foto, un password, o cualquier otro campo especial
@@ -229,10 +224,15 @@ class PromotionRepository:
                 instance.full_clean()  # Validaciones del modelo
                 instance.save()
 
+                # Si se proporcionan IDs de entidades relacionadas, agregarlos
+                if externals is not None:
+                    # Asignar directamente los IDs
+                    instance.externals.set(externals)                
+
         except (TypeError, ValueError) as e:
             raise PromotionValueError("data", f"Error de estructura en los datos: {str(e)}") from e
         except ValidationError as e:
-            raise PromotionValidationError(f"Validation error occurred: {e.message_dict}") from e
+            raise PromotionValidationError(f"Error de validación: {e.message_dict}") from e
         except IntegrityError as e:
             if 'duplicate' in str(e).lower() or 'unique constraint' in str(e).lower():
                 raise PromotionAlreadyExistsError('attributeName', instance.attributeName)  # Ajusta según el campo único
@@ -291,12 +291,7 @@ class PromotionRepository:
                 if external_id is not None:
                     instance.external_id = external_id
 
-                # Si se proporcionan IDs de entidades relacionadas, actualizarlos
-                if externals is not None:
-                    # Asignar directamente los IDs
-                    instance.externals.set(externals)
-
-                # Si adicionalData, agregar datos adicionales
+                # Si adicionalData, agregar datos adicionales que no sean relaciones
                 if adicionalData:
                     # Aquí puedes agregar lógica para manejar datos adicionales específicos
                     # Por ejemplo, guardar una foto, un password, o cualquier otro campo especial
@@ -304,6 +299,11 @@ class PromotionRepository:
 
                 instance.full_clean()  # Validaciones del modelo Django
                 instance.save() 
+
+                # Si se proporcionan IDs de entidades relacionadas, actualizarlos
+                if externals is not None:
+                    # Asignar directamente los IDs
+                    instance.externals.set(externals)                
             
             # Convertir el modelo actualizado de vuelta a una entidad
             return Mapper.model_to_entity(instance, PromotionEntity)
@@ -313,7 +313,7 @@ class PromotionRepository:
         except (TypeError, ValueError) as e:
             raise PromotionValueError("data", f"Error de estructura en los datos: {str(e)}") from e
         except ValidationError as e:
-            raise PromotionValidationError(f"Validation error occurred: {e.message_dict}") from e
+            raise PromotionValidationError(f"Error de validación: {e.message_dict}") from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e            
         except Exception as e:
