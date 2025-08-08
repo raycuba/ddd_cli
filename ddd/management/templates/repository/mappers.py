@@ -119,7 +119,7 @@ class Mapper:
             except AttributeError:
                 continue  # Algunos campos virtuales pueden no estar disponibles
         return data
-    
+
 """
 Si necesitas obtener mas detalles sobre una instancia de tu model a parte del ID de las relaciones
 recuerda que en un enfoque DDD las entidades no deben contener datos de otras entidades
