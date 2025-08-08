@@ -48,7 +48,7 @@ class [[ entity_name.capitalize() ]]Repository:
         returns: 
             List[ [[ entity_name.capitalize() ]]Entity ]: Lista de entidades recuperadas.
         raises:
-            [[ entity_name.capitalize() ]]ValueError: Si los filtros no son un diccionario o None.
+            [[ entity_name.capitalize() ]]ValueError:  Si el valor de entrada no es válido.
             ConnectionDataBaseError: Si hay un error al conectar a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
@@ -85,7 +85,7 @@ class [[ entity_name.capitalize() ]]Repository:
         returns: 
             El entidad encontrada o None si no existe.
         raises:
-            [[ entity_name.capitalize() ]]ValueError: Si el ID no es un entero.         
+            [[ entity_name.capitalize() ]]ValueError: Si el valor de entrada no es válido.        
             [[ entity_name.capitalize() ]]NotFoundError: Si no existe el registro con el ID dado.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
@@ -118,10 +118,11 @@ class [[ entity_name.capitalize() ]]Repository:
         returns:
             True si existe un registro con el valor dado, False en caso contrario.
         raises:
-            [[ entity_name.capitalize() ]]ValueError: Si el campo no es válido.
+            [[ entity_name.capitalize() ]]ValueError:  Si el valor de entrada no es válido.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
+        
         # Lista de campos en los que se permite verificar unicidad
         ALLOWED_FIELDS = ['nombre', 'email', 'ruc', 'codigo']  # define según tu entidad
         
@@ -147,7 +148,7 @@ class [[ entity_name.capitalize() ]]Repository:
         returns:
             Número de registros que cumplen las condiciones.
         raises: 
-            [[ entity_name.capitalize() ]]ValueError: Si los filtros no son un diccionario o None.
+            [[ entity_name.capitalize() ]]ValueError:  Si el valor de entrada no es válido.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.       
             RepositoryError: Si ocurre un error inesperado (interno del sistema). 
         """     
@@ -183,7 +184,7 @@ class [[ entity_name.capitalize() ]]Repository:
         returns: 
             La entidad creada.
         raises:
-            [[ entity_name.capitalize() ]]ValueError: Si la entidad es nula o no tiene el método 'to_dict'.
+            [[ entity_name.capitalize() ]]ValueError:  Si el valor de entrada no es válido.
             [[ entity_name.capitalize() ]]ValidationError: Si los datos no son válidos.
             [[ entity_name.capitalize() ]]AlreadyExistsError: Si ya existe un registro con el mismo nombre.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.   
@@ -259,7 +260,7 @@ class [[ entity_name.capitalize() ]]Repository:
             La entidad guardada.
         raises: 
             [[ entity_name.capitalize() ]]NotFoundError: Si no existe el registro con el ID dado.
-            [[ entity_name.capitalize() ]]ValueError: Si la entidad es nula o no tiene el método 'to_dict'.
+            [[ entity_name.capitalize() ]]ValueError:  Si el valor de entrada no es válido.
             [[ entity_name.capitalize() ]]ValidationError: Si los datos no son válidos.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.   
             RepositoryError: Si ocurre un error inesperado (interno del sistema).     
@@ -328,7 +329,7 @@ class [[ entity_name.capitalize() ]]Repository:
             id: ID del registro a eliminar.
         raises: 
             [[ entity_name.capitalize() ]]NotFoundError: Si no existe el registro con el ID dado.
-            [[ entity_name.capitalize() ]]ValueError: Si el ID no es un entero.
+            [[ entity_name.capitalize() ]]ValueError:  Si el valor de entrada no es válido.
             [[ entity_name.capitalize() ]]ValidationError: Si los datos no son válidos
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.      
             RepositoryError: Si ocurre un error inesperado (interno del sistema).  

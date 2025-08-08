@@ -35,7 +35,7 @@ class [[ entity_name.capitalize() ]]Service:
         return: 
             Lista de la entidad
         raises:
-            [[ entity_name.capitalize() ]]ValueError: Si los filtros no son un diccionario o None.
+            [[ entity_name.capitalize() ]]ValueError:  Si el valor de entrada no es válido.
             ConnectionDataBaseError: Si hay un error al conectar a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
@@ -54,7 +54,7 @@ class [[ entity_name.capitalize() ]]Service:
         return: 
             Número total de instancias.
         raises: 
-            [[ entity_name.capitalize() ]]ValueError: Si los filtros no son un diccionario o None.
+            [[ entity_name.capitalize() ]]ValueError:  Si el valor de entrada no es válido.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.       
             RepositoryError: Si ocurre un error inesperado (interno del sistema).             
         """
@@ -74,7 +74,7 @@ class [[ entity_name.capitalize() ]]Service:
         return: 
             La entidad creada.
         raises: 
-            [[ entity_name.capitalize() ]]ValueError: Si el campo no es válido.
+            [[ entity_name.capitalize() ]]ValueError: Si el valor de entrada no es válido.
             [[ entity_name.capitalize() ]]ValidationError: Si los datos no son válidos.
             [[ entity_name.capitalize() ]]AlreadyExistsError: Si ya existe un registro con el mismo nombre.            
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
@@ -104,7 +104,7 @@ class [[ entity_name.capitalize() ]]Service:
         return: 
             La entidad recuperada.
         raises:
-            [[ entity_name.capitalize() ]]ValueError: Si el ID no es un entero.         
+            [[ entity_name.capitalize() ]]ValueError: Si el valor de entrada no es válido.         
             [[ entity_name.capitalize() ]]NotFoundError: Si no existe el registro con el ID dado.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
@@ -129,7 +129,7 @@ class [[ entity_name.capitalize() ]]Service:
             La entidad actualizada.
         raises: 
             [[ entity_name.capitalize() ]]NotFoundError: Si no existe el registro con el ID dado.
-            [[ entity_name.capitalize() ]]ValueError: Si el ID no es un entero.                  
+            [[ entity_name.capitalize() ]]ValueError: Si el valor de entrada no es válido.                 
             [[ entity_name.capitalize() ]]ValidationError: Si los datos no son válidos.            
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
@@ -158,7 +158,7 @@ class [[ entity_name.capitalize() ]]Service:
             True/False (depende del exito de la operacion)
         raises:
             [[ entity_name.capitalize() ]]NotFoundError: Si no se encuentra la instancia.
-            [[ entity_name.capitalize() ]]ValueError: Si el campo no es válido.
+            [[ entity_name.capitalize() ]]ValueError: Si el valor de entrada no es válido.
             [[ entity_name.capitalize() ]]ValidationError: Si los datos no son válidos.            
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).            
