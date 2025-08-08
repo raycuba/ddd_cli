@@ -20,6 +20,8 @@ from typing import List, Optional
 
 # importa las entidades utilizadas aqui
 from ..domain.entities import [[ entity_name.capitalize() ]]Entity
+
+# importa las excepciones utilizadas aqui
 from ..domain.exceptions import (
     [[ entity_name.capitalize() ]]ValueError,
     [[ entity_name.capitalize() ]]ValidationError,
@@ -29,4 +31,6 @@ from ..domain.exceptions import (
     [[ entity_name.capitalize() ]]PermissionError
 )
 from ..infrastructure.exceptions import RepositoryError, ConnectionDataBaseError
+
+# importa los repositorios utilizados aqui
 from ..infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository

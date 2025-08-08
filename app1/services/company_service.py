@@ -21,6 +21,8 @@ from typing import List, Optional
 
 # importa las entidades utilizadas aqui
 from ..domain.entities import CompanyEntity
+
+# importa las excepciones utilizadas aqui
 from ..domain.exceptions import (
     CompanyValueError,
     CompanyValidationError,
@@ -30,6 +32,8 @@ from ..domain.exceptions import (
     CompanyPermissionError
 )
 from ..infrastructure.exceptions import RepositoryError, ConnectionDataBaseError
+
+# importa los repositorios utilizados aqui
 from ..infrastructure.company_repository import CompanyRepository
 
 class CompanyService:
