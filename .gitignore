@@ -16,6 +16,8 @@ venv/
 # directorio de apps de prueba
 test_apps/
 apps/
+app1/
+app/
 
 # Configuración del sistema
 *.swp
