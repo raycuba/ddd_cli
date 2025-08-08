@@ -11,9 +11,9 @@ from django.core.validators import (
 )
 
 
-class PromotionBaseForm(forms.Form):
+class CompanyBaseForm(forms.Form):
     """
-    Formulario base para la entidad promotion.
+    Formulario base para la entidad company.
     """
 
     def __init__(self, *_args, **kwargs):
@@ -119,9 +119,9 @@ class PromotionBaseForm(forms.Form):
             raise forms.ValidationError("Passwords do not match")
 
 
-class PromotionCreateForm(PromotionBaseForm):
+class CompanyCreateForm(CompanyBaseForm):
     """
-    Formulario para crear una nueva instancia de promotion. Sin modificaciones adicionales.
+    Formulario para crear una nueva instancia de company. Sin modificaciones adicionales.
     """
 
     def __init__(self, *args, **kwargs):
@@ -135,9 +135,9 @@ class PromotionCreateForm(PromotionBaseForm):
         # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
 
 
-class PromotionEditGetForm(PromotionBaseForm):
+class CompanyEditGetForm(CompanyBaseForm):
     """
-    Formulario para editar mediante GET una instancia de promotion. 
+    Formulario para editar mediante GET una instancia de company. 
     """
 
     def __init__(self, *args, **kwargs):
@@ -158,9 +158,9 @@ class PromotionEditGetForm(PromotionBaseForm):
         })
 
 
-class PromotionEditPostForm(PromotionBaseForm):
+class CompanyEditPostForm(CompanyBaseForm):
     """
-    Formulario para editar mediante POST una instancia de promotion. 
+    Formulario para editar mediante POST una instancia de company. 
     """
 
     def __init__(self, *args, **kwargs):
@@ -174,9 +174,9 @@ class PromotionEditPostForm(PromotionBaseForm):
                 del self.fields[field]      
 
 
-class PromotionViewForm(PromotionBaseForm):
+class CompanyViewForm(CompanyBaseForm):
     """
-    Formulario de solo lectura para Visualizar una instancia de promotion
+    Formulario de solo lectura para Visualizar una instancia de company
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

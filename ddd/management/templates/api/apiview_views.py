@@ -6,7 +6,7 @@ from drf_yasg import openapi
 from rest_framework.permissions import IsAuthenticated
 
 # importar serializers
-from serializers import [[ entity_name.capitalize() ]]DTOSerializer
+from .serializers import [[ entity_name.capitalize() ]]DTOSerializer
 
 # importa las excepciones personalizadas
 from .domain.exceptions import (

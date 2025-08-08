@@ -6,20 +6,20 @@ from django.db.models import Q
 from django.forms import ValidationError
 
 # importa las entidades utilizadas aqui
-from ..models import Promotion
+from ..models import Company
 from .mappers import Mapper
 from ..utils.clean_dict_of_keys import clean_dict_of_keys
 from ..utils.is_integer import is_integer
-from ..domain.entities import PromotionEntity
+from ..domain.entities import CompanyEntity
 
 # importa las excepciones personalizadas
 from ..domain.exceptions import (
-    PromotionValueError,
-    PromotionValidationError,
-    PromotionAlreadyExistsError,
-    PromotionNotFoundError,
-    PromotionOperationNotAllowedError,
-    PromotionPermissionError
+    CompanyValueError,
+    CompanyValidationError,
+    CompanyAlreadyExistsError,
+    CompanyNotFoundError,
+    CompanyOperationNotAllowedError,
+    CompanyPermissionError
 )
 
 # importa las excepciones de repositorio
@@ -29,9 +29,9 @@ from .exceptions import (
 )
 
 
-class PromotionRepository:
+class CompanyRepository:
     """
-    Repositorio para manejar la persistencia de datos de la entidad: promotion.
+    Repositorio para manejar la persistencia de datos de la entidad: company.
     
     Este repositorio incluye:
     - Validación de existencia de registros.
@@ -40,27 +40,27 @@ class PromotionRepository:
     """
 
     @staticmethod
-    def get_all(filters: Optional[dict] = None) -> List[ PromotionEntity ]:
+    def get_all(filters: Optional[dict] = None) -> List[ CompanyEntity ]:
         """
         Obtiene todos los registros de la entidad.
 
         params:
             filters (dict, optional): Filtros a aplicar en la consulta.
         returns: 
-            List[ PromotionEntity ]: Lista de entidades recuperadas.
+            List[ CompanyEntity ]: Lista de entidades recuperadas.
         raises:
-            PromotionValueError: Si los filtros no son un diccionario o None.
+            CompanyValueError: Si los filtros no son un diccionario o None.
             ConnectionDataBaseError: Si hay un error al conectar a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
 
         try:
-            instance_list = Promotion.objects.all()    
+            instance_list = Company.objects.all()    
 
             # Aplicar filtros si se proporcionan
             if filters is not None:
                 if not isinstance(filters, dict):
-                    raise PromotionValueError("filters", "filters debe ser un diccionario o None")
+                    raise CompanyValueError("filters", "filters debe ser un diccionario o None")
                 if "nombre" in filters and filters["nombre"].strip():
                     instance_list = instance_list.filter(nombre__icontains=filters["nombre"])      
                     
@@ -68,7 +68,7 @@ class PromotionRepository:
             instance_list = instance_list.only("id", "nombre", "created_at")
 
             # Convertir a entidades usando el Mapper genérico
-            return [Mapper.model_to_entity(instance, PromotionEntity) for instance in instance_list]        
+            return [Mapper.model_to_entity(instance, CompanyEntity) for instance in instance_list]        
 
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e
@@ -77,7 +77,7 @@ class PromotionRepository:
 
 
     @staticmethod
-    def get_by_id(id) -> Optional[ PromotionEntity ]:
+    def get_by_id(id) -> Optional[ CompanyEntity ]:
         """
         Obtiene un registro por su ID.
         
@@ -86,22 +86,22 @@ class PromotionRepository:
         returns: 
             El entidad encontrada o None si no existe.
         raises:
-            PromotionValueError: Si el ID no es un entero.         
-            PromotionNotFoundError: Si no existe el registro con el ID dado.
+            CompanyValueError: Si el ID no es un entero.         
+            CompanyNotFoundError: Si no existe el registro con el ID dado.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
 
         # Validar que el ID sea un entero
         if not is_integer(id):
-            raise PromotionValueError(field="id", detail="El ID debe ser un entero.")
+            raise CompanyValueError(field="id", detail="El ID debe ser un entero.")
 
         try:
-            instance = Promotion.objects.get(id=id)
-            return Mapper.model_to_entity(instance, PromotionEntity)
+            instance = Company.objects.get(id=id)
+            return Mapper.model_to_entity(instance, CompanyEntity)
 
-        except Promotion.DoesNotExist as e:
-            raise PromotionNotFoundError(id=id) from e
+        except Company.DoesNotExist as e:
+            raise CompanyNotFoundError(id=id) from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e    
         except Exception as e:
@@ -119,7 +119,7 @@ class PromotionRepository:
         returns:
             True si existe un registro con el valor dado, False en caso contrario.
         raises:
-            PromotionValueError: Si el campo no es válido.
+            CompanyValueError: Si el campo no es válido.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
@@ -127,10 +127,10 @@ class PromotionRepository:
         ALLOWED_FIELDS = ['nombre', 'email', 'ruc', 'codigo']  # define según tu entidad
         
         if field_name not in ALLOWED_FIELDS:
-            raise PromotionValueError(field=field_name, detail=f"El campo '{field_name}' no es válido para verificar existencia.")
+            raise CompanyValueError(field=field_name, detail=f"El campo '{field_name}' no es válido para verificar existencia.")
 
         try:
-            return Promotion.objects.filter(**{field_name: value}).exists()
+            return Company.objects.filter(**{field_name: value}).exists()
 
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e
@@ -148,18 +148,18 @@ class PromotionRepository:
         returns:
             Número de registros que cumplen las condiciones.
         raises: 
-            PromotionValueError: Si los filtros no son un diccionario o None.
+            CompanyValueError: Si los filtros no son un diccionario o None.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.       
             RepositoryError: Si ocurre un error inesperado (interno del sistema). 
         """     
 
         try:
-            instance_list = Promotion.objects.all()    
+            instance_list = Company.objects.all()    
 
             # Aplicar filtros si se proporcionan
             if filters is not None:
                 if not isinstance(filters, dict):
-                    raise PromotionValueError(field="filters", detail="filters debe ser un diccionario o None")               
+                    raise CompanyValueError(field="filters", detail="filters debe ser un diccionario o None")               
                 if "nombre" in filters and filters["nombre"].strip():
                     instance_list = instance_list.filter(nombre__icontains=filters["nombre"])            
 
@@ -172,7 +172,7 @@ class PromotionRepository:
 
 
     @staticmethod
-    def create(entity: PromotionEntity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> PromotionEntity:
+    def create(entity: CompanyEntity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> CompanyEntity:
         """
         Crea un nuevo registro.
 
@@ -184,16 +184,16 @@ class PromotionRepository:
         returns: 
             La entidad creada.
         raises:
-            PromotionValueError: Si la entidad es nula o no tiene el método 'to_dict'.
-            PromotionValidationError: Si los datos no son válidos.
-            PromotionAlreadyExistsError: Si ya existe un registro con el mismo nombre.
+            CompanyValueError: Si la entidad es nula o no tiene el método 'to_dict'.
+            CompanyValidationError: Si los datos no son válidos.
+            CompanyAlreadyExistsError: Si ya existe un registro con el mismo nombre.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.   
             RepositoryError: Si ocurre un error inesperado (interno del sistema).     
         """
 
         # Validar la entidad de entrada
         if not entity or not hasattr(entity, "to_dict"):
-            raise PromotionValueError("Promotion", "Entidad nula o no tiene el método 'to_dict'")
+            raise CompanyValueError("Company", "Entidad nula o no tiene el método 'to_dict'")
 
         try:
             #convertir a dict
@@ -203,7 +203,7 @@ class PromotionRepository:
             data = clean_dict_of_keys(data, keys=entity.SPECIAL_FIELDS)
 
             # Crear el registro a partir de los campos presentes en la 'data'
-            instance = Promotion(**data)
+            instance = Company(**data)
 
             with transaction.atomic():
                 # Asegurar que todas las operaciones se realicen en una transacción
@@ -230,24 +230,24 @@ class PromotionRepository:
                     instance.externals.set(externals)                
 
         except (TypeError, ValueError) as e:
-            raise PromotionValueError("data", f"Error de estructura en los datos: {str(e)}") from e
+            raise CompanyValueError("data", f"Error de estructura en los datos: {str(e)}") from e
         except ValidationError as e:
-            raise PromotionValidationError(f"Error de validación: {e.message_dict}") from e
+            raise CompanyValidationError(f"Error de validación: {e.message_dict}") from e
         except IntegrityError as e:
             if 'duplicate' in str(e).lower() or 'unique constraint' in str(e).lower():
-                raise PromotionAlreadyExistsError('attributeName', instance.attributeName)  # Ajusta según el campo único
+                raise CompanyAlreadyExistsError('attributeName', instance.attributeName)  # Ajusta según el campo único
             # Otro error de integridad → regla de negocio?
-            raise PromotionValidationError({"integridad": "Datos duplicados o inconsistentes"})            
+            raise CompanyValidationError({"integridad": "Datos duplicados o inconsistentes"})            
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e
         except Exception as e:
             raise RepositoryError(f"Error al crear el registro: {str(e)}") from e
         
-        return Mapper.model_to_entity(instance, PromotionEntity)
+        return Mapper.model_to_entity(instance, CompanyEntity)
 
 
     @staticmethod
-    def update(entity: PromotionEntity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> PromotionEntity:
+    def update(entity: CompanyEntity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> CompanyEntity:
         """
         Guarda los cambios en una entidad existente.
 
@@ -259,23 +259,23 @@ class PromotionRepository:
         returns:
             La entidad guardada.
         raises: 
-            PromotionNotFoundError: Si no existe el registro con el ID dado.
-            PromotionValueError: Si la entidad es nula o no tiene el método 'to_dict'.
-            PromotionValidationError: Si los datos no son válidos.
+            CompanyNotFoundError: Si no existe el registro con el ID dado.
+            CompanyValueError: Si la entidad es nula o no tiene el método 'to_dict'.
+            CompanyValidationError: Si los datos no son válidos.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.   
             RepositoryError: Si ocurre un error inesperado (interno del sistema).     
         """    
 
         # Validar la entidad de entrada
         if not entity or not hasattr(entity, "to_dict"):
-            raise PromotionValueError("Promotion", "Entidad nula o no tiene el método 'to_dict'")
+            raise CompanyValueError("Company", "Entidad nula o no tiene el método 'to_dict'")
 
         if not entity.id or not is_integer(entity.id):
-            raise PromotionValueError(field="id", detail="El ID debe ser un entero.")                        
+            raise CompanyValueError(field="id", detail="El ID debe ser un entero.")                        
 
         try:
             # Recuperar el modelo existente basado en el ID de la entidad
-            instance = Promotion.objects.get(id=entity.id)
+            instance = Company.objects.get(id=entity.id)
 
             with transaction.atomic():
                 # Asegurar que todas las operaciones se realicen en una transacción
@@ -306,14 +306,14 @@ class PromotionRepository:
                     instance.externals.set(externals)                
             
             # Convertir el modelo actualizado de vuelta a una entidad
-            return Mapper.model_to_entity(instance, PromotionEntity)
+            return Mapper.model_to_entity(instance, CompanyEntity)
 
-        except Promotion.DoesNotExist as e:
-            raise PromotionNotFoundError(id=entity.id) from e
+        except Company.DoesNotExist as e:
+            raise CompanyNotFoundError(id=entity.id) from e
         except (TypeError, ValueError) as e:
-            raise PromotionValueError("data", f"Error de estructura en los datos: {str(e)}") from e
+            raise CompanyValueError("data", f"Error de estructura en los datos: {str(e)}") from e
         except ValidationError as e:
-            raise PromotionValidationError(f"Error de validación: {e.message_dict}") from e
+            raise CompanyValidationError(f"Error de validación: {e.message_dict}") from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e            
         except Exception as e:
@@ -328,9 +328,9 @@ class PromotionRepository:
         params: 
             id: ID del registro a eliminar.
         raises: 
-            PromotionNotFoundError: Si no existe el registro con el ID dado.
-            PromotionValueError: Si el ID no es un entero.
-            PromotionValidationError: Si los datos no son válidos
+            CompanyNotFoundError: Si no existe el registro con el ID dado.
+            CompanyValueError: Si el ID no es un entero.
+            CompanyValidationError: Si los datos no son válidos
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.      
             RepositoryError: Si ocurre un error inesperado (interno del sistema).  
         returns: 
@@ -338,17 +338,17 @@ class PromotionRepository:
         """
 
         if not is_integer(id):
-            raise PromotionValueError(field="id", detail="El ID debe ser un entero.")
+            raise CompanyValueError(field="id", detail="El ID debe ser un entero.")
 
         try:
-            instance = Promotion.objects.get(id=id)
+            instance = Company.objects.get(id=id)
             instance.delete()
             return True
 
-        except Promotion.DoesNotExist as e:
-            raise PromotionNotFoundError(id=id) from e
+        except Company.DoesNotExist as e:
+            raise CompanyNotFoundError(id=id) from e
         except ValidationError as e:
-            raise PromotionValidationError(f"Validation error occurred: {e.message_dict}") from e
+            raise CompanyValidationError(f"Validation error occurred: {e.message_dict}") from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Error al acceder a la base de datos") from e            
         except Exception as e:
@@ -400,44 +400,44 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
     En lugar de exponer solo filtros genéricos por `nombre`, puedes agregar métodos que expresen reglas de negocio:
         @staticmethod
         def get_activos():
-            return Promotion.objects.filter(estado='activo')
+            return Company.objects.filter(estado='activo')
 
         @staticmethod
-        def find_by_slug(slug: str) -> OptionalPromotionEntity:
+        def find_by_slug(slug: str) -> OptionalCompanyEntity:
             try:
-                instance = Promotion.objects.get(slug=slug)
-                return Mapper.model_to_entity(instance, PromotionEntity)
-            except Promotion.DoesNotExist:
+                instance = Company.objects.get(slug=slug)
+                return Mapper.model_to_entity(instance, CompanyEntity)
+            except Company.DoesNotExist:
                 return None
 
     Estos métodos se integran naturalmente con `get_by_id()` y `get_all()`, y evitan que la lógica de negocio se repita en servicios.
 
 #### 2. 🔍 **QuerySets y Managers personalizados**
     Puedes encapsular lógica común (como filtros por estado o relaciones) en un `Manager` personalizado:
-        class PromotionManager(models.Manager):
+        class CompanyManager(models.Manager):
             def activos(self):
                 return self.filter(estado='activo')
             def con_relacion(self):
                 return self.select_related('external').prefetch_related('externals')
 
-        class Promotion(models.Model):
+        class Company(models.Model):
             ...
-            objects = PromotionManager()
+            objects = CompanyManager()
 
     Luego, en el repositorio:
         @staticmethod
         def get_all(filters=None):
-            instance_list = Promotion.objects.activos()  # Usa tu Manager
+            instance_list = Company.objects.activos()  # Usa tu Manager
             if filters and "nombre" in filters:
                 instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
-            return [Mapper.model_to_entity(inst, PromotionEntity) for inst in instance_list]
+            return [Mapper.model_to_entity(inst, CompanyEntity) for inst in instance_list]
 
         @staticmethod
         def get_all_with_relations():
-            instance_list = Promotion.objects.activos().con_relacion() # Usa tu Manager
+            instance_list = Company.objects.activos().con_relacion() # Usa tu Manager
             if filters:
                 instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
-            return [Mapper.model_to_entity(inst, PromotionEntity) for inst in instance_list]
+            return [Mapper.model_to_entity(inst, CompanyEntity) for inst in instance_list]
 
     Así mantienes el diseño actual, pero con mejor rendimiento y expresividad.
 
@@ -448,24 +448,24 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
         def get_paginated(page: int, size: int, filters=None):
             offset = (page - 1) * size
             limit = offset + size
-            instance_list = Promotion.objects.all()
+            instance_list = Company.objects.all()
             if filters and "nombre" in filters:
                 instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
             instance_list = instance_list.only("id", "nombre", "created_at")[offset:limit]
-            return [Mapper.model_to_entity(inst, PromotionEntity) for inst in instance_list]
+            return [Mapper.model_to_entity(inst, CompanyEntity) for inst in instance_list]
 
     Ideal para APIs o listados grandes.
 
 #### 4. 🔄 **Separación de lectura y escritura (CQRS básico)**
     Aunque la plantilla combina lectura y escritura, puedes dividirla cuando el sistema escala:
 
-        class PromotionReadRepository:
+        class CompanyReadRepository:
             @staticmethod
             def get_all(...):  # Igual al actual
             @staticmethod
             def count_all(...):  # Ya implementado
 
-        class PromotionWriteRepository:
+        class CompanyWriteRepository:
             @staticmethod
             def create(...):   # Usa `adicionalData` para lógica especial
             @staticmethod
@@ -481,10 +481,10 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
         from django.db.models import Count
         @staticmethod
         def get_con_muchos_externals(min_relaciones=3):
-            instances = Promotion.objects.annotate(
+            instances = Company.objects.annotate(
                 total_externals=Count('externals')
             ).filter(total_externals__gt=min_relaciones)
-            return [Mapper.model_to_entity(inst, PromotionEntity) for inst in instances]
+            return [Mapper.model_to_entity(inst, CompanyEntity) for inst in instances]
 
     Así mantienes el mapeo y la coherencia del dominio.
 
@@ -493,10 +493,10 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
 
         @staticmethod
         def get_all_with_relations():
-            instance_list = Promotion.objects.select_related('external').prefetch_related('externals')
+            instance_list = Company.objects.select_related('external').prefetch_related('externals')
             if filters:
                 instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
-            return [Mapper.model_to_entity(inst, PromotionEntity) for inst in instance_list]
+            return [Mapper.model_to_entity(inst, CompanyEntity) for inst in instance_list]
 
     Evita el problema N+1 cuando accedes a relaciones.
 
@@ -506,34 +506,34 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
         from django.db.models import Q, 
         @staticmethod
         def search_advanced(query):
-            instances = Promotion.objects.filter(
+            instances = Company.objects.filter(
                 Q(nombre__icontains=query) | Q(descripcion__icontains=query)
             )
-            return [Mapper.model_to_entity(inst, PromotionEntity) for inst in instances]
+            return [Mapper.model_to_entity(inst, CompanyEntity) for inst in instances]
 
         @staticmethod
         def reactivar_registros():
-            Promotion.objects.filter(estado='inactivo').update(estado=F('estado_anterior'))
+            Company.objects.filter(estado='inactivo').update(estado=F('estado_anterior'))
 
         @staticmethod
         def busqueda_compleja_sql():
             from django.db import connection
             with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM app_promotion WHERE estado = %s", ['activo'])
+                cursor.execute("SELECT * FROM app_company WHERE estado = %s", ['activo'])
                 rows = cursor.fetchall()
-            return [Mapper.model_to_entity(row, PromotionEntity) for row in rows]
+            return [Mapper.model_to_entity(row, CompanyEntity) for row in rows]
 
     El repositorio sigue siendo el único punto de acceso al ORM.
 
 #### 8. **Documentación y claridad**
     Los métodos del repositorio deben reflejar intenciones del negocio, no solo operaciones técnicas:
         @staticmethod
-        def get_all(filters=None) -> ListPromotionEntity:
+        def get_all(filters=None) -> ListCompanyEntity:
             """
-            Obtiene todos los promotion que coincidan con los filtros.
+            Obtiene todos los company que coincidan con los filtros.
             Usa `.only()` para optimizar rendimiento.
             :param filters: Diccionario con filtros (ej. {"nombre": "juan"}).
-            :return: Lista de entidades Promotion.
+            :return: Lista de entidades Company.
             """
     Esto hace que el repositorio sea autoexplicativo.
 
@@ -548,8 +548,8 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
                 pass
         
             def test_create_con_external_y_externals(self):
-                entity = PromotionEntity(nombre="Test")
-                created = PromotionRepository.create(
+                entity = CompanyEntity(nombre="Test")
+                created = CompanyRepository.create(
                     entity=entity,
                     external_id=1,
                     externals=[1, 2],
@@ -559,7 +559,7 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
                 self.assertEqual(created.nombre, "Test")
 
                 # Verifica relaciones
-                instance = Promotion.objects.get(id=created.id)
+                instance = Company.objects.get(id=created.id)
                 self.assertEqual(instance.external_id, 1)
                 self.assertEqual(instance.externals.count(), 2)
 

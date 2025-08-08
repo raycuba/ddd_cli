@@ -23,20 +23,20 @@ Django form list
         </thead>
         <tbody>
 
-            {% for promotion in promotion_list %}
+            {% for company in company_list %}
             <tr class="align-middle">              
-                <td>{{promotion.attributeName}}</td>                
-                <td>{{promotion.attributeEmail}}</td>
+                <td>{{company.attributeName}}</td>                
+                <td>{{company.attributeEmail}}</td>
                 <td>
-                    {% if promotion.attributeRole == 'adm' %} 
+                    {% if company.attributeRole == 'adm' %} 
                         Administrator 
-                    {% elif promotion.attributeRole == 'man' %} 
+                    {% elif company.attributeRole == 'man' %} 
                         Manager 
-                    {% elif promotion.attributeRole == 'emp' %} 
+                    {% elif company.attributeRole == 'emp' %} 
                         Employee 
                     {% endif %}
                 </td>
-                <td>{{promotion.attributeStatus}}</td>
+                <td>{{company.attributeStatus}}</td>
                 <td>
                     <a class="btn btn-success" href="">Edit</a>
                     <a class="btn btn-success" href="">View</a>

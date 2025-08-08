@@ -2,7 +2,7 @@
 """
 Los servicios en DDD son responsables de manejar la lógica de negocio 
 y las operaciones CRUD relacionadas con una entidad específica. 
-Este servicio proporciona métodos para listar, contar, crear, recuperar, actualizar y eliminar instancias de la entidad promotion. 
+Este servicio proporciona métodos para listar, contar, crear, recuperar, actualizar y eliminar instancias de la entidad company. 
 Cada método maneja la validación necesaria y utiliza un repositorio para interactuar con la persistencia de datos.
 son utiles para:
 - Centralizar la lógica de negocio relacionada con una entidad.
@@ -20,41 +20,41 @@ son utiles para:
 from typing import List, Optional
 
 # importa las entidades utilizadas aqui
-from ..domain.entities import PromotionEntity
+from ..domain.entities import CompanyEntity
 from ..domain.exceptions import (
-    PromotionValueError,
-    PromotionValidationError,
-    PromotionAlreadyExistsError,
-    PromotionNotFoundError,
-    PromotionOperationNotAllowedError,
-    PromotionPermissionError
+    CompanyValueError,
+    CompanyValidationError,
+    CompanyAlreadyExistsError,
+    CompanyNotFoundError,
+    CompanyOperationNotAllowedError,
+    CompanyPermissionError
 )
 from ..infrastructure.exceptions import RepositoryError, ConnectionDataBaseError
-from ..infrastructure.promotion_repository import PromotionRepository
+from ..infrastructure.company_repository import CompanyRepository
 
-class PromotionService:
+class CompanyService:
     """
-    Servicio para manejar las operaciones CRUD relacionadas con promotion.
+    Servicio para manejar las operaciones CRUD relacionadas con company.
 
     Métodos disponibles:
-        - list: Lista todas las instancias de promotion.
-        - count_all: Cuenta todas las instancias de promotion.
-        - create: Crea una nueva instancia de promotion.
-        - retrieve: Recupera una instancia de promotion por ID.
-        - update: Actualiza una instancia existente de promotion.
-        - delete: Elimina una instancia de promotion.
+        - list: Lista todas las instancias de company.
+        - count_all: Cuenta todas las instancias de company.
+        - create: Crea una nueva instancia de company.
+        - retrieve: Recupera una instancia de company por ID.
+        - update: Actualiza una instancia existente de company.
+        - delete: Elimina una instancia de company.
     """
 
     #Si necesitas mantener un estado de lista de entidades
-    # promotion_list = []    
+    # company_list = []    
 
 
-    def __init__(self, repository: PromotionRepository):
+    def __init__(self, repository: CompanyRepository):
         """
         Inicializa el servicio con el repositorio correspondiente.
 
         params:
-            repository: Repositorio que maneja la persistencia de promotion.
+            repository: Repositorio que maneja la persistencia de company.
         """
 
         self.repository = repository    
@@ -62,14 +62,14 @@ class PromotionService:
 
     def list(self, filters: Optional[dict] = None) -> List[dict]:
         """
-        Lista instancias de promotion.
+        Lista instancias de company.
 
         params:
             filters: Filtros opcionales para la consulta.
         return: 
             Lista de la entidad
         raises:
-            PromotionValueError: Si los filtros no son un diccionario o None.
+            CompanyValueError: Si los filtros no son un diccionario o None.
             ConnectionDataBaseError: Si hay un error al conectar a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
@@ -81,14 +81,14 @@ class PromotionService:
 
     def count_all(self, filters: Optional[dict] = None) -> int:
         """
-        Cuenta todas las instancias de promotion.
+        Cuenta todas las instancias de company.
 
         param: 
             filters: Filtros opcionales para la consulta.
         return: 
             Número total de instancias.
         raises: 
-            PromotionValueError: Si los filtros no son un diccionario o None.
+            CompanyValueError: Si los filtros no son un diccionario o None.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.       
             RepositoryError: Si ocurre un error inesperado (interno del sistema).             
         """
@@ -98,7 +98,7 @@ class PromotionService:
 
     def create(self, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None, adicionalData=None) -> dict:
         """
-        Crea una nueva instancia de promotion.
+        Crea una nueva instancia de company.
 
         params: 
             data: Diccionario o DTO con los datos necesarios para crear la instancia.
@@ -108,19 +108,19 @@ class PromotionService:
         return: 
             La entidad creada.
         raises: 
-            PromotionValueError: Si el campo no es válido.
-            PromotionValidationError: Si los datos no son válidos.
-            PromotionAlreadyExistsError: Si ya existe un registro con el mismo nombre.            
+            CompanyValueError: Si el campo no es válido.
+            CompanyValidationError: Si los datos no son válidos.
+            CompanyAlreadyExistsError: Si ya existe un registro con el mismo nombre.            
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).            
         """
 
         # Validación de reglas de negocio (opcional)
         if self.repository.exists_by_field(field_name="attributeName", value=data['attributeName']):
-            raise PromotionValueError("attributeName", "An instance with this attributeName already exists")
+            raise CompanyValueError("attributeName", "An instance with this attributeName already exists")
 
         #crear y validar la entidad
-        entity = PromotionEntity.from_dict(data)
+        entity = CompanyEntity.from_dict(data)
         entity.validate()       
 
         # Guardar en el repositorio
@@ -131,15 +131,15 @@ class PromotionService:
 
     def retrieve(self, entity_id: int) -> dict:
         """
-        Recupera una instancia de promotion por su ID.
+        Recupera una instancia de company por su ID.
 
         param: 
             entity_id: ID de la instancia a recuperar.
         return: 
             La entidad recuperada.
         raises:
-            PromotionValueError: Si el ID no es un entero.         
-            PromotionNotFoundError: Si no existe el registro con el ID dado.
+            CompanyValueError: Si el ID no es un entero.         
+            CompanyNotFoundError: Si no existe el registro con el ID dado.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
@@ -151,7 +151,7 @@ class PromotionService:
 
     def update(self, entity_id: int, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None,adicionalData=None) -> dict:
         """
-        Actualiza una instancia existente de promotion.
+        Actualiza una instancia existente de company.
 
         params:
             entity_id: ID de la instancia a actualizar.
@@ -162,9 +162,9 @@ class PromotionService:
         return: 
             La entidad actualizada.
         raises: 
-            PromotionNotFoundError: Si no existe el registro con el ID dado.
-            PromotionValueError: Si el ID no es un entero.                  
-            PromotionValidationError: Si los datos no son válidos.            
+            CompanyNotFoundError: Si no existe el registro con el ID dado.
+            CompanyValueError: Si el ID no es un entero.                  
+            CompanyValidationError: Si los datos no son válidos.            
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
@@ -184,23 +184,23 @@ class PromotionService:
 
     def delete(self, entity_id: int) -> bool:
         """
-        Elimina una instancia de promotion.
+        Elimina una instancia de company.
 
         params:
             entity_id: ID de la instancia a eliminar.
         return: 
             True/False (depende del exito de la operacion)
         raises:
-            PromotionNotFoundError: Si no se encuentra la instancia.
-            PromotionValueError: Si el campo no es válido.
-            PromotionValidationError: Si los datos no son válidos.            
+            CompanyNotFoundError: Si no se encuentra la instancia.
+            CompanyValueError: Si el campo no es válido.
+            CompanyValidationError: Si los datos no son válidos.            
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).            
         """
         
         # Verifica si la entidad existe
         if not self.repository.exists_by_field(field_name="id", value=entity_id):
-            raise PromotionNotFoundError(id=entity_id)
+            raise CompanyNotFoundError(id=entity_id)
 
         # Eliminación en el repositorio
         self.repository.delete(id=entity_id)

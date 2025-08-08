@@ -6,7 +6,7 @@ from django.db import models
 from datetime import datetime, date
 import decimal
 import uuid
-from ..domain.exceptions import *
+from ..domain.exceptions import CompanyValueError
 
 T = TypeVar("T")
 
@@ -50,7 +50,7 @@ class Mapper:
         """
 
         if not model_instance:
-            raise PromotionValueError("Model instance cannot be None", "Cannot convert None to entity")
+            raise CompanyValueError("Model instance cannot be None", "Cannot convert None to entity")
 
         entity_field_names = {f.name for f in fields(entity_class)}
 

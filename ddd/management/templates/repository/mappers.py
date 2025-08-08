@@ -5,7 +5,7 @@ from django.db import models
 from datetime import datetime, date
 import decimal
 import uuid
-from ..domain.exceptions import *
+from ..domain.exceptions import [[ entity_name.capitalize() ]]ValueError
 
 T = TypeVar("T")
 

@@ -5,12 +5,12 @@ from django.http import HttpResponse
 
 # importa las excepciones personalizadas
 from .domain.exceptions import (
-    PromotionValueError,
-    PromotionValidationError,
-    PromotionAlreadyExistsError,
-    PromotionNotFoundError,
-    PromotionOperationNotAllowedError,
-    PromotionPermissionError
+    CompanyValueError,
+    CompanyValidationError,
+    CompanyAlreadyExistsError,
+    CompanyNotFoundError,
+    CompanyOperationNotAllowedError,
+    CompanyPermissionError
 )
 
 # importa las excepciones de repositorio
@@ -20,34 +20,34 @@ from .infrastructure.exceptions import (
 )
 
 # Importar formularios específicos de la entidad
-from app1.promotion_forms import (
-    PromotionCreateForm, 
-    PromotionEditGetForm, 
-    PromotionEditPostForm, 
-    PromotionViewForm
+from app1.company_forms import (
+    CompanyCreateForm, 
+    CompanyEditGetForm, 
+    CompanyEditPostForm, 
+    CompanyViewForm
 )
 
 # Importar servicios específicos del dominio
-from app1.services.promotion_service import PromotionService
+from app1.services.company_service import CompanyService
 
 # Importar repositorios específicos de la infraestructura
-from app1.infrastructure.promotion_repository import PromotionRepository
+from app1.infrastructure.company_repository import CompanyRepository
 
 
-def promotion_list(request):
+def company_list(request):
     """
-    Vista genérica para mostrar una lista de todas las instancias de promotion.
+    Vista genérica para mostrar una lista de todas las instancias de company.
     """
 
-    promotionList = [] #inicialize list
+    companyList = [] #inicialize list
 
-    promotionService = PromotionService(repository=PromotionRepository()) # Instanciar el servicio
+    companyService = CompanyService(repository=CompanyRepository()) # Instanciar el servicio
 
     # Obtener la lista del repositorio
     try:
-        promotionList = promotionService.list()
+        companyList = companyService.list()
 
-    except (PromotionValueError) as e:
+    except (CompanyValueError) as e:
         messages.error(request,  str(e))
     except (ConnectionDataBaseError, RepositoryError) as e:
         messages.error(request, "There was an error accessing the database or repository: " + str(e))
@@ -55,24 +55,24 @@ def promotion_list(request):
         messages.error(request, "An unexpected error occurred: " + str(e))
 
     # Renderizar la plantilla con la lista
-    return render(request, 'app1/promotion_web_list.html', {
-        'promotionList': promotionList
+    return render(request, 'app1/company_web_list.html', {
+        'companyList': companyList
     })
 
 
-def promotion_create(request):
+def company_create(request):
     """
-    Vista genérica para crear una nueva instancia de promotion utilizando un servicio.
+    Vista genérica para crear una nueva instancia de company utilizando un servicio.
     """
 
     if request.method == "POST":
 
         # Validar los datos del formulario
-        form = PromotionCreateForm(request.POST)
+        form = CompanyCreateForm(request.POST)
 
         if form.is_valid():
             form_data = form.cleaned_data
-            promotionService = PromotionService(repository=PromotionRepository()) # Instanciar el servicio
+            companyService = CompanyService(repository=CompanyRepository()) # Instanciar el servicio
 
             # Obtener el ID de la entidad relacionada si existe
             external_id = request.POST.get('external_id', None)
@@ -82,15 +82,15 @@ def promotion_create(request):
 
             try:
                 # LLamar al servicio de creación
-                promotionService.create(data=form_data, external_id=external_id, externals=externals_ids)
+                companyService.create(data=form_data, external_id=external_id, externals=externals_ids)
 
                 # Mostrar mensaje de éxito y redirigir
-                messages.success(request, f"Successfully created promotion")
-                return redirect('app1:promotion_list')
+                messages.success(request, f"Successfully created company")
+                return redirect('app1:company_list')
 
-            except PromotionAlreadyExistsError as e:
+            except CompanyAlreadyExistsError as e:
                 messages.error(request, "Already Exists Error: " + str(e))
-            except (PromotionValueError, PromotionValidationError) as e:
+            except (CompanyValueError, CompanyValidationError) as e:
                 form.add_error(None, "Validation Error: " + str(e))
             except (ConnectionDataBaseError, RepositoryError) as e:
                 messages.error(request, "There was an error accessing the database or repository: " + str(e))
@@ -100,44 +100,44 @@ def promotion_create(request):
             messages.error(request, "There were errors in the form. Please correct them")
     else:
         # Formulario vacío para solicitudes GET
-        form = PromotionCreateForm()
+        form = CompanyCreateForm()
 
     # Renderizar la plantilla con el formulario
-    return render(request, 'app1/promotion_web_create.html', {'form': form}) 
+    return render(request, 'app1/company_web_create.html', {'form': form}) 
 
 
-def promotion_edit(request, id=None):
+def company_edit(request, id=None):
     """
-    Vista genérica para editar una instancia existente de promotion utilizando un servicio.
+    Vista genérica para editar una instancia existente de company utilizando un servicio.
     """
 
     if id is None:
         # Redireccion si no se proporciona un ID
-        return redirect('app1:promotion_list')
+        return redirect('app1:company_list')
 
-    promotionService = PromotionService(repository=PromotionRepository()) # Instanciar el servicio
+    companyService = CompanyService(repository=CompanyRepository()) # Instanciar el servicio
 
     try:
         # Obtener los datos de la entidad desde el servicio
-        promotion = promotionService.retrieve(entity_id=id)
+        company = companyService.retrieve(entity_id=id)
 
-    except PromotionNotFoundError as e:
+    except CompanyNotFoundError as e:
         messages.error(request,  "Not Found Error: " + str(e))
-        return redirect('app1:promotion_list')
-    except PromotionValueError as e:
+        return redirect('app1:company_list')
+    except CompanyValueError as e:
         messages.error(request,  "Value Error: " + str(e))
-        return redirect('app1:promotion_list')
+        return redirect('app1:company_list')
     except (ConnectionDataBaseError, RepositoryError) as e:
         messages.error(request, "There was an error accessing the database or repository: " + str(e))
-        return redirect('app1:promotion_list')
+        return redirect('app1:company_list')
     except Exception as e:
         messages.error(request, "An unexpected error occurred: " + str(e))
-        return redirect('app1:promotion_list')
+        return redirect('app1:company_list')
 
     if request.method == "POST":
 
         # Validar los datos del formulario
-        form = PromotionEditPostForm(request.POST)
+        form = CompanyEditPostForm(request.POST)
 
         if form.is_valid():
             form_data = form.cleaned_data
@@ -155,17 +155,17 @@ def promotion_edit(request, id=None):
                 externals_ids = form_data.get('externals', [])                
 
                 # LLamar al servicio de actualización
-                promotionService.update(entity_id=id, data=form_data, external_id=external_id, externals=externals_ids)
+                companyService.update(entity_id=id, data=form_data, external_id=external_id, externals=externals_ids)
 
                 # Mostrar mensaje de éxito
-                messages.success(request, f"Successfully updated promotion")
+                messages.success(request, f"Successfully updated company")
 
-                # Redireccionar a la lista de promotions
-                return redirect('app1:promotion_list')
+                # Redireccionar a la lista de companys
+                return redirect('app1:company_list')
 
-            except PromotionNotFoundError as e:
+            except CompanyNotFoundError as e:
                 messages.error(request,  "Not Found Error: " + str(e))                
-            except (PromotionValueError, PromotionValidationError) as e:
+            except (CompanyValueError, CompanyValidationError) as e:
                 form.add_error(None, "Validation Error: " + str(e))
             except (ConnectionDataBaseError, RepositoryError) as e:
                 messages.error(request, "There was an error accessing the database or repository: " + str(e))
@@ -178,74 +178,74 @@ def promotion_edit(request, id=None):
     # request.method == "GET":
     else:  
         # Initialize the form with existing data
-        form = PromotionEditGetForm(initial={
-            'id': promotion['id'],            
-            'attributeName': promotion['attributeName'],
-            'attributeEmail': promotion['attributeEmail']
+        form = CompanyEditGetForm(initial={
+            'id': company['id'],            
+            'attributeName': company['attributeName'],
+            'attributeEmail': company['attributeEmail']
         })
 
     # Renderizar la plantilla con el formulario
-    return render(request, 'app1/promotion_web_edit.html', {'form': form})
+    return render(request, 'app1/company_web_edit.html', {'form': form})
 
 
-def promotion_detail(request, id=None):
+def company_detail(request, id=None):
     """
-    Vista genérica para mostrar los detalles de una instancia específica de promotion.
+    Vista genérica para mostrar los detalles de una instancia específica de company.
     """
     if id is None:
-        return redirect('app1:promotion_list')
+        return redirect('app1:company_list')
 
-    promotionService = PromotionService(repository=PromotionRepository()) # Instanciar el servicio
+    companyService = CompanyService(repository=CompanyRepository()) # Instanciar el servicio
 
     try:
         # Obtener los datos de la entidad desde el servicio
-        promotion = promotionService.retrieve(entity_id=id)
+        company = companyService.retrieve(entity_id=id)
 
-    except PromotionNotFoundError as e:
+    except CompanyNotFoundError as e:
         messages.error(request,  "Not Found Error: " + str(e))        
-        return redirect('app1:promotion_list')
-    except PromotionValueError as e:
+        return redirect('app1:company_list')
+    except CompanyValueError as e:
         messages.error(request,  str(e))
-        return redirect('app1:promotion_list')
+        return redirect('app1:company_list')
     except (ConnectionDataBaseError, RepositoryError) as e:
         messages.error(request, "There was an error accessing the database or repository: " + str(e))
-        return redirect('app1:promotion_list')
+        return redirect('app1:company_list')
     except Exception as e:
         messages.error(request, "An unexpected error occurred: " + str(e))
-        return redirect('app1:promotion_list')
+        return redirect('app1:company_list')
 
     # Renderizar la plantilla con el formulario de vista
-    form = PromotionViewForm(initial={
-        'attributeName': promotion['attributeName'],
-        'attributeEmail': promotion['attributeEmail']
+    form = CompanyViewForm(initial={
+        'attributeName': company['attributeName'],
+        'attributeEmail': company['attributeEmail']
     })
 
-    return render(request, 'app1/promotion_web_detail.html', {'form': form})
+    return render(request, 'app1/company_web_detail.html', {'form': form})
 
 
-def promotion_delete(request, id=None):
+def company_delete(request, id=None):
     """
-    Vista genérica para eliminar una instancia existente de promotion utilizando un servicio.
+    Vista genérica para eliminar una instancia existente de company utilizando un servicio.
     """
     if id is None:
         messages.error(request, "Non Valid id to delete")
-        return redirect('app1:promotion_list')
+        return redirect('app1:company_list')
 
-    promotionService = PromotionService(repository=PromotionRepository()) # Instanciar el servicio
+    companyService = CompanyService(repository=CompanyRepository()) # Instanciar el servicio
 
     try:
         # LLamar al servicio de eliminación
-        promotionService.delete(entity_id=id)
-        messages.success(request, f"Successfully deleted promotion")
+        companyService.delete(entity_id=id)
+        messages.success(request, f"Successfully deleted company")
 
-    except PromotionNotFoundError as e:
+    except CompanyNotFoundError as e:
         messages.error(request,  "Not Found Error: " + str(e))             
-    except (PromotionValueError, PromotionValidationError) as e:
+    except (CompanyValueError, CompanyValidationError) as e:
         messages.error(request,  "Validation Error: " + str(e))
     except (ConnectionDataBaseError, RepositoryError) as e:
         messages.error(request, "There was an error accessing the database or repository: " + str(e))
     except Exception as e:
         messages.error(request, "An unexpected error occurred: " + str(e))
 
-    return redirect('app1:promotion_list')
+    return redirect('app1:company_list')
 

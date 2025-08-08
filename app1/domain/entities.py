@@ -2,15 +2,15 @@
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 from uuid import UUID, uuid4
-from exceptions import *
+from .exceptions import *
 
 @dataclass
-class PromotionEntity:
+class CompanyEntity:
     """
-    Entidad del dominio para promotion.
+    Entidad del dominio para company.
 
     Esta clase representa la lógica de negocio central y las reglas asociadas 
-    con promotion en el sistema.
+    con company en el sistema.
     """
 
     # Lista de campos especiales
@@ -49,10 +49,10 @@ class PromotionEntity:
         - Validaciones intrínsecas al momento de creación/modificación
         """
         if not self.attributeName or len(self.attributeName) < 3:
-            raise PromotionValueError("El attributeName debe tener al menos 3 caracteres")
+            raise CompanyValueError("El attributeName debe tener al menos 3 caracteres")
 
         if self.attributeEmail and len(self.attributeEmail) > 500:
-            raise PromotionValueError("El attributeEmail no puede superar los 500 caracteres")
+            raise CompanyValueError("El attributeEmail no puede superar los 500 caracteres")
  
 
     def update(self, data:dict, addMode:bool = False) -> None:
@@ -61,7 +61,7 @@ class PromotionEntity:
         si addMode = True permite añadir campos nuevos
         :param data: Diccionario con los nuevos valores para los atributos.
         :param addMode: Si es True, permite añadir nuevos campos que no existan en la entidad.
-        :raises PromotionValueError: Si hay un error de estructura en los datos.
+        :raises CompanyValueError: Si hay un error de estructura en los datos.
         """
         # Actualizar cada campo proporcionado en 'data'
         for key, value in data.items():
@@ -69,7 +69,7 @@ class PromotionEntity:
                 try:
                     setattr(self, key, value)             
                 except TypeError as e:
-                    raise PromotionValueError(key, f"Error de estructura en los datos: {str(e)}") from e
+                    raise CompanyValueError(key, f"Error de estructura en los datos: {str(e)}") from e
 
         self.validate()    
 
@@ -82,7 +82,7 @@ class PromotionEntity:
 
         
     @staticmethod
-    def from_dict(data: dict) -> "PromotionEntity":
+    def from_dict(data: dict) -> "CompanyEntity":
         """
         Crea una instancia de la entidad a partir de un diccionario.
         """
@@ -91,9 +91,9 @@ class PromotionEntity:
 
         # construir la entidad
         try:
-            entity = PromotionEntity(**data)
+            entity = CompanyEntity(**data)
         except TypeError as e:
-            raise PromotionValueError("Error al construir la entidad", str(e)) from e
+            raise CompanyValueError("Error al construir la entidad", str(e)) from e
 
         return entity
         
