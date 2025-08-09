@@ -63,7 +63,7 @@ class [[ entity_name.capitalize() ]]Entity:
                 try:
                     setattr(self, key, value)             
                 except TypeError as e:
-                    raise [[ entity_name.capitalize() ]]ValueError(field=key, detailf"Error de estructura en los datos: {str(e)}") from e
+                    raise [[ entity_name.capitalize() ]]ValueError(field=key, detail=f"Error de estructura en los datos: {str(e)}") from e
 
         self.validate()    
 
