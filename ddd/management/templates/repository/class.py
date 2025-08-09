@@ -235,7 +235,7 @@ class [[ entity_name.capitalize() ]]Repository:
             raise [[ entity_name.capitalize() ]]ValidationError(f"Error de validación: {e.message_dict}") from e
         except IntegrityError as e:
             if 'duplicate' in str(e).lower() or 'unique constraint' in str(e).lower():
-                raise [[ entity_name.capitalize() ]]AlreadyExistsError('attributeName', instance.attributeName)  # Ajusta según el campo único
+                raise [[ entity_name.capitalize() ]]AlreadyExistsError(field='attributeName', detail=instance.attributeName)  # Ajusta según el campo único
             # Otro error de integridad → regla de negocio?
             raise [[ entity_name.capitalize() ]]ValidationError({"integridad": "Datos duplicados o inconsistentes"})            
         except DatabaseError as e:

@@ -25,8 +25,9 @@ class [[ entity_name.capitalize() ]]ValidationError([[ entity_name.capitalize() 
 
 class [[ entity_name.capitalize() ]]AlreadyExistsError([[ entity_name.capitalize() ]]Error):
     """Cuando se intenta crear una [[ entity_name.capitalize() ]] que ya existe."""
-    def __init__(self, cause):
-        self.cause = cause
+    def __init__(self, detail: str, field: str = "value"):
+        self.field = field        
+        self.detail = detail
         super().__init__(f"[[ entity_name.capitalize() ]] existe.")
 
 
