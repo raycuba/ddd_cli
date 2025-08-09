@@ -7,10 +7,13 @@ class [[ entity_name.capitalize() ]]Error(Exception):
 
 class [[ entity_name.capitalize() ]]ValueError([[ entity_name.capitalize() ]]Error):
     """Error de valor en atributos de la entidad [[ entity_name.capitalize() ]]."""
-    def __init__(self, field: str, detail: str):
+    def __init__(self, detail: str, field: str = "value"):
         self.field = field
         self.detail = detail
-        super().__init__(f"Error en el campo '{field}': {detail}")
+        if field == "value":
+            super().__init__(f"Error de valor: {detail}")
+        else:
+            super().__init__(f"Error en el campo '{field}': {detail}")
 
 
 class [[ entity_name.capitalize() ]]ValidationError([[ entity_name.capitalize() ]]Error):

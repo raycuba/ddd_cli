@@ -43,11 +43,11 @@ class [[ entity_name.capitalize() ]]Entity:
         - Validaciones intrínsecas al momento de creación/modificación
         """
         if not self.attributeName or len(self.attributeName) < 3:
-            raise [[ entity_name.capitalize() ]]ValueError("El attributeName debe tener al menos 3 caracteres")
+            raise [[ entity_name.capitalize() ]]ValueError(field="attributeName", detail="El attributeName debe tener al menos 3 caracteres")
 
         if self.attributeEmail and len(self.attributeEmail) > 500:
-            raise [[ entity_name.capitalize() ]]ValueError("El attributeEmail no puede superar los 500 caracteres")
- 
+            raise [[ entity_name.capitalize() ]]ValueError(field="attributeEmail", detail="El attributeEmail no puede superar los 500 caracteres")
+
 
     def update(self, data:dict, addMode:bool = False) -> None:
         """
@@ -63,7 +63,7 @@ class [[ entity_name.capitalize() ]]Entity:
                 try:
                     setattr(self, key, value)             
                 except TypeError as e:
-                    raise [[ entity_name.capitalize() ]]ValueError(key, f"Error de estructura en los datos: {str(e)}") from e
+                    raise [[ entity_name.capitalize() ]]ValueError(field=key, detailf"Error de estructura en los datos: {str(e)}") from e
 
         self.validate()    
 
@@ -87,7 +87,7 @@ class [[ entity_name.capitalize() ]]Entity:
         try:
             entity = [[ entity_name.capitalize() ]]Entity(**data)
         except TypeError as e:
-            raise [[ entity_name.capitalize() ]]ValueError("Error al construir la entidad", str(e)) from e
+            raise [[ entity_name.capitalize() ]]ValueError("Error al construir la entidad:", str(e)) from e
 
         return entity
         

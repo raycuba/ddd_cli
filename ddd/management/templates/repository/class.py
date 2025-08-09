@@ -59,7 +59,7 @@ class [[ entity_name.capitalize() ]]Repository:
             # Aplicar filtros si se proporcionan
             if filters is not None:
                 if not isinstance(filters, dict):
-                    raise [[ entity_name.capitalize() ]]ValueError("filters", "filters debe ser un diccionario o None")
+                    raise [[ entity_name.capitalize() ]]ValueError(field="filters", detail="filters debe ser un diccionario o None")
                 if "nombre" in filters and filters["nombre"].strip():
                     instance_list = instance_list.filter(nombre__icontains=filters["nombre"])      
                     
@@ -193,7 +193,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
         # Validar la entidad de entrada
         if not entity or not hasattr(entity, "to_dict"):
-            raise [[ entity_name.capitalize() ]]ValueError("[[ entity_name.capitalize() ]]", "Entidad nula o no tiene el método 'to_dict'")
+            raise [[ entity_name.capitalize() ]]ValueError(field="[[ entity_name.capitalize() ]]", detail="Entidad nula o no tiene el método 'to_dict'")
 
         try:
             #convertir a dict
@@ -230,7 +230,7 @@ class [[ entity_name.capitalize() ]]Repository:
                     instance.externals.set(externals)                
 
         except (TypeError, ValueError) as e:
-            raise [[ entity_name.capitalize() ]]ValueError("data", f"Error de estructura en los datos: {str(e)}") from e
+            raise [[ entity_name.capitalize() ]]ValueError(field="data", detail=f"Error de estructura en los datos: {str(e)}") from e
         except ValidationError as e:
             raise [[ entity_name.capitalize() ]]ValidationError(f"Error de validación: {e.message_dict}") from e
         except IntegrityError as e:
@@ -268,7 +268,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
         # Validar la entidad de entrada
         if not entity or not hasattr(entity, "to_dict"):
-            raise [[ entity_name.capitalize() ]]ValueError("[[ entity_name.capitalize() ]]", "Entidad nula o no tiene el método 'to_dict'")
+            raise [[ entity_name.capitalize() ]]ValueError(field="[[ entity_name.capitalize() ]]", detail="Entidad nula o no tiene el método 'to_dict'")
 
         if not entity.id or not is_integer(entity.id):
             raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="El ID debe ser un entero.")                        
@@ -311,7 +311,7 @@ class [[ entity_name.capitalize() ]]Repository:
         except [[ entity_name.capitalize() ]].DoesNotExist as e:
             raise [[ entity_name.capitalize() ]]NotFoundError(id=entity.id) from e
         except (TypeError, ValueError) as e:
-            raise [[ entity_name.capitalize() ]]ValueError("data", f"Error de estructura en los datos: {str(e)}") from e
+            raise [[ entity_name.capitalize() ]]ValueError(field="data", detail=f"Error de estructura en los datos: {str(e)}") from e
         except ValidationError as e:
             raise [[ entity_name.capitalize() ]]ValidationError(f"Error de validación: {e.message_dict}") from e
         except DatabaseError as e:

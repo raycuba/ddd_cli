@@ -83,7 +83,7 @@ class [[ entity_name.capitalize() ]]Service:
 
         # Validación de reglas de negocio (opcional)
         if self.repository.exists_by_field(field_name="attributeName", value=data['attributeName']):
-            raise [[ entity_name.capitalize() ]]ValueError("attributeName", "An instance with this attributeName already exists")
+            raise [[ entity_name.capitalize() ]]ValueError(field="attributeName", detail="An instance with this attributeName already exists")
 
         #crear y validar la entidad
         entity = [[ entity_name.capitalize() ]]Entity.from_dict(data)

@@ -49,7 +49,7 @@ class Mapper:
         """
 
         if not model_instance:
-            raise [[ entity_name.capitalize() ]]ValueError("Model instance cannot be None", "Cannot convert None to entity")
+            raise [[ entity_name.capitalize() ]]ValueError("Model instance cannot be None. Cannot convert None to entity")
 
         entity_field_names = {f.name for f in fields(entity_class)}
 
