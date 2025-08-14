@@ -124,7 +124,7 @@ class [[ entity_name.capitalize() ]]Repository:
         """
         
         # Lista de campos en los que se permite verificar unicidad
-        ALLOWED_FIELDS = ['nombre', 'email', 'ruc', 'codigo']  # define según tu entidad
+        ALLOWED_FIELDS = ['id', 'nombre', 'email', 'ruc', 'codigo']  # define según tu entidad
         
         if field_name not in ALLOWED_FIELDS:
             raise [[ entity_name.capitalize() ]]ValueError(field=field_name, detail=f"El campo '{field_name}' no es válido para verificar existencia.")
