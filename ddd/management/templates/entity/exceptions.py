@@ -28,7 +28,7 @@ class [[ entity_name.capitalize() ]]AlreadyExistsError([[ entity_name.capitalize
     def __init__(self, detail: str, field: str = "value"):
         self.field = field        
         self.detail = detail
-        super().__init__(f"[[ entity_name.capitalize() ]] existe.")
+        super().__init__(f"[[ entity_name.capitalize() ]] ya existe.")
 
 
 class [[ entity_name.capitalize() ]]NotFoundError([[ entity_name.capitalize() ]]Error):
