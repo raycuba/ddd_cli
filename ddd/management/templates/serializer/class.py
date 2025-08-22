@@ -37,14 +37,14 @@ class [[ serializer_name.capitalize() ]]DTOSerializer(serializers.Serializer):
         """
         Debe implementarse según tu lógica de negocio.
         """
-        raise NotImplementedError("Implementa el método `create` en tu serializer.")
+        raise NotImplementedError("Implement methond `create` in serializer.")
 
 
     def update(self, instance, validated_data):
         """
         Debe implementarse según tu lógica de negocio.
         """
-        raise NotImplementedError("Implementa el método `update` en tu serializer.")
+        raise NotImplementedError("Implement method `update` in serializer.")
 
 
     '''

@@ -59,7 +59,7 @@ class [[ entity_name.capitalize() ]]Repository:
             # Aplicar filtros si se proporcionan
             if filters is not None:
                 if not isinstance(filters, dict):
-                    raise [[ entity_name.capitalize() ]]ValueError(field="filters", detail="filters debe ser un diccionario o None")
+                    raise [[ entity_name.capitalize() ]]ValueError(field="filters", detail="filters must be a dict or None")
                 if "nombre" in filters and filters["nombre"].strip():
                     instance_list = instance_list.filter(nombre__icontains=filters["nombre"])      
                     
@@ -70,9 +70,9 @@ class [[ entity_name.capitalize() ]]Repository:
             return [Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity) for instance in instance_list]        
 
         except DatabaseError as e:
-            raise ConnectionDataBaseError("Error al acceder a la base de datos") from e
+            raise ConnectionDataBaseError("Data base access error") from e
         except Exception as e:
-            raise RepositoryError(f"Error al obtener registros: {str(e)}") from e
+            raise RepositoryError(f"Error fetching registers: {str(e)}") from e
 
 
     @staticmethod
@@ -93,7 +93,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
         # Validar que el ID sea un entero
         if not is_integer(id):
-            raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="El ID debe ser un entero.")
+            raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="ID must be integer.")
 
         try:
             instance = [[ entity_name.capitalize() ]].objects.get(id=id)
@@ -102,9 +102,9 @@ class [[ entity_name.capitalize() ]]Repository:
         except [[ entity_name.capitalize() ]].DoesNotExist as e:
             raise [[ entity_name.capitalize() ]]NotFoundError(id=id) from e
         except DatabaseError as e:
-            raise ConnectionDataBaseError("Error al acceder a la base de datos") from e    
+            raise ConnectionDataBaseError("Data base access error") from e    
         except Exception as e:
-            raise RepositoryError(f"Error al obtener el registro con ID {id}: {str(e)}") from e            
+            raise RepositoryError(f"Error fetching registers with ID {id}: {str(e)}") from e            
      
 
     @staticmethod
@@ -133,9 +133,9 @@ class [[ entity_name.capitalize() ]]Repository:
             return [[ entity_name.capitalize() ]].objects.filter(**{field_name: value}).exists()
 
         except DatabaseError as e:
-            raise ConnectionDataBaseError("Error al acceder a la base de datos") from e
+            raise ConnectionDataBaseError("Data base access error") from e
         except Exception as e:
-            raise RepositoryError(f"Error al verificar la existencia del campo {field_name} con valor {value}: {str(e)}") from e            
+            raise RepositoryError(f"Error verifying field {field_name} with value {value}: {str(e)}") from e            
 
 
     @staticmethod
@@ -159,16 +159,16 @@ class [[ entity_name.capitalize() ]]Repository:
             # Aplicar filtros si se proporcionan
             if filters is not None:
                 if not isinstance(filters, dict):
-                    raise [[ entity_name.capitalize() ]]ValueError(field="filters", detail="filters debe ser un diccionario o None")               
+                    raise [[ entity_name.capitalize() ]]ValueError(field="filters", detail="filters must be dict or None")               
                 if "nombre" in filters and filters["nombre"].strip():
                     instance_list = instance_list.filter(nombre__icontains=filters["nombre"])            
 
             return instance_list.count()            
 
         except DatabaseError as e:
-            raise ConnectionDataBaseError("Error al acceder a la base de datos") from e            
+            raise ConnectionDataBaseError("Data base access error") from e            
         except Exception as e:
-            raise RepositoryError(f"Error al contar registros: {str(e)}") from e
+            raise RepositoryError(f"Error counting registers: {str(e)}") from e
 
 
     @staticmethod
@@ -193,7 +193,7 @@ class [[ entity_name.capitalize() ]]Repository:
 
         # Validar la entidad de entrada
         if not entity or not hasattr(entity, "to_dict"):
-            raise [[ entity_name.capitalize() ]]ValueError(field="[[ entity_name.capitalize() ]]", detail="Entidad nula o no tiene el método 'to_dict'")
+            raise [[ entity_name.capitalize() ]]ValueError(field="[[ entity_name.capitalize() ]]", detail="Entity null or without methond 'to_dict'")
 
         try:
             #convertir a dict
@@ -230,18 +230,18 @@ class [[ entity_name.capitalize() ]]Repository:
                     instance.externals.set(externals)                
 
         except (TypeError, ValueError) as e:
-            raise [[ entity_name.capitalize() ]]ValueError(field="data", detail=f"Error de estructura en los datos: {str(e)}") from e
+            raise [[ entity_name.capitalize() ]]ValueError(field="data", detail=f"Error in the data structure: {str(e)}") from e
         except ValidationError as e:
-            raise [[ entity_name.capitalize() ]]ValidationError(f"Error de validación: {e.message_dict}") from e
+            raise [[ entity_name.capitalize() ]]ValidationError(f"Validation error: {e.message_dict}") from e
         except IntegrityError as e:
             if 'duplicate' in str(e).lower() or 'unique constraint' in str(e).lower():
                 raise [[ entity_name.capitalize() ]]AlreadyExistsError(field='attributeName', detail=instance.attributeName)  # Ajusta según el campo único
             # Otro error de integridad → regla de negocio?
-            raise [[ entity_name.capitalize() ]]ValidationError({"integridad": "Datos duplicados o inconsistentes"})            
+            raise [[ entity_name.capitalize() ]]ValidationError({"integrity": "Duplicated or inconsistent data"})            
         except DatabaseError as e:
-            raise ConnectionDataBaseError("Error al acceder a la base de datos") from e
+            raise ConnectionDataBaseError("Data base access error") from e
         except Exception as e:
-            raise RepositoryError(f"Error al crear el registro: {str(e)}") from e
+            raise RepositoryError(f"Error creating register: {str(e)}") from e
         
         return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
 
@@ -268,10 +268,10 @@ class [[ entity_name.capitalize() ]]Repository:
 
         # Validar la entidad de entrada
         if not entity or not hasattr(entity, "to_dict"):
-            raise [[ entity_name.capitalize() ]]ValueError(field="[[ entity_name.capitalize() ]]", detail="Entidad nula o no tiene el método 'to_dict'")
+            raise [[ entity_name.capitalize() ]]ValueError(field="[[ entity_name.capitalize() ]]", detail="Entity null or without method 'to_dict'")
 
         if not entity.id or not is_integer(entity.id):
-            raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="El ID debe ser un entero.")                        
+            raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="Id must be integer.")                        
 
         try:
             # Recuperar el modelo existente basado en el ID de la entidad
@@ -311,13 +311,13 @@ class [[ entity_name.capitalize() ]]Repository:
         except [[ entity_name.capitalize() ]].DoesNotExist as e:
             raise [[ entity_name.capitalize() ]]NotFoundError(id=entity.id) from e
         except (TypeError, ValueError) as e:
-            raise [[ entity_name.capitalize() ]]ValueError(field="data", detail=f"Error de estructura en los datos: {str(e)}") from e
+            raise [[ entity_name.capitalize() ]]ValueError(field="data", detail=f"Error inthe data structure: {str(e)}") from e
         except ValidationError as e:
-            raise [[ entity_name.capitalize() ]]ValidationError(f"Error de validación: {e.message_dict}") from e
+            raise [[ entity_name.capitalize() ]]ValidationError(f"Validation error: {e.message_dict}") from e
         except DatabaseError as e:
-            raise ConnectionDataBaseError("Error al acceder a la base de datos") from e            
+            raise ConnectionDataBaseError("Data base access error") from e            
         except Exception as e:
-            raise RepositoryError(f"Error al actualizar el registro: {str(e)}") from e
+            raise RepositoryError(f"Error updating register: {str(e)}") from e
 
 
     @staticmethod
@@ -350,9 +350,9 @@ class [[ entity_name.capitalize() ]]Repository:
         except ValidationError as e:
             raise [[ entity_name.capitalize() ]]ValidationError(f"Validation error occurred: {e.message_dict}") from e
         except DatabaseError as e:
-            raise ConnectionDataBaseError("Error al acceder a la base de datos") from e            
+            raise ConnectionDataBaseError("Data base access error") from e            
         except Exception as e:
-            raise RepositoryError(f"Error al eliminar registro: {str(e)}") from e
+            raise RepositoryError(f"Error deleting register: {str(e)}") from e
 
 
 '''
