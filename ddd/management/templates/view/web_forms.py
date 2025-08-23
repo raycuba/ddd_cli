@@ -328,7 +328,7 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
         }),
         validators=[
             RegexValidator(
-                r'^(https?|ftp)://[^\s/$.?#].[^\s]*$',
+                r'^(https?|ftp)://[^\\s/$.?#].[^\\s]*$',
                 "Please enter a valid URL starting with http://, https://, or ftp://"
             ),
         ]
@@ -393,13 +393,13 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
             'class': 'form-control',
             'minlength': '4',  # Mínima longitud en el navegador
             'maxlength': '250',  # Máxima longitud en el navegador      
-            'pattern': r'^[A-Za-z\s]*$',  # Expresión regular en el navegador           
+            'pattern': r'^[A-Za-z\\s]*$',  # Expresión regular en el navegador           
             'title': 'The name can only contain letters and spaces.'
         }),
         validators=[
             MinLengthValidator(4, "The name must be at least 4 characters"),
             MaxLengthValidator(250, "The name must not exceed 250 characters"),
-            RegexValidator(r'^[A-Za-z\s]*$', "The name can only contain letters and spaces"),
+            RegexValidator(r'^[A-Za-z\\s]*$', "The name can only contain letters and spaces"),
         ]          
     ) 
 
