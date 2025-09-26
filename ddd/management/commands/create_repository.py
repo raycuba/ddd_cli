@@ -30,6 +30,7 @@ class CreateRepositoryCommand:
                 try:
                     os.makedirs(repository_dir, exist_ok=True)
                     create__init__files(repository_dir)
+                    
                     os.makedirs(utils_dir, exist_ok=True)
                     create__init__files(utils_dir)
 

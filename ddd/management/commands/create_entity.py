@@ -26,9 +26,8 @@ class CreateEntityCommand:
             # Crear directorios si no existen
             try:
                 os.makedirs(entities_dir, exist_ok=True)
-                
-                # Crear archivos __init__.py
                 create__init__files(entities_dir)
+                
             except OSError as e:
                 print(Fore.RED + f"Failed to create directory '{entities_dir}': {e}" + Style.RESET_ALL)
                 return

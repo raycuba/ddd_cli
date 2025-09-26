@@ -24,9 +24,8 @@ class CreateSerializerCommand:
             # Crear directorios si no existen
             try:
                 os.makedirs(serializers_dir, exist_ok=True)
-
-                # Crear archivos __init__.py
                 create__init__files(serializers_dir)
+                
             except OSError as e:
                 print(Fore.RED + f"Failed to create directory '{serializers_dir}': {e}" + Style.RESET_ALL)
                 return
