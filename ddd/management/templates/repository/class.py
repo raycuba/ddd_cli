@@ -9,6 +9,7 @@ from ..models import [[ entity_name.capitalize() ]]
 from .mappers import Mapper
 from ..utils.clean_dict_of_keys import clean_dict_of_keys
 from ..utils.is_integer import is_integer
+from ..utils.is_uuid import is_uuid
 from ..domain.entities import [[ entity_name.capitalize() ]]Entity
 
 # importa las excepciones personalizadas
@@ -76,12 +77,13 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def get_by_id(id) -> Optional[ [[ entity_name.capitalize() ]]Entity ]:
+    def get_by_id(id = None, uuid = None) -> Optional[ [[ entity_name.capitalize() ]]Entity ]:
         """
-        Obtiene un registro por su ID.
+        Obtiene un registro por su ID o UUID.
         
         params:
             id: ID del registro a recuperar.
+            uuid: UUID del registro a recuperar.
         returns: 
             El entidad encontrada o None si no existe.
         raises:
@@ -91,12 +93,22 @@ class [[ entity_name.capitalize() ]]Repository:
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
 
-        # Validar que el ID sea un entero
-        if not is_integer(id):
-            raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="ID must be integer.")
+        # Validar que el ID sea un entero o el UUID sea un UUID válido
+        if id is not None: 
+            if not is_integer(id):
+                raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="ID must be integer.")
+        elif uuid is not None:
+            if not is_uuid(uuid):
+                raise [[ entity_name.capitalize() ]]ValueError(field="uuid", detail="UUID must be valid.")
+        else:
+            raise [[ entity_name.capitalize() ]]ValueError(field="id/uuid", detail="Either id or uuid must be provided.")
 
         try:
-            instance = [[ entity_name.capitalize() ]].objects.get(id=id)
+            if id is not None:
+                instance = [[ entity_name.capitalize() ]].objects.get(id=id)
+            else:
+                instance = [[ entity_name.capitalize() ]].objects.get(uuid=uuid)
+
             return Mapper.model_to_entity(instance, [[ entity_name.capitalize() ]]Entity)
 
         except [[ entity_name.capitalize() ]].DoesNotExist as e:
@@ -124,7 +136,7 @@ class [[ entity_name.capitalize() ]]Repository:
         """
         
         # Lista de campos en los que se permite verificar unicidad
-        ALLOWED_FIELDS = ['id', 'nombre', 'email', 'ruc', 'codigo']  # define según tu entidad
+        ALLOWED_FIELDS = ['id', 'uuid', 'nombre', 'email', 'ruc', 'codigo']  # define según tu entidad
         
         if field_name not in ALLOWED_FIELDS:
             raise [[ entity_name.capitalize() ]]ValueError(field=field_name, detail=f"El campo '{field_name}' no es válido para verificar existencia.")
@@ -270,12 +282,23 @@ class [[ entity_name.capitalize() ]]Repository:
         if not entity or not hasattr(entity, "to_dict"):
             raise [[ entity_name.capitalize() ]]ValueError(field="[[ entity_name.capitalize() ]]", detail="Entity null or without method 'to_dict'")
 
+        # Validar que tenga el id o uuid
+        if not entity.id and not entity.uuid:
+            raise [[ entity_name.capitalize() ]]ValueError(field="id/uuid", detail="The id or uuid field is required")
+
+        # validar el id
         if not entity.id or not is_integer(entity.id):
-            raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="Id must be integer.")                        
+            raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="Id must be integer.")
+
+        # validar el uuid
+        if entity.uuid and not is_uuid(entity.uuid):
+            raise [[ entity_name.capitalize() ]]ValueError(field="uuid", detail="UUID must be valid.")
 
         try:
-            # Recuperar el modelo existente basado en el ID de la entidad
-            instance = [[ entity_name.capitalize() ]].objects.get(id=entity.id)
+            if entity.id:
+                instance = [[ entity_name.capitalize() ]].objects.get(id=entity.id)
+            else:
+                instance = [[ entity_name.capitalize() ]].objects.get(uuid=entity.uuid)
 
             with transaction.atomic():
                 # Asegurar que todas las operaciones se realicen en una transacción
@@ -321,12 +344,13 @@ class [[ entity_name.capitalize() ]]Repository:
 
 
     @staticmethod
-    def delete(id) -> bool:
+    def delete(id=None, uuid=None) -> bool:
         """
-        Elimina un registro por su ID.
+        Elimina un registro por su ID o UUID.
 
         params: 
             id: ID del registro a eliminar.
+            uuid: UUID del registro a eliminar.
         raises: 
             [[ entity_name.capitalize() ]]NotFoundError: Si no existe el registro con el ID dado.
             [[ entity_name.capitalize() ]]ValueError:  Si el valor de entrada no es válido.
@@ -337,11 +361,24 @@ class [[ entity_name.capitalize() ]]Repository:
             True si la eliminación fue exitosa
         """
 
-        if not is_integer(id):
+        # Validar que haya un id o uuid
+        if not id and not uuid:
+            raise [[ entity_name.capitalize() ]]ValueError(field="id/uuid", detail="The id or uuid field is required")
+
+        # validar el id
+        if id and not is_integer(id):
             raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="El ID debe ser un entero.")
 
+        # validar el uuid
+        if uuid and not is_uuid(uuid):
+            raise [[ entity_name.capitalize() ]]ValueError(field="uuid", detail="El UUID debe ser válido.")
+
         try:
-            instance = [[ entity_name.capitalize() ]].objects.get(id=id)
+            if id is not None:
+                instance = [[ entity_name.capitalize() ]].objects.get(id=id)
+            else:
+                instance = [[ entity_name.capitalize() ]].objects.get(uuid=uuid)
+    
             instance.delete()
             return True
 

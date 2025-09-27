@@ -95,12 +95,13 @@ class [[ entity_name.capitalize() ]]Service:
         return saved_entity.to_dict()
 
 
-    def retrieve(self, entity_id: int) -> dict:
+    def retrieve(self, entity_id: int = None, entity_uuid: str = None) -> dict:
         """
-        Recupera una instancia de [[ entity_name.lower() ]] por su ID.
+        Recupera una instancia de [[ entity_name.lower() ]] por su ID o UUID.
 
         param: 
             entity_id: ID de la instancia a recuperar.
+            entity_uuid: UUID de la instancia a recuperar.
         return: 
             La entidad recuperada.
         raises:
@@ -110,17 +111,18 @@ class [[ entity_name.capitalize() ]]Service:
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
 
-        entity = self.repository.get_by_id(id=entity_id)
+        entity = self.repository.get_by_id(id=entity_id, uuid=entity_uuid)
 
         return entity.to_dict()
 
 
-    def update(self, entity_id: int, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None,adicionalData=None) -> dict:
+    def update(self, entity_id: int = None, entity_uuid: str = None, data = None, external_id: Optional[int]=None, externals: Optional[List[int]]=None,adicionalData=None) -> dict:
         """
         Actualiza una instancia existente de [[ entity_name.lower() ]].
 
         params:
             entity_id: ID de la instancia a actualizar.
+            entity_uuid: UUID de la instancia a actualizar.
             data: Diccionario o DTO con los datos a actualizar.
             external_id: ID del padre si es necesario (opcional).
             externals: Lista de IDs de entidades relacionadas (opcional).
@@ -134,9 +136,18 @@ class [[ entity_name.capitalize() ]]Service:
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
+        # Validación de entrada
+        if not entity_id and not entity_uuid:
+            raise [[ entity_name.capitalize() ]]ValueError(field="id/uuid", detail="The id or uuid field is required")
+        
+        if not data:
+            raise [[ entity_name.capitalize() ]]ValueError(field="data", detail="The data field is required")
 
         # Recuperar la entidad
-        entity = self.repository.get_by_id(id=entity_id)
+        entity = self.repository.get_by_id(id=entity_id, uuid=entity_uuid)
+
+        if not entity:
+            raise [[ entity_name.capitalize() ]]NotFoundError(id=entity_id or entity_uuid)
 
         # actualizar la instancia y validar
         entity.update(data)     
@@ -148,12 +159,13 @@ class [[ entity_name.capitalize() ]]Service:
         return updated_entity.to_dict()
 
 
-    def delete(self, entity_id: int) -> bool:
+    def delete(self, entity_id: int = None, entity_uuid: str = None) -> bool:
         """
         Elimina una instancia de [[ entity_name.lower() ]].
 
         params:
             entity_id: ID de la instancia a eliminar.
+            entity_uuid: UUID de la instancia a eliminar.
         return: 
             True/False (depende del exito de la operacion)
         raises:
@@ -163,12 +175,11 @@ class [[ entity_name.capitalize() ]]Service:
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).            
         """
-        
-        # Verifica si la entidad existe
-        if not self.repository.exists_by_field(field_name="id", value=entity_id):
-            raise [[ entity_name.capitalize() ]]NotFoundError(id=entity_id)
+        # Validación de entrada
+        if not entity_id and not entity_uuid:
+            raise [[ entity_name.capitalize() ]]ValueError(field="id/uuid", detail="The id or uuid field is required")
 
         # Eliminación en el repositorio
-        self.repository.delete(id=entity_id)
+        self.repository.delete(id=entity_id, uuid=entity_uuid)
 
         return True

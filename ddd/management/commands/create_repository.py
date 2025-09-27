@@ -21,6 +21,7 @@ class CreateRepositoryCommand:
             exceptions_path = os.path.join(repository_dir, 'exceptions.py')
             clean_dict_of_keys_path = os.path.join(utils_dir, 'clean_dict_of_keys.py')
             is_integer_path = os.path.join(utils_dir, 'is_integer.py')
+            is_uuid_path = os.path.join(utils_dir, 'is_uuid.py')
 
             # decodficar app_path
             app_name, last_app_name, app_route, relative_app_path = decodeAppPath(app_path)
@@ -54,6 +55,9 @@ class CreateRepositoryCommand:
 
             # Crear archivo is_integer.py
             readWriteTemplate(templateName = 'utils', fileName='is_integer.py', render_params={}, repository_path=is_integer_path, failIfError=False, simulate=simulate)
+
+            # Crear archivo is_uuid.py
+            readWriteTemplate(templateName = 'utils', fileName='is_uuid.py', render_params={}, repository_path=is_uuid_path, failIfError=False, simulate=simulate)
 
             #renderizar class.py
             readWriteTemplate(templateName = 'repository', fileName='class.py', render_params={'entity_name':entity_name, 'app_name':app_name}, repository_path=repository_path, failIfError=True, simulate=simulate)
