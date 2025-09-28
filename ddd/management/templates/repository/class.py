@@ -362,15 +362,15 @@ class [[ entity_name.capitalize() ]]Repository:
         """
 
         # Validar que haya un id o uuid
-        if not id and not uuid:
+        if id is None and uuid is None:
             raise [[ entity_name.capitalize() ]]ValueError(field="id/uuid", detail="The id or uuid field is required")
 
         # validar el id
-        if id and not is_integer(id):
+        if id is not None and not is_integer(id):
             raise [[ entity_name.capitalize() ]]ValueError(field="id", detail="El ID debe ser un entero.")
 
         # validar el uuid
-        if uuid and not is_uuid(uuid):
+        if uuid is not None and not is_uuid(uuid):
             raise [[ entity_name.capitalize() ]]ValueError(field="uuid", detail="El UUID debe ser válido.")
 
         try:

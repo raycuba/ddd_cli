@@ -67,7 +67,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
 
         [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
 
-        if id:
+        if id is not None:
             # Recuperar un registro específico por ID
             try:
 
