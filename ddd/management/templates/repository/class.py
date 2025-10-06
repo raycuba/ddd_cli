@@ -307,7 +307,7 @@ class [[ entity_name.capitalize() ]]Repository:
                 # Actualizar cada campo de la entidad en el modelo
                 for key, value in entity.to_dict().items():
                     if hasattr(instance, key):
-                        if not key in instance.SPECIAL_FIELDS: # No actualizar campos especiales
+                        if not key in entity.SPECIAL_FIELDS: # No actualizar campos especiales
                             setattr(instance, key, value)
 
                 # Si se proporciona un ID de otra entidad, actualizarlo
