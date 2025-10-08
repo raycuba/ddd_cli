@@ -15,7 +15,7 @@ class [[ entity_name.capitalize() ]]Service:
     # [[ entity_name.lower() ]]_list = []    
 
 
-    def __init__(self, repository: [[ entity_name.capitalize() ]]Repository):
+    def __init__(self, repository: [[ entity_name.capitalize() ]]Repository = [[ entity_name.capitalize() ]]Repository()):
         """
         Inicializa el servicio con el repositorio correspondiente.
 

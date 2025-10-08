@@ -27,9 +27,6 @@ from .infrastructure.exceptions import (
 # Importar servicios específicos del dominio
 from [[ app_name.lower() ]].services.[[ entity_name.lower() ]]_service import [[ entity_name.capitalize() ]]Service
 
-# Importar repositorios específicos de la infraestructura
-from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
-
 class [[ entity_name.capitalize() ]]APIView(APIView):
     """
     API para manejar operaciones CRUD relacionadas con [[ entity_name.lower() ]].
@@ -65,7 +62,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         - Si no se proporciona `id`, recupera todos los registros.
         """
 
-        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
         if id is not None:
             # Recuperar un registro específico por ID
@@ -146,7 +143,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         # Si se proporcionan IDs de entidades relacionadas, agregarlos
         externals = request.data.get('externals', None)
 
-        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio        
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio        
 
         try:
             # Llamar al servicio de creación con los datos proporcionados
@@ -204,7 +201,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         # Si se proporcionan IDs de entidades relacionadas, agregarlos
         externals = request.data.get('externals', None)       
         
-        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio        
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio        
 
         try:
             # Llamar al servicio de actualización con el ID y los nuevos datos
@@ -249,7 +246,7 @@ class [[ entity_name.capitalize() ]]APIView(APIView):
         - Llama al servicio de eliminación para manejar la lógica de negocio.
         """
         
-        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
         
         try:
             # Llamar al servicio de eliminación con el ID proporcionado

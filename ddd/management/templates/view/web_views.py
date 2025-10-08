@@ -29,9 +29,6 @@ from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import (
 # Importar servicios específicos del dominio
 from [[ app_name.lower() ]].services.[[ entity_name.lower() ]]_service import [[ entity_name.capitalize() ]]Service
 
-# Importar repositorios específicos de la infraestructura
-from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
-
 
 def [[ entity_name.lower() ]]_list(request):
     """
@@ -40,7 +37,7 @@ def [[ entity_name.lower() ]]_list(request):
 
     [[ entity_name.lower() ]]List = [] #inicialize list
 
-    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
     # Obtener la lista del repositorio
     try:
@@ -71,7 +68,7 @@ def [[ entity_name.lower() ]]_create(request):
 
         if form.is_valid():
             form_data = form.cleaned_data
-            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
             # Obtener el ID de la entidad relacionada si existe
             external_id = request.POST.get('external_id', None)
@@ -114,7 +111,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
         # Redireccion si no se proporciona un ID
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
     try:
         # Obtener los datos de la entidad desde el servicio
@@ -194,7 +191,7 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
     if id is None:
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
     try:
         # Obtener los datos de la entidad desde el servicio
@@ -230,7 +227,7 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
         messages.error(request, "Non Valid id to delete")
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
     try:
         # LLamar al servicio de eliminación

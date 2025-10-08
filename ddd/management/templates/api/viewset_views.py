@@ -27,9 +27,6 @@ from .infrastructure.exceptions import (
 # importar servicios específicos del dominio
 from [[ app_name.lower() ]].services.[[ entity_name.lower() ]]_service import [[ entity_name.capitalize() ]]Service
 
-# Importar repositorios específicos de la infraestructura
-from [[ app_name.lower() ]].infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
-
 class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
     """
     ViewSet para manejar operaciones CRUD relacionadas con [[ entity_name.lower() ]].
@@ -65,7 +62,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         - Se utiliza el servicio `list_[[ entity_name.lower() ]]` para manejar la lógica.
         """
 
-        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
         try:
             # Llamar al servicio para recuperar todos los registros
@@ -107,7 +104,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         - Utiliza el servicio `retrieve_[[ entity_name.lower() ]]` para manejar la lógica.
         """
 
-        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
         try:
             # Llamar al servicio para recuperar un registro específico
@@ -164,7 +161,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         # Si se proporcionan IDs de entidades relacionadas, agregarlos
         externals = request.data.get('externals', None)   
         
-        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
         try:
             # Llamar al servicio para crear el registro
@@ -222,7 +219,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         # Si se proporcionan IDs de entidades relacionadas, agregarlos
         externals = request.data.get('externals', None)                  
 
-        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
         try:
             # Llamar al servicio para actualizar el registro
@@ -267,7 +264,7 @@ class [[ entity_name.capitalize() ]]ViewSet(ViewSet):
         - Llama al servicio `delete_[[ entity_name.lower() ]]` para manejar la eliminación.
         """
 
-        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service(repository=[[ entity_name.capitalize() ]]Repository()) # Instanciar el servicio
+        [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
 
         try:
             # Llamar al servicio para eliminar el registro

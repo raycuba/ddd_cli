@@ -10,18 +10,7 @@ from ..domain.exceptions import [[ entity_name.capitalize() ]]ValueError
 T = TypeVar("T")
 
 class Mapper:
-
-    @staticmethod
-    def entity_to_dict(entity_instance: Any) -> dict:
-        """
-        Convierte una entidad en un diccionario que contiene solo sus propios campos
-        Es exclusivo para el sistema basico DDD (No cambiar)
-        """
-
-        # Convertir la entidad a diccionario directamente con asdict (solo los campos de la entidad)
-        return asdict(entity_instance)
     
-
     @staticmethod
     def model_to_entity(model_instance: models.Model, entity_class: Type[T]) -> T:
         """
@@ -46,10 +35,12 @@ class Mapper:
             EmailField -> (str)
             SlugField -> (str)
             AutoField (ID auto-generado) -> (int)
+            ImageField -> (str)
+            FileField -> (str)
         """
 
         if not model_instance:
-            raise [[ entity_name.capitalize() ]]ValueError("Model instance cannot be None. Cannot convert None to entity")
+            raise [[ entity_name.capitalize() ]]ValueError(_.tx("Model_instance_cannot_be_None_Cannot_convert_None_to_entity"))
 
         entity_field_names = {f.name for f in fields(entity_class)}
 
@@ -62,6 +53,9 @@ class Mapper:
                 value = getattr(model_instance, field_name)
             except AttributeError:
                 continue
+            
+            #mostrar el tipo de campo
+            field_object = model_instance._meta.get_field(field_name)
 
             # Manejo especial para diferentes tipos de campo
             if isinstance(value, models.Manager):
@@ -86,21 +80,38 @@ class Mapper:
             elif hasattr(value, 'pk'):
                 # Es una relación ForeignKey/OneToOne -> extraer ID
                 value = value.pk if value else None
+                
+            elif isinstance(field_object, (models.FileField, models.ImageField)):
+                try:
+                    if value and value.name:
+                        value = value.url  # esto lanza excepción si no hay archivo
+                    else:
+                        value = None
+                except ValueError:
+                    value = None
+                    
+            else:
+                # Otros tipos (CharField, IntegerField, BooleanField, etc.) se dejan tal cual
+                pass
 
             # Añadir al diccionario solo si es válido
             data[field_name] = value
 
         return entity_class(**data)
     
-
+    
+    @staticmethod
+    def entity_to_dict(entity_instance: Any) -> dict:
+        """Convierte una entidad en un diccionario que contiene solo sus propios campos"""
+        # Convertir la entidad a diccionario directamente con asdict (solo los campos de la entidad)
+        return asdict(entity_instance)
+    
     @staticmethod
     def model_to_dict(model_instance: models.Model) -> dict:
         """
-        Convierte una entidad de modelo Django a diccionario usando sus campos reales.
+        Convierte un modelo Django a diccionario usando sus campos reales.
         Alternativa segura a asdict().
-        Es exclusivo para el sistema basico DDD donde las entidades no deben contener datos de otras entidades (No cambiar)
         """
-
         data = {}
         for field in model_instance._meta.get_fields():
             try:
@@ -119,36 +130,4 @@ class Mapper:
             except AttributeError:
                 continue  # Algunos campos virtuales pueden no estar disponibles
         return data
-
-"""
-Si necesitas obtener mas detalles sobre una instancia de tu model a parte del ID de las relaciones
-recuerda que en un enfoque DDD las entidades no deben contener datos de otras entidades
-asi que deberas extender el Mapper para utilizar/generar DTO y asi tus vistas o apis 
-ejemplo: 
-    #añade un DTO llamdo ListDto
-
-    @dataclass
-    class ListDto:
-        id: Optional[int] = None  
-        title: Optional[str] = None  
-        tipo: Optional[str] = None #FK a un model llamado Tipo
-        categorias: Optional[List[str]] = None #Relacion con un model llamdo Categorias
-
-        def to_dict(self) -> dict:
-            return asdict(self)
-
-    #añade la funcion en tu mapper
-    @staticmethod
-    def model_to_list_dto(model_instance: models.Model) -> ListDto:
-        dto = ListDto()
-        dto.id = model_instance.id
-        dto.title = model_instance.title
-        dto.tipo = model_instance.tipo.nombre if model_instance.tipo else None
-        dto.categorias = list(model_instance.categorias.values_list('nombre', flat=True)) if model_instance.categorias else None
-
-llamaras el mapper desde el repositorio pasando el DTO al servicio 
-y asi obtendras un DTO con los datos que necesitas en la vista o api
-
-"""
-
     
