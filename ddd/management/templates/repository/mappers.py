@@ -83,8 +83,8 @@ class Mapper:
                 
             elif isinstance(field_object, (models.FileField, models.ImageField)):
                 try:
-                    if value and value.name:
-                        value = value.url  # esto lanza excepción si no hay archivo
+                    if value and value.name and value.url:
+                        value = {"file_name": value.name, "url": value.url} # Esto lanza una excepción si el archivo no existe
                     else:
                         value = None
                 except ValueError:
