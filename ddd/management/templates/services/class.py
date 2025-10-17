@@ -15,7 +15,7 @@ class [[ entity_name.capitalize() ]]Service:
     # [[ entity_name.lower() ]]_list = []    
 
 
-    def __init__(self, repository: [[ entity_name.capitalize() ]]Repository = [[ entity_name.capitalize() ]]Repository()):
+    def __init__(self, repository: Optional[[[ entity_name.capitalize() ]]Repository] = None):
         """
         Inicializa el servicio con el repositorio correspondiente.
 
@@ -23,7 +23,7 @@ class [[ entity_name.capitalize() ]]Service:
             repository: Repositorio que maneja la persistencia de [[ entity_name.lower() ]].
         """
 
-        self.repository = repository    
+        self.repository = repository or [[ entity_name.capitalize() ]]Repository()
 
 
     def list(self, filters: Optional[dict] = None) -> List[dict]:
