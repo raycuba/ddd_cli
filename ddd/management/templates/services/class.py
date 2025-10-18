@@ -116,7 +116,7 @@ class [[ entity_name.capitalize() ]]Service:
         return entity.to_dict()
 
 
-    def update(self, entity_id: int = None, entity_uuid: str = None, data = None, external_id: Optional[int]=None, externals: Optional[List[int]]=None,adicionalData=None) -> dict:
+    def update(self, entity_id: int = None, entity_uuid: str = None, data = None, external_id: Optional[int]=None, externals: Optional[List[int]]=None, adicionalData=None) -> dict:
         """
         Actualiza una instancia existente de [[ entity_name.lower() ]].
 

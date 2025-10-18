@@ -6,20 +6,21 @@ class CreateRepositoryCommand:
         parser = subparsers.add_parser("create-repository", help='Create a new repository')
         parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument('entity_name', type=str, help='The name of the entity')
+        parser.add_argument("--pydantic", action="store_true", help="Create a Pydantic structure for this entity")
         parser.add_argument("--simulate", action="store_true", help="Simulate the creation of this entity without writing files")        
         parser.set_defaults(func=self.execute)
 
     def execute(self, args):
-        self.create_repository(args.app_path, args.entity_name, args.simulate)
+        self.create_repository(args.app_path, args.entity_name, args.pydantic, args.simulate)
 
-    def create_repository(self, app_path, entity_name, simulate=False, **kwargs):
+    def create_repository(self, app_path, entity_name, pydantic=False, simulate=False, **kwargs):
             """Crea un nuevo repositorio"""
             utils_dir = os.path.join(app_path, 'utils')
             repository_dir = os.path.join(app_path, 'infrastructure')
             repository_path = os.path.join(repository_dir, entity_name.lower() + '_repository.py')
             mappers_path = os.path.join(repository_dir, 'mappers.py')
             exceptions_path = os.path.join(repository_dir, 'exceptions.py')
-            clean_dict_of_keys_path = os.path.join(utils_dir, 'clean_dict_of_keys.py')
+            filter_dict_path = os.path.join(utils_dir, 'filter_dict.py')
             is_integer_path = os.path.join(utils_dir, 'is_integer.py')
             is_uuid_path = os.path.join(utils_dir, 'is_uuid.py')
 
@@ -45,19 +46,61 @@ class CreateRepositoryCommand:
                     return
             
             # Crear archivo de mappers.py        
-            readWriteTemplate(templateName = 'repository', fileName='mappers.py', render_params={'entity_name':entity_name, 'app_name':app_name}, repository_path=mappers_path, failIfError=False, simulate=simulate)
+            readWriteTemplate(
+                templateName = 'repository', 
+                fileName='mappers_dataclass.py' if not pydantic else 'mappers_pydantic.py',
+                render_params={'entity_name':entity_name, 'app_name':app_name}, 
+                repository_path=mappers_path, 
+                failIfError=False, 
+                simulate=simulate
+            )
 
             # Crear archivo de exceptions.py
-            readWriteTemplate(templateName = 'repository', fileName='exceptions.py', render_params={}, repository_path=exceptions_path, failIfError=False, simulate=simulate)
+            readWriteTemplate(
+                templateName = 'repository', 
+                fileName='exceptions.py', 
+                render_params={}, 
+                repository_path=exceptions_path, 
+                failIfError=False, 
+                simulate=simulate
+            )
 
-            # Crear archivo clean_dict_of_keys.py
-            readWriteTemplate(templateName = 'utils', fileName='clean_dict_of_keys.py', render_params={}, repository_path=clean_dict_of_keys_path, failIfError=False, simulate=simulate)
+            # Crear archivo filter_dict.py
+            readWriteTemplate(
+                templateName = 'utils', 
+                fileName='filter_dict.py',
+                render_params={}, 
+                repository_path=filter_dict_path, 
+                failIfError=False, 
+                simulate=simulate
+            )
 
             # Crear archivo is_integer.py
-            readWriteTemplate(templateName = 'utils', fileName='is_integer.py', render_params={}, repository_path=is_integer_path, failIfError=False, simulate=simulate)
+            readWriteTemplate(
+                templateName = 'utils', 
+                fileName='is_integer.py', 
+                render_params={}, 
+                repository_path=is_integer_path, 
+                failIfError=False, 
+                simulate=simulate
+            )
 
             # Crear archivo is_uuid.py
-            readWriteTemplate(templateName = 'utils', fileName='is_uuid.py', render_params={}, repository_path=is_uuid_path, failIfError=False, simulate=simulate)
+            readWriteTemplate(
+                templateName = 'utils', 
+                fileName='is_uuid.py', 
+                render_params={}, 
+                repository_path=is_uuid_path, 
+                failIfError=False, 
+                simulate=simulate
+            )
 
             #renderizar class.py
-            readWriteTemplate(templateName = 'repository', fileName='class.py', render_params={'entity_name':entity_name, 'app_name':app_name}, repository_path=repository_path, failIfError=True, simulate=simulate)
+            readWriteTemplate(
+                templateName = 'repository', 
+                fileName='class.py', 
+                render_params={'entity_name':entity_name, 'app_name':app_name}, 
+                repository_path=repository_path, 
+                failIfError=True, 
+                simulate=simulate
+            )

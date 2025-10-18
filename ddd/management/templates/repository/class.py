@@ -7,7 +7,7 @@ from django.forms import ValidationError
 # importa las entidades utilizadas aqui
 from ..models import [[ entity_name.capitalize() ]]
 from .mappers import Mapper
-from ..utils.clean_dict_of_keys import clean_dict_of_keys
+from ..utils.filter_dict import filter_dict_by_keys
 from ..utils.is_integer import is_integer
 from ..utils.is_uuid import is_uuid
 from ..domain.entities import [[ entity_name.capitalize() ]]Entity
@@ -211,8 +211,8 @@ class [[ entity_name.capitalize() ]]Repository:
             #convertir a dict
             data = entity.to_dict()        
 
-            # Eliminar de la data las propiedades que requieren un tratamiento especial
-            data = clean_dict_of_keys(data, keys=entity.SPECIAL_FIELDS)
+            # Filtrar solo los campos actualizables
+            data = filter_dict_by_keys(data, keys=entity.REPO_MUTABLE_FIELDS)  
 
             # Crear el registro a partir de los campos presentes en la 'data'
             instance = [[ entity_name.capitalize() ]](**data)
@@ -304,11 +304,10 @@ class [[ entity_name.capitalize() ]]Repository:
                 # Asegurar que todas las operaciones se realicen en una transacción
                 # Esto garantiza que si algo falla, no se guarden cambios parciales            
 
-                # Actualizar cada campo de la entidad en el modelo
-                for key, value in entity.to_dict().items():
-                    if hasattr(instance, key):
-                        if not key in entity.SPECIAL_FIELDS: # No actualizar campos especiales
-                            setattr(instance, key, value)
+                # Solo actualizar campos simples (whitelist)
+                for field in [[ entity_name.capitalize() ]]Entity.REPO_MUTABLE_FIELDS:
+                    value = getattr(entity, field)
+                    setattr(instance, field, value)
 
                 # Si se proporciona un ID de otra entidad, actualizarlo
                 if external_id is not None:

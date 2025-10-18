@@ -6,17 +6,19 @@ class CreateEntityCommand:
         parser = subparsers.add_parser("create-entity", help="Create a new entity")
         parser.add_argument("app_path", type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument("entity_name", type=str, help="The name of the entity")
+        parser.add_argument("--pydantic", action="store_true", help="Create a Pydantic structure for this entity")
         parser.add_argument("--split", action="store_true", help="Create a separate file for this entity")
         parser.add_argument("--simulate", action="store_true", help="Simulate the creation of this entity without writing files")
         parser.set_defaults(func=self.execute)     
 
     def execute(self, args):
-        self.create_entity(args.app_path, args.entity_name, args.split, args.simulate)
+        self.create_entity(args.app_path, args.entity_name, args.pydantic, args.split, args.simulate)
 
-    def create_entity(self, app_path, entity_name, split=False, simulate=False, **kwargs):
+    def create_entity(self, app_path, entity_name, pydantic=False, split=False, simulate=False, **kwargs):
         """Crea una nueva entidad"""
-        exceptions_dir = os.path.join(app_path, 'domain') 
-        exceptions_path = os.path.join(exceptions_dir, 'exceptions.py')        
+        domain_dir = os.path.join(app_path, 'domain') 
+        exceptions_path = os.path.join(domain_dir, 'exceptions.py')        
+        schemas_path = os.path.join(domain_dir, 'schemas.py')
 
         entities_dir = os.path.join(app_path, 'domain') if not split else os.path.join(app_path, 'domain', 'entities')
         entities_path = os.path.join(entities_dir, 'entities.py') if not split else os.path.join(entities_dir, entity_name.lower() + '_entity.py')
@@ -42,7 +44,7 @@ class CreateEntityCommand:
         if not os.path.exists(entities_path) or simulate:
             readWriteTemplate(
                 templateName='entity',
-                fileName='imports.py',
+                fileName='imports_dataclass.py' if not pydantic else 'imports_pydantic.py',
                 render_params={'entity_name': entity_name},
                 repository_path=entities_path,
                 failIfError=True,
@@ -52,7 +54,7 @@ class CreateEntityCommand:
         #renderizar class
         readWriteTemplate(
             templateName='entity',
-            fileName='class.py',
+            fileName='class_dataclass.py' if not pydantic else 'class_pydantic.py',
             render_params={'entity_name': entity_name},
             repository_path=entities_path,
             failIfError=True,
@@ -69,3 +71,14 @@ class CreateEntityCommand:
             failIfError=True,
             simulate=simulate
         )
+        
+        if pydantic:
+            #renderizar schemas
+            readWriteTemplate(
+                templateName='entity',
+                fileName='schemas.py',
+                render_params={},
+                repository_path=schemas_path,
+                failIfError=True,
+                simulate=simulate
+            )            

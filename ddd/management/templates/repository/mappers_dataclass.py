@@ -1,10 +1,10 @@
 # utils/mappers.py
+import uuid
+import decimal
 from dataclasses import asdict, fields
 from typing import Type, TypeVar, Any
 from django.db import models
 from datetime import datetime, date
-import decimal
-import uuid
 from ..domain.exceptions import [[ entity_name.capitalize() ]]ValueError
 
 T = TypeVar("T")
@@ -13,34 +13,10 @@ class Mapper:
     
     @staticmethod
     def model_to_entity(model_instance: models.Model, entity_class: Type[T]) -> T:
-        """
-        Convierte una instancia de modelo Django a una entidad basada solo en los campos de la entidad.
-        Es exclusivo para el sistema basico DDD donde las entidades no deben contener datos de otras entidades (No cambiar)
-
-        Conversión según el tipo de propiedad de Django Model:
-            CharField -> (str).
-            TextField -> (str).
-            IntegerField -> (int).
-            FloatField -> (float)
-            BooleanField -> (bool)
-            DateField -> (datetime.date)
-            DateTimeField -> (datetime.time)
-            ForeignKey -> ID (int/str)
-            OneToOneField -> ID (int/str)            
-            ManyToManyField -> lista de IDs (int o str)
-            DecimalField -> (decimal.Decimal)
-            UUIDField -> uuid.UUID
-            JSONField -> (dict o list)
-            FileField o ImageField -> ruta de archivo(str)
-            EmailField -> (str)
-            SlugField -> (str)
-            AutoField (ID auto-generado) -> (int)
-            ImageField -> (str)
-            FileField -> (str)
-        """
+        """Convierte modelo Django → entidad Dataclass con validación de tipos y manejo especial de campos."""
 
         if not model_instance:
-            raise [[ entity_name.capitalize() ]]ValueError(_.tx("Model_instance_cannot_be_None_Cannot_convert_None_to_entity"))
+            raise [[ entity_name.capitalize() ]]ValueError("Model_instance_cannot_be_None_Cannot_convert_None_to_entity")
 
         entity_field_names = {f.name for f in fields(entity_class)}
 

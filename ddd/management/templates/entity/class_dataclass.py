@@ -7,13 +7,13 @@ class [[ entity_name.capitalize() ]]Entity:
     con [[ entity_name.lower() ]] en el sistema.
     """
 
-    # Lista de campos especiales
-    # Los campos especiales son aquellos que no deben ser actualizados directamente
-    # o que requieren un tratamiento especial al ser guardados.
-    # Por ejemplo: id, uuid, external_id, etc.
-    SPECIAL_FIELDS = (
-        'id', 'uuid', 'external_id', 'externals'
-    )    
+    # Lista de campos actualizables en el repositorio (para lógica de actualización)
+    REPO_MUTABLE_FIELDS = {    
+        'attributeName',
+        'attributeEmail',
+        'external_id',
+        'externals',
+    }   
 
     # Identificadores
     id: Optional[int] = None  # ID relacionado con la base de datos
@@ -29,11 +29,9 @@ class [[ entity_name.capitalize() ]]Entity:
     # Relaciones Many-to-Many o Reverse FK
     externals: Optional[List[int]] = None  # Lista de IDs de entidades relacionadas
 
-    
     # Descomentar si se quiere hacer una validacion estricta
     #def __post_init__(self):
     #    self.validate()   
-
 
     def validate(self) -> None:
         """
@@ -47,7 +45,6 @@ class [[ entity_name.capitalize() ]]Entity:
 
         if self.attributeEmail and len(self.attributeEmail) > 500:
             raise [[ entity_name.capitalize() ]]ValueError(field="attributeEmail", detail="attributeEmail must not exceed 500 characters")
-
 
     def update(self, data:dict, addMode:bool = False) -> None:
         """
@@ -67,20 +64,17 @@ class [[ entity_name.capitalize() ]]Entity:
 
         self.validate()    
 
-
     def to_dict(self) -> dict:
         """
         Convierte la entidad a un diccionario.
         """
         return self.__dict__
-
-        
+ 
     @staticmethod
     def from_dict(data: dict) -> "[[ entity_name.capitalize() ]]Entity":
         """
         Crea una instancia de la entidad a partir de un diccionario.
         """
-
         # aqui quitaremos de 'data' los campos no deseados para la entity
 
         # construir la entidad
@@ -92,43 +86,51 @@ class [[ entity_name.capitalize() ]]Entity:
         return entity
         
 
-    '''
-    Ejemplos de: 
+'''
+Guía para añadir nuevos campos a entidades Dataclass:
 
-    - Atributos obligatorios y opcionales
-        name: Optional[str] = None  # Nombre 
-        email: Optional[str] = None  # Email opcional
-        slug: Optional[str] = None  # Identificador único legible para URLs
-        content: Optional[str] = None  # Contenido detallado o descripción extensa
-        price: Optional[float] = None  # Precio o valor numérico
-        quantity: Optional[int] = None  # Cantidad disponible o asociada
-        rating: Optional[float] = None  # Valoración media (ej. 4.5 estrellas)
-        is_active: bool = True  # Estado activo/inactivo
-        is_featured: Optional[bool] = None  # Si es destacado/promocionado
-        is_valid: Optional[bool] = True # Opcional, pero valor inicial no None
-        updated_at: Optional[str] = None  # Fecha de última modificación (ISO 8601)
-        deleted_at: Optional[str] = None  # Fecha de eliminación o "soft delete"
-        image: Optional[str] = None  # URL hacia una imagen asociada
-        video: Optional[str] = None  # URL hacia un video asociado
-        latitude: Optional[float] = None  # Coordenada de latitud
-        longitude: Optional[float] = None  # Coordenada de longitud
-        location_name: Optional[str] = None  # Nombre del lugar (dirección o ciudad)
-        created_by: Optional[int] = None  # Usuario que creó la entidad
-        updated_by: Optional[int] = None  # Usuario que actualizó la entidad
-        order_status: Optional[str] = None  # Estado de la orden (e.g., "PENDING", "COMPLETED")
-        total_price: Optional[float] = None  # Precio total de la orden
-        config: Optional[Dict] = field(default_factory=dict)  # Configuración adicional, ej. {"shipping": "free", "gift_wrap": True} 
-        categories: Optional[List[str]] = field(default_factory=list)  # Lista de categorías asociadas, ej. ["electronics", "clothing"]
-        items: Optional[List[Dict]] = None  # Lista de artículos asociados ej. [{"product_id": 1, "quantity": 2}, {"product_id": 2, "quantity": 1}]
+- ✅ **Atributos opcionales**: usa `Optional[Tipo] = None`
+- ✅ **Listas/Dicts por defecto**: usa `field(default_factory=list)` o `field(default_factory=dict)`
+- ✅ **Atributos obligatorios**: define sin valor por defecto → fallará si no se proporciona
+- ✅ **Valores por defecto simples**: asigna directamente (`is_active: bool = True`)
+- ✅ **Fechas/horas**: usa `str` en formato ISO (ej. "2023-10-05T14:48:00Z") → convierte a datetime al usar
+- ✅ **Archivos/URLs**: usa Optional[dict] o crea submodelos si es complejo
 
-    - Atributos de relación
-        external_id: Optional[int] = None  # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
-        external_uuid: Optional[str] = None  # UUID externo
-        externals: Optional[List[int]] = None  # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
-        externals_uuids: Optional[List[str]] = None  # Lista de UUIDs externos
+Ejemplos:
 
-    Nota: en un @dataclass lo mejor es que los atributos sean opcionales,
-    y que se inicialicen con None, para evitar problemas de validación
-    y que se puedan añadir nuevos atributos sin problemas.
+    # Atributos simples opcionales
+    name: Optional[str] = None
+    email: Optional[str] = None
+    price: Optional[float] = None
+    quantity: Optional[int] = None
+    is_featured: Optional[bool] = None
 
-    '''
+    # Atributos con valor por defecto (no None)
+    is_active: bool = True
+    rating: float = 0.0
+
+    # Colecciones con valor por defecto (¡nunca asignes [] o {} directamente!)
+    categories: List[str] = field(default_factory=list)
+    config: Dict[str, Any] = field(default_factory=dict)
+    items: List[Dict[str, Any]] = field(default_factory=list)
+
+    # Fechas (usa str en formato ISO)
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
+    # Relaciones (IDs)
+    external_id: Optional[int] = None # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
+    externals: Optional[List[int]] = None # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
+
+    # Referencias UUID a otras entidades (solo son refencias)
+    external_uuid: Optional[str] = None  # UUID externo (para relaciones 1-a-1)
+    externals_uuids: Optional[List[str]] = None  # Lista de UUIDs externos  (para relaciones 1-a-M o M-a-M)
+
+    # Objetos complejos (mejor usar dict)
+    image: Optional[dict] = None
+    address: Optional[dict] = None
+
+⚠️ Importante:
+- Los campos se validan automáticamente al crear la instancia
+- Para validaciones personalizadas, usa `@dataclass` o `@field_validator`
+'''

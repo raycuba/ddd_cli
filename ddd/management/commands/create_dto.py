@@ -6,6 +6,7 @@ class CreateDTOCommand:
         parser = subparsers.add_parser('create-dto', help='Create a new DTO')
         parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument('dto_name', type=str, help='The name of the DTO')
+        parser.add_argument("--pydantic", action="store_true", help="Create a Pydantic structure for this entity")        
         parser.add_argument(
             '--split', action='store_true', help='Create a separate file for this DTO'
         )        
@@ -13,9 +14,9 @@ class CreateDTOCommand:
         parser.set_defaults(func=self.execute) 
 
     def execute(self, args):
-        self.create_dto(args.app_path, args.dto_name, args.split, args.simulate)
+        self.create_dto(args.app_path, args.dto_name, args.pydantic, args.split, args.simulate)
 
-    def create_dto(self, app_path, dto_name, split=False, simulate=False, **kwargs):
+    def create_dto(self, app_path, dto_name, pydantic=False, split=False, simulate=False, **kwargs):
         """Crea un nuevo DTO"""
         dtos_dir = app_path if not split else os.path.join(app_path, 'dtos')
         dtos_path = os.path.join(dtos_dir, 'dtos.py') if not split else os.path.join(dtos_dir, dto_name.lower() + '_dto.py')
@@ -40,7 +41,7 @@ class CreateDTOCommand:
         if not os.path.exists(dtos_path) or simulate:
             readWriteTemplate(
                 templateName='dto',
-                fileName='imports.py',
+                fileName='imports_dataclass.py' if not pydantic else 'imports_pydantic.py',
                 render_params={'dto_name': dto_name},
                 repository_path=dtos_path,
                 failIfError=True,
@@ -49,7 +50,7 @@ class CreateDTOCommand:
 
         readWriteTemplate(
             templateName='dto',
-            fileName='class.py',
+            fileName='class_dataclass.py' if not pydantic else 'class_pydantic.py',
             render_params={'dto_name': dto_name},
             repository_path=dtos_path,
             failIfError=True,
