@@ -33,30 +33,8 @@ class [[ dto_name.capitalize() ]]Dto(BaseModel):
         Transporte y validación básica de datos
         - Validaciones centradas en un conjunto específico de datos (integridad de datos)
         - Ejemplo: campos no nulos, longitud mínima
-        """
-
-    def update(self, data: Dict[str, Any], addMode: bool = False) -> None:
-        """
-        Actualiza los atributos de la entidad con valores nuevos.
-        si addMode = True permite añadir campos nuevos
-        :param data: Diccionario con los nuevos valores para los atributos.
-        :param addMode: Si es True, permite añadir nuevos campos que no existan en la entidad.
-        :raises ValueError: Si hay un error de estructura en los datos.
-        """
-        # Filtrar campos válidos
-        valid_data = {}
-        for key, value in data.items():
-            if hasattr(self, key) or addMode:
-                valid_data[key] = value
-        
-        # Crear una copia actualizada (Pydantic valida automáticamente)
-        updated = self.model_copy(update=valid_data)
-        
-        # Reemplazar los atributos actuales
-        for field, value in updated:
-            setattr(self, field, value)
-        
-        self.validate()      
+        """ 
+        pass
 
     def to_dict(self) -> Dict[str, Any]:
         """Convierte a diccionario (compatible con JSON)"""
