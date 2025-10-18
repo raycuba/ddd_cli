@@ -27,6 +27,7 @@ class [[ dto_name.capitalize() ]]Dto(BaseModel):
         }
     )    
 
+    @model_validator(mode='after')
     def validate(self) -> None:
         """
         Valida los datos del DTO.
@@ -96,7 +97,20 @@ Ejemplos:
 - Los campos se validan automáticamente al crear la instancia
 - Para validaciones personalizadas, usa `@model_validator` o `@field_validator`
 
-💡 Consejo: 
-Si añades un campo nuevo, no necesitas modificar `__init__`, 
+💡 Validadores: ejemplos de uso:
+
+    @model_validator(mode='after')
+    def validate(self) -> None:
+        if not self.attributeName or len(self.attributeName) < 3:
+            raise ValueError("attributeName must be at least 3 characters")
+
+    @field_validator('attributeEmail')
+    def validate_email(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None and "@" not in v:
+            raise ValueError("Invalid email address")
+        return v
+
+💡 Consejo:
+Si añades un campo nuevo, no necesitas modificar `__init__`,
 `to_dict()`, `from_dict()` ni `update()` → Pydantic lo maneja todo.
 '''
