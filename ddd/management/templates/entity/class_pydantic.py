@@ -1,18 +1,10 @@
-class [[ entity_name.capitalize() ]]Entity(BaseModel):
+class [[ entity_name.capitalize() ]]Entity(BaseEntity):
     """
     Entidad del dominio para [[ entity_name.lower() ]].
 
     Esta clase representa la lógica de negocio central y las reglas asociadas 
     con [[ entity_name.lower() ]] en el sistema.
     """
-
-    # Lista de campos actualizables en el repositorio (para lógica de actualización)
-    REPO_MUTABLE_FIELDS: ClassVar[set] = {    
-        'attributeName',
-        'attributeEmail',
-        'external_id',
-        'externals',
-    }
 
     # Identificadores
     id: Optional[int] = None  # ID relacionado con la base de datos
@@ -41,7 +33,7 @@ class [[ entity_name.capitalize() ]]Entity(BaseModel):
     )    
 
     @model_validator(mode='after')
-    def validate(self) -> None:
+    def validate(self) -> Self:
         """
         Valida la entidad antes de guardar o procesar.
         Lanza excepciones si las reglas de negocio no se cumplen.
@@ -54,32 +46,7 @@ class [[ entity_name.capitalize() ]]Entity(BaseModel):
         if self.attributeEmail and len(self.attributeEmail) > 500:
             raise [[ entity_name.capitalize() ]]ValueError(field="attributeEmail", detail="attributeEmail must not exceed 500 characters")
 
-    def update(self, data: Dict[str, Any], addMode: bool = False) -> None:
-        """
-        Actualiza los atributos de la entidad con valores nuevos.
-        si addMode = True permite añadir campos nuevos
-        :param data: Diccionario con los nuevos valores para los atributos.
-        :param addMode: Si es True, permite añadir nuevos campos que no existan en la entidad.
-        :raises ValueError: Si hay un error de estructura en los datos.
-        """
-        # Filtrar campos válidos
-        valid_data = {}
-        for key, value in data.items():
-            if hasattr(self, key) or addMode:
-                valid_data[key] = value
-        
-        # Crear una copia actualizada (Pydantic valida automáticamente)
-        updated = self.model_copy(update=valid_data)
-        
-        # Reemplazar los atributos actuales
-        for field, value in updated:
-            setattr(self, field, value)
-        
-        self.validate()
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convierte a diccionario (compatible con JSON)"""
-        return self.model_dump()
+        return self
         
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "[[ entity_name.capitalize() ]]Entity":
@@ -140,9 +107,10 @@ Ejemplos:
 💡 Validadores: ejemplos de uso:
 
     @model_validator(mode='after')
-    def validate(self) -> None:
+    def validate(self) -> self:
         if not self.attributeName or len(self.attributeName) < 3:
             raise ValueError("attributeName must be at least 3 characters")
+        return self
 
     @field_validator('attributeEmail')
     def validate_email(cls, v: Optional[str]) -> Optional[str]:

@@ -15,6 +15,14 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
     Formulario base para la entidad [[ entity_name.lower() ]].
     """
 
+    # Campos del formulario no actualizables en la entidad
+    # Son aquellos que no son utiles para la logica del dominio o persistencia
+    # o aquellos que se presentan mediante una estructura distinta a la que espera la entity (ej: imagenes o archivos)
+    ENTITY_NOT_UPDATABLE_FIELDS = {
+        'attributePhoto',
+        'attributePassword',
+    }    
+
     def __init__(self, *_args, **kwargs):
         super().__init__(*_args, **kwargs)
 
@@ -165,12 +173,7 @@ class [[ entity_name.capitalize() ]]EditPostForm([[ entity_name.capitalize() ]]B
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)     
 
-        # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
-
-        # Eliminamos los campos que no se deben guardar de la forma tradicional
-        for field in ['attributePassword', 'attributePhoto']:
-            if field in self.fields:
-                del self.fields[field]      
+        # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario 
 
 
 class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseForm):
@@ -185,10 +188,6 @@ class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseF
         # Hacer todos los campos no editables
         for field in self.fields.values():
             field.widget.attrs['disabled'] = True
-
-
-
-
 
 
 

@@ -28,14 +28,14 @@ class [[ dto_name.capitalize() ]]Dto(BaseModel):
     )    
 
     @model_validator(mode='after')
-    def validate(self) -> None:
+    def validate(self) -> Self:
         """
         Valida los datos del DTO.
         Transporte y validación básica de datos
         - Validaciones centradas en un conjunto específico de datos (integridad de datos)
         - Ejemplo: campos no nulos, longitud mínima
         """ 
-        pass
+        return self
 
     def to_dict(self) -> Dict[str, Any]:
         """Convierte a diccionario (compatible con JSON)"""
@@ -100,9 +100,10 @@ Ejemplos:
 💡 Validadores: ejemplos de uso:
 
     @model_validator(mode='after')
-    def validate(self) -> None:
+    def validate(self) -> self:
         if not self.attributeName or len(self.attributeName) < 3:
             raise ValueError("attributeName must be at least 3 characters")
+        return self
 
     @field_validator('attributeEmail')
     def validate_email(cls, v: Optional[str]) -> Optional[str]:

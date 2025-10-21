@@ -49,7 +49,7 @@ def create_[[ entity_name.lower() ]](repository: [[ entity_name.capitalize() ]]R
     """
 
     # Validación de reglas de negocio (opcional)
-    if repository.exists_by_field(field_name="attributeName", value=data['attributeName']):
+    if repository.exists_by_field(field_name="attributeName", value=data.get("attributeName")):
         raise [[ entity_name.capitalize() ]]ValueError(field="attributeName", detail="An instance with this attributeName already exists")
 
     #crear y validar la entidad

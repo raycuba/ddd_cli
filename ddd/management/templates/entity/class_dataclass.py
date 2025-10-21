@@ -6,15 +6,7 @@ class [[ entity_name.capitalize() ]]Entity:
     Esta clase representa la lógica de negocio central y las reglas asociadas 
     con [[ entity_name.lower() ]] en el sistema.
     """
-
-    # Lista de campos actualizables en el repositorio (para lógica de actualización)
-    REPO_MUTABLE_FIELDS = {    
-        'attributeName',
-        'attributeEmail',
-        'external_id',
-        'externals',
-    }   
-
+    
     # Identificadores
     id: Optional[int] = None  # ID relacionado con la base de datos
     uuid: Optional[UUID] = None
@@ -66,10 +58,10 @@ class [[ entity_name.capitalize() ]]Entity:
 
     def to_dict(self) -> dict:
         """
-        Convierte la entidad a un diccionario.
+        Convierte la entidad a un diccionario, excluyendo los campos con valor None.
         """
-        return self.__dict__
- 
+        return {k: v for k, v in self.__dict__.items() if v is not None}
+
     @staticmethod
     def from_dict(data: dict) -> "[[ entity_name.capitalize() ]]Entity":
         """

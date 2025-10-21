@@ -7,7 +7,7 @@ from django.forms import ValidationError
 # importa las entidades utilizadas aqui
 from ..models import [[ entity_name.capitalize() ]]
 from .mappers import Mapper
-from ..utils.filter_dict import filter_dict_by_keys
+from ..utils.filter_dict import clean_dict_of_keys
 from ..utils.is_integer import is_integer
 from ..utils.is_uuid import is_uuid
 from ..domain.entities import [[ entity_name.capitalize() ]]Entity
@@ -38,6 +38,14 @@ class [[ entity_name.capitalize() ]]Repository:
     - Control de unicidad.
     - Métodos básicos.
     """
+
+    # Campos de la entidad no persistibles en el repositorio (para lógica de actualización)
+    # Los campos no persistibles son aquellos que nunca cambian como: id, uuid, created_at, updated_at, etc.
+    # aquellos que tienen una forma especial de ser guardados como: photo, password, etc.
+    # y también los campos ManyToManyField
+    ENTITY_NOT_PERSISTIBLE_FIELDS = {
+        'id', 'uuid', 'externals'
+    }    
 
     @staticmethod
     def get_all(filters: Optional[dict] = None) -> List[ [[ entity_name.capitalize() ]]Entity ]:
@@ -212,7 +220,7 @@ class [[ entity_name.capitalize() ]]Repository:
             data = entity.to_dict()        
 
             # Filtrar solo los campos actualizables
-            data = filter_dict_by_keys(data, keys=entity.REPO_MUTABLE_FIELDS)  
+            data = clean_dict_of_keys(data, keys=[[ entity_name.capitalize() ]]Repository.ENTITY_NOT_PERSISTIBLE_FIELDS)              
 
             # Crear el registro a partir de los campos presentes en la 'data'
             instance = [[ entity_name.capitalize() ]](**data)
@@ -302,12 +310,12 @@ class [[ entity_name.capitalize() ]]Repository:
 
             with transaction.atomic():
                 # Asegurar que todas las operaciones se realicen en una transacción
-                # Esto garantiza que si algo falla, no se guarden cambios parciales            
-
-                # Solo actualizar campos simples (whitelist)
-                for field in [[ entity_name.capitalize() ]]Entity.REPO_MUTABLE_FIELDS:
-                    value = getattr(entity, field)
-                    setattr(instance, field, value)
+                # Esto garantiza que si algo falla, no se guarden cambios parciales     
+                
+                # Actualizar cada campo de la entidad en el modelo
+                for key, value in entity.to_dict().items():
+                    if (key is not None) and (not key in [[ entity_name.capitalize() ]]Repository.ENTITY_NOT_PERSISTIBLE_FIELDS) and hasattr(instance, key):
+                        setattr(instance, key, value)                
 
                 # Si se proporciona un ID de otra entidad, actualizarlo
                 if external_id is not None:

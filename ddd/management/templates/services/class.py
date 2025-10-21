@@ -15,7 +15,7 @@ class [[ entity_name.capitalize() ]]Service:
     # [[ entity_name.lower() ]]_list = []    
 
 
-    def __init__(self, repository: Optional[[[ entity_name.capitalize() ]]Repository] = None):
+    def __init__(self, repository: Optional[ [[ entity_name.capitalize() ]]Repository ] = None):
         """
         Inicializa el servicio con el repositorio correspondiente.
 
@@ -82,7 +82,7 @@ class [[ entity_name.capitalize() ]]Service:
         """
 
         # Validación de reglas de negocio (opcional)
-        if self.repository.exists_by_field(field_name="attributeName", value=data['attributeName']):
+        if self.repository.exists_by_field(field_name="attributeName", value=data.get("attributeName")):
             raise [[ entity_name.capitalize() ]]ValueError(field="attributeName", detail="An instance with this attributeName already exists")
 
         #crear y validar la entidad

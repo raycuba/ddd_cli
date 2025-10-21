@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
+from .utils.filter_dict import clean_dict_of_keys
 
 # importa las excepciones personalizadas
 from .domain.exceptions import (
@@ -37,11 +38,9 @@ def [[ entity_name.lower() ]]_list(request):
 
     [[ entity_name.lower() ]]List = [] #inicialize list
 
-    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
-
     # Obtener la lista del repositorio
     try:
-        [[ entity_name.lower() ]]List = [[ entity_name.lower() ]]Service.list()
+        [[ entity_name.lower() ]]List = [[ entity_name.capitalize() ]]Service().list()
 
     except ([[ entity_name.capitalize() ]]ValueError) as e:
         messages.error(request,  str(e))
@@ -64,21 +63,20 @@ def [[ entity_name.lower() ]]_create(request):
     if request.method == "POST":
 
         # Validar los datos del formulario
-        form = [[ entity_name.capitalize() ]]CreateForm(request.POST)
+        form = [[ entity_name.capitalize() ]]CreateForm(request.POST, request.FILES)
 
         if form.is_valid():
-            form_data = form.cleaned_data
-            [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
+            try:        
+                form_data = form.cleaned_data
 
-            # Obtener el ID de la entidad relacionada si existe
-            external_id = request.POST.get('external_id', None)
+                # Obtener el ID de la entidad relacionada si existe
+                external_id = request.POST.get('external_id', None)
 
-            # Obtener la lista de ids de externals seleccionadas
-            externals_ids = form_data.get('externals', [])
+                # Obtener la lista de ids de externals seleccionadas
+                externals_ids = form_data.get('externals', [])
 
-            try:
                 # LLamar al servicio de creación
-                [[ entity_name.lower() ]]Service.create(data=form_data, external_id=external_id, externals=externals_ids)
+                [[ entity_name.capitalize() ]]Service().create(data=form_data, external_id=external_id, externals=externals_ids)
 
                 # Mostrar mensaje de éxito y redirigir
                 messages.success(request, f"Successfully created [[ entity_name.lower() ]]")
@@ -111,11 +109,9 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
         # Redireccion si no se proporciona un ID
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
-
     try:
         # Obtener los datos de la entidad desde el servicio
-        [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.retrieve(entity_id=id)
+        [[ entity_name.lower() ]] = [[ entity_name.capitalize() ]]Service().retrieve(entity_id=id)
 
     except [[ entity_name.capitalize() ]]NotFoundError as e:
         messages.error(request,  "Not Found Error: " + str(e))
@@ -133,12 +129,12 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
     if request.method == "POST":
 
         # Validar los datos del formulario
-        form = [[ entity_name.capitalize() ]]EditPostForm(request.POST)
+        form = [[ entity_name.capitalize() ]]EditPostForm(request.POST, request.FILES)
 
         if form.is_valid():
-            form_data = form.cleaned_data
-
             try:
+                form_data = form.cleaned_data            
+                
                 # obtenemos del request los campos especiales del formulario
                 # ejemplo: password = request.POST.get('password', None)
                 # ejemplo: photo = request.FILES.get('photo', None)
@@ -148,10 +144,13 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
                 external_id = request.POST.get('external_id', None)
 
                 # Obtener la lista de ids de externals seleccionadas
-                externals_ids = form_data.get('externals', [])                
+                externals_ids = form_data.get('externals', [])         
+                
+                # Limpiar los campos no actualizables del diccionario de datos
+                form_data = clean_dict_of_keys(form_data, keys=[[ entity_name.capitalize() ]]EditPostForm.ENTITY_NOT_UPDATABLE_FIELDS)
 
                 # LLamar al servicio de actualización
-                [[ entity_name.lower() ]]Service.update(entity_id=id, data=form_data, external_id=external_id, externals=externals_ids)
+                [[ entity_name.capitalize() ]]Service().update(entity_id=id, data=form_data, external_id=external_id, externals=externals_ids)
 
                 # Mostrar mensaje de éxito
                 messages.success(request, f"Successfully updated [[ entity_name.lower() ]]")
@@ -175,9 +174,9 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
     else:  
         # Initialize the form with existing data
         form = [[ entity_name.capitalize() ]]EditGetForm(initial={
-            'id': [[ entity_name.lower() ]]['id'],            
-            'attributeName': [[ entity_name.lower() ]]['attributeName'],
-            'attributeEmail': [[ entity_name.lower() ]]['attributeEmail']
+            'id': [[ entity_name.lower() ]].get('id'),
+            'attributeName': [[ entity_name.lower() ]].get('attributeName'),
+            'attributeEmail': [[ entity_name.lower() ]].get('attributeEmail')
         })
 
     # Renderizar la plantilla con el formulario
@@ -191,11 +190,9 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
     if id is None:
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
-
     try:
         # Obtener los datos de la entidad desde el servicio
-        [[ entity_name.lower() ]] = [[ entity_name.lower() ]]Service.retrieve(entity_id=id)
+        [[ entity_name.lower() ]] = [[ entity_name.capitalize() ]]Service().retrieve(entity_id=id)
 
     except [[ entity_name.capitalize() ]]NotFoundError as e:
         messages.error(request,  "Not Found Error: " + str(e))        
@@ -212,8 +209,8 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
 
     # Renderizar la plantilla con el formulario de vista
     form = [[ entity_name.capitalize() ]]ViewForm(initial={
-        'attributeName': [[ entity_name.lower() ]]['attributeName'],
-        'attributeEmail': [[ entity_name.lower() ]]['attributeEmail']
+        'attributeName': [[ entity_name.lower() ]].get('attributeName'),
+        'attributeEmail': [[ entity_name.lower() ]].get('attributeEmail')
     })
 
     return render(request, '[[ relative_app_path.lower() ]]/[[ entity_name.lower() ]]_web_detail.html', {'form': form})
@@ -227,11 +224,9 @@ def [[ entity_name.lower() ]]_delete(request, id=None):
         messages.error(request, "Non Valid id to delete")
         return redirect('[[ app_route.lower() ]]:[[ entity_name.lower() ]]_list')
 
-    [[ entity_name.lower() ]]Service = [[ entity_name.capitalize() ]]Service() # Instanciar el servicio
-
     try:
         # LLamar al servicio de eliminación
-        [[ entity_name.lower() ]]Service.delete(entity_id=id)
+        [[ entity_name.capitalize() ]]Service().delete(entity_id=id)
         messages.success(request, f"Successfully deleted [[ entity_name.lower() ]]")
 
     except [[ entity_name.capitalize() ]]NotFoundError as e:

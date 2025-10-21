@@ -1,7 +1,9 @@
 # utils/mappers.py
 import decimal
 from typing import Type, TypeVar, Any
+from pydantic import BaseModel
 from django.db import models
+
 from ..domain.exceptions import [[ entity_name.capitalize() ]]ValueError
 from ..domain.schemas import FileData
 
@@ -44,7 +46,7 @@ class Mapper:
             elif hasattr(value, 'pk') and value is not None:
                 value = value.pk
 
-            # Archivos
+            # Archivos e Imágenes
             elif field_object and isinstance(field_object, (models.FileField, models.ImageField)):
                 try:
                     if value and value.name and hasattr(value, 'url'):
