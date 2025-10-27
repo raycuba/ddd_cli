@@ -83,6 +83,10 @@ def readWriteTemplate(templateName: str, fileName:str, render_params: dict, repo
         mode = 'a' if addition else 'w'
 
         if not simulate:
+            # Si el archivo existe y no es una adición, fallar
+            if os.path.exists(repository_path) and not addition:
+                raise Exception(f"File {repository_path} already exists")
+                
             # Escribir en el archivo
             with open(repository_path, mode) as f:
                 f.write('\n' + rendered_content + '\n')
