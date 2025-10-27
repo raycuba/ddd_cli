@@ -6,7 +6,7 @@ class CreateRepositoryCommand:
         parser = subparsers.add_parser("create-repository", help='Create a new repository')
         parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument('entity_name', type=str, help='The name of the entity')
-        parser.add_argument("--pydantic", action="store_true", help="Create a Pydantic structure for this entity")
+        parser.add_argument("--pydantic", action="store_true", help="Create a Pydantic structure for this repository")
         parser.add_argument("--simulate", action="store_true", help="Simulate the creation of this entity without writing files")        
         parser.set_defaults(func=self.execute)
 

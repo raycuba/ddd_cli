@@ -6,7 +6,7 @@ class CreateDTOCommand:
         parser = subparsers.add_parser('create-dto', help='Create a new DTO')
         parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument('dto_name', type=str, help='The name of the DTO')
-        parser.add_argument("--pydantic", action="store_true", help="Create a Pydantic structure for this entity")        
+        parser.add_argument("--pydantic", action="store_true", help="Create a Pydantic structure for this dto")        
         parser.add_argument(
             '--split', action='store_true', help='Create a separate file for this DTO'
         )        
