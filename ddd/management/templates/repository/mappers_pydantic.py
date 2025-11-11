@@ -1,6 +1,10 @@
 # utils/mappers.py
 import json
 import decimal
+from datetime import datetime, date, time
+from uuid import UUID
+from decimal import Decimal
+from enum import Enum
 from typing import Type, TypeVar, Any
 from pydantic import BaseModel
 from django.db import models
@@ -17,6 +21,26 @@ def is_json_serializable(value):
         return True
     except (TypeError, ValueError):
         return False
+
+def make_json_safe(value):
+    if isinstance(value, dict):
+        return {k: make_json_safe(v) for k, v in value.items()}
+    elif isinstance(value, list):
+        return [make_json_safe(v) for v in value]
+    elif isinstance(value, (datetime, date, time)):
+        return value.isoformat()
+    elif isinstance(value, UUID):
+        return str(value)
+    elif isinstance(value, Decimal):
+        return float(value)
+    elif isinstance(value, set):
+        return list(value)
+    elif isinstance(value, Enum):
+        return value.value
+    elif isinstance(value, bytes):
+        return value.decode('utf-8', errors='ignore')
+    else:
+        return value        
 
 class Mapper:
 
@@ -104,8 +128,8 @@ class Mapper:
 
                 # JSONField
                 if isinstance(model_field, JSONField):
-                    if isinstance(value, dict) and is_json_serializable(value):
-                        setattr(instance, key, value)
+                    if isinstance(value, dict) and is_json_serializable(make_json_safe(value)):
+                        setattr(instance, key, make_json_safe(value))
 
                 # ForeignKey (ej: company_id → company)
                 elif isinstance(model_field, ForeignKey) and key.endswith("_id"):
