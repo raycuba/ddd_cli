@@ -1,13 +1,23 @@
 # utils/mappers.py
 import uuid
+import json
 import decimal
+from datetime import datetime, date
 from dataclasses import asdict, fields
 from typing import Type, TypeVar, Any
 from django.db import models
-from datetime import datetime, date
+from django.db.models import JSONField, ManyToManyField, ForeignKey
+
 from ..domain.exceptions import [[ entity_name.capitalize() ]]ValueError
 
 T = TypeVar("T")
+
+def is_json_serializable(value):
+    try:
+        json.dumps(value)
+        return True
+    except (TypeError, ValueError):
+        return False
 
 class Mapper:
     
@@ -75,6 +85,47 @@ class Mapper:
 
         return entity_class(**data)
     
+    @staticmethod
+    def update_model_from_entity(instance, entity, excluded_fields=None):
+        """
+        Actualiza una instancia de modelo Django desde una entidad de dominio.
+        
+        - Ignora campos no persistibles.
+        - Ignora valores None.
+        - Maneja correctamente JSONField, ForeignKey y ManyToMany.
+        """
+        excluded_fields = excluded_fields or []
+
+        for key, value in entity.to_dict().items():
+            if (
+                key is not None
+                and key not in excluded_fields
+                and hasattr(instance, key)
+                and value is not None
+            ):
+                model_field = instance._meta.get_field(key)
+
+                # JSONField
+                if isinstance(model_field, JSONField):
+                    if isinstance(value, dict) and is_json_serializable(value):
+                        setattr(instance, key, value)
+
+                # ForeignKey (ej: company_id → company)
+                elif isinstance(model_field, ForeignKey) and key.endswith("_id"):
+                    setattr(instance, key, value)
+
+                # ManyToMany (ej: branches, categories)
+                elif isinstance(model_field, ManyToManyField):
+                    # Se actualiza con .set() después de guardar la instancia
+                    pass  # se maneja fuera de esta función
+                
+                # id y uuid se ignoran
+                elif key in ['id', 'uuid']:
+                    pass  # No se actualizan estos campos
+
+                # Campo normal
+                else:
+                    setattr(instance, key, value)            
     
     @staticmethod
     def entity_to_dict(entity_instance: Any) -> dict:
