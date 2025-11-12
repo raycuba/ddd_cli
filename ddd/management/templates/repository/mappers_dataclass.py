@@ -114,42 +114,53 @@ class Mapper:
         """
         Actualiza una instancia de modelo Django desde una entidad de dominio.
         
-        - Ignora campos no persistibles.
-        - Ignora valores None.
-        - Maneja correctamente JSONField, ForeignKey y ManyToMany.
+        :param instance: Instancia del modelo Django a actualizar.
+        :param entity: Entidad de dominio (Pydantic) con los nuevos datos.
+        :param excluded_fields: Lista de campos a excluir de la actualización.
+        :return: Instancia del modelo Django actualizada y un dict con datos ManyToMany para actualizar luego.
+        
+        características:
+        - Ignora campos 'id' y 'uuid'.
+        - Maneja ForeignKey (terminan en '_id').
+        - Maneja JSONField con serialización segura.
+        - Maneja ManyToManyField (devuelve datos para actualizar luego).
+        - Actualiza campos normales directamente.
         """
         excluded_fields = excluded_fields or []
+        model_fields = {field.name for field in instance._meta.get_fields()}
+        many_to_many_data = {}
 
         for key, value in entity.to_dict().items():
-            if (
-                key is not None
-                and key not in excluded_fields
-                and hasattr(instance, key)
-                and value is not None
-            ):
-                model_field = instance._meta.get_field(key)
+            if ((key is not None) and (key not in excluded_fields)):
+                
+                if key in model_fields:
+                    model_field = instance._meta.get_field(key)
+                else:
+                    model_field = None
+
+                # id y uuid se ignoran
+                if key in ['id', 'uuid']:
+                    continue  # no se actualizan identificadores
+                
+                # ForeignKey (ej: company_id → company)
+                elif key.endswith("_id"):
+                    setattr(instance, key, value)
 
                 # JSONField
-                if isinstance(model_field, JSONField):
+                elif model_field and isinstance(model_field, JSONField):
                     if isinstance(value, dict) and is_json_serializable(make_json_safe(value)):
                         setattr(instance, key, make_json_safe(value))
 
-                # ForeignKey (ej: company_id → company)
-                elif isinstance(model_field, ForeignKey) and key.endswith("_id"):
-                    setattr(instance, key, value)
-
                 # ManyToMany (ej: branches, categories)
-                elif isinstance(model_field, ManyToManyField):
+                elif model_field and isinstance(model_field, ManyToManyField):
                     # Se actualiza con .set() después de guardar la instancia
-                    pass  # se maneja fuera de esta función
-                
-                # id y uuid se ignoran
-                elif key in ['id', 'uuid']:
-                    pass  # No se actualizan estos campos
+                    many_to_many_data[key] = value # Guardar para actualizar luego
 
                 # Campo normal
                 else:
-                    setattr(instance, key, value)            
+                    setattr(instance, key, value)  
+                    
+        return instance, many_to_many_data       
     
     @staticmethod
     def entity_to_dict(entity_instance: Any) -> dict:

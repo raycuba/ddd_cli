@@ -40,11 +40,9 @@ class [[ entity_name.capitalize() ]]Repository:
     """
 
     # Campos de la entidad no persistibles en el repositorio (para lógica de actualización)
-    # Los campos no persistibles son aquellos que nunca cambian como: id, uuid, created_at, updated_at, etc.
-    # aquellos que tienen una forma especial de ser guardados como: photo, password, etc.
-    # y también los campos ManyToManyField
+    # Los campos no persistibles son aquellos que tienen una forma especial de ser guardados como: photo, password, etc.
     ENTITY_NOT_PERSISTIBLE_FIELDS = {
-        'id', 'uuid', 'externals'
+        'photo', 'password'
     }    
 
     @staticmethod
@@ -216,14 +214,9 @@ class [[ entity_name.capitalize() ]]Repository:
             raise [[ entity_name.capitalize() ]]ValueError(field="[[ entity_name.capitalize() ]]", detail="Entity null or without methond 'to_dict'")
 
         try:
-            #convertir a dict
-            data = entity.to_dict()        
-
-            # Filtrar solo los campos actualizables
-            data = clean_dict_of_keys(data, keys=[[ entity_name.capitalize() ]]Repository.ENTITY_NOT_PERSISTIBLE_FIELDS)              
-
-            # Crear el registro a partir de los campos presentes en la 'data'
-            instance = [[ entity_name.capitalize() ]](**data)
+            # Crear el registro a partir de los campos presentes en la 'entity'
+            instance = [[ entity_name.capitalize() ]]()
+            Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name.capitalize() ]]Repository.ENTITY_NOT_PERSISTIBLE_FIELDS) 
 
             with transaction.atomic():
                 # Asegurar que todas las operaciones se realicen en una transacción
@@ -313,9 +306,7 @@ class [[ entity_name.capitalize() ]]Repository:
                 # Esto garantiza que si algo falla, no se guarden cambios parciales     
                 
                 # Actualizar cada campo de la entidad en el modelo
-                for key, value in entity.to_dict().items():
-                    if (key is not None) and (not key in [[ entity_name.capitalize() ]]Repository.ENTITY_NOT_PERSISTIBLE_FIELDS) and hasattr(instance, key):
-                        setattr(instance, key, value)                
+                Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name.capitalize() ]]Repository.ENTITY_NOT_PERSISTIBLE_FIELDS)              
 
                 # Si se proporciona un ID de otra entidad, actualizarlo
                 if external_id is not None:
