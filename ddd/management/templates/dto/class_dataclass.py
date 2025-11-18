@@ -1,7 +1,7 @@
 @dataclass
-class [[ dto_name.capitalize() ]]Dto:
+class [[ dto_name|capitalize_first ]]Dto:
     """
-    Data Transfer Object para [[ dto_name.lower() ]].
+    Data Transfer Object para [[ dto_name|decapitalize_first ]].
 
     Este DTO se utiliza para transferir datos entre capas del sistema, 
     como entre la capa de dominio y la capa de infraestructura o vistas.
@@ -39,11 +39,11 @@ class [[ dto_name.capitalize() ]]Dto:
         return self.__dict__
 
     @staticmethod
-    def from_dict(data: dict) -> "[[ dto_name.capitalize() ]]Dto":
+    def from_dict(data: dict) -> "[[ dto_name|capitalize_first ]]Dto":
         """
         Crea una instancia del DTO a partir de un diccionario.
         """
-        return [[ dto_name.capitalize() ]]Dto(**data)
+        return [[ dto_name|capitalize_first ]]Dto(**data)
 
 
 '''

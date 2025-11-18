@@ -22,20 +22,20 @@ Django form list
         </thead>
         <tbody>
 
-            {% for [[ entity_name.lower() ]] in [[ entity_name.lower() ]]_list %}
+            {% for [[ entity_name|decapitalize_first ]] in [[ entity_name|decapitalize_first ]]_list %}
             <tr class="align-middle">              
-                <td>{{[[ entity_name.lower() ]].attributeName}}</td>                
-                <td>{{[[ entity_name.lower() ]].attributeEmail}}</td>
+                <td>{{[[ entity_name|decapitalize_first ]].attributeName}}</td>                
+                <td>{{[[ entity_name|decapitalize_first ]].attributeEmail}}</td>
                 <td>
-                    {% if [[ entity_name.lower() ]].attributeRole == 'adm' %} 
+                    {% if [[ entity_name|decapitalize_first ]].attributeRole == 'adm' %} 
                         Administrator 
-                    {% elif [[ entity_name.lower() ]].attributeRole == 'man' %} 
+                    {% elif [[ entity_name|decapitalize_first ]].attributeRole == 'man' %} 
                         Manager 
-                    {% elif [[ entity_name.lower() ]].attributeRole == 'emp' %} 
+                    {% elif [[ entity_name|decapitalize_first ]].attributeRole == 'emp' %} 
                         Employee 
                     {% endif %}
                 </td>
-                <td>{{[[ entity_name.lower() ]].attributeStatus}}</td>
+                <td>{{[[ entity_name|decapitalize_first ]].attributeStatus}}</td>
                 <td>
                     <a class="btn btn-success" href="">Edit</a>
                     <a class="btn btn-success" href="">View</a>

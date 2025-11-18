@@ -1,7 +1,7 @@
 """
 Los servicios en DDD son responsables de manejar la lógica de negocio 
 y las operaciones CRUD relacionadas con una entidad específica. 
-Este servicio proporciona métodos para listar, contar, crear, recuperar, actualizar y eliminar instancias de la entidad [[ entity_name.lower() ]]. 
+Este servicio proporciona métodos para listar, contar, crear, recuperar, actualizar y eliminar instancias de la entidad [[ entity_name|decapitalize_first ]]. 
 Cada método maneja la validación necesaria y utiliza un repositorio para interactuar con la persistencia de datos.
 son utiles para:
 - Centralizar la lógica de negocio relacionada con una entidad.
@@ -19,18 +19,18 @@ son utiles para:
 from typing import List, Optional
 
 # importa las entidades utilizadas aqui
-from ..domain.entities import [[ entity_name.capitalize() ]]Entity
+from ..domain.entities import [[ entity_name|capitalize_first ]]Entity
 
 # importa las excepciones utilizadas aqui
 from ..domain.exceptions import (
-    [[ entity_name.capitalize() ]]ValueError,
-    [[ entity_name.capitalize() ]]ValidationError,
-    [[ entity_name.capitalize() ]]AlreadyExistsError,
-    [[ entity_name.capitalize() ]]NotFoundError,
-    [[ entity_name.capitalize() ]]OperationNotAllowedError,
-    [[ entity_name.capitalize() ]]PermissionError
+    [[ entity_name|capitalize_first ]]ValueError,
+    [[ entity_name|capitalize_first ]]ValidationError,
+    [[ entity_name|capitalize_first ]]AlreadyExistsError,
+    [[ entity_name|capitalize_first ]]NotFoundError,
+    [[ entity_name|capitalize_first ]]OperationNotAllowedError,
+    [[ entity_name|capitalize_first ]]PermissionError
 )
 from ..infrastructure.exceptions import RepositoryError, ConnectionDataBaseError
 
 # importa los repositorios utilizados aqui
-from ..infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name.capitalize() ]]Repository
+from ..infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name|capitalize_first ]]Repository

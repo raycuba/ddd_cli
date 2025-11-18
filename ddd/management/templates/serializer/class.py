@@ -1,6 +1,6 @@
-class [[ serializer_name.capitalize() ]]DTOSerializer(serializers.Serializer):
+class [[ serializer_name|capitalize_first ]]DTOSerializer(serializers.Serializer):
     """
-    Serializer Object para [[ serializer_name.lower() ]].
+    Serializer Object para [[ serializer_name|decapitalize_first ]].
 
     Este Serializer se utiliza para transferir datos entre capas del sistema, 
     como entre la capa de dominio y vistas en Django REST Framework (DRF).

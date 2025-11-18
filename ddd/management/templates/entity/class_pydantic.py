@@ -1,9 +1,9 @@
-class [[ entity_name.capitalize() ]]Entity(BaseEntity):
+class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
     """
-    Entidad del dominio para [[ entity_name.lower() ]].
+    Entidad del dominio para [[ entity_name|decapitalize_first ]].
 
     Esta clase representa la lógica de negocio central y las reglas asociadas 
-    con [[ entity_name.lower() ]] en el sistema.
+    con [[ entity_name|decapitalize_first ]] en el sistema.
     """
 
     # Identificadores
@@ -41,15 +41,15 @@ class [[ entity_name.capitalize() ]]Entity(BaseEntity):
         - Validaciones intrínsecas al momento de creación/modificación
         """
         if not self.attributeName or len(self.attributeName) < 3:
-            raise [[ entity_name.capitalize() ]]ValueError(field="attributeName", detail="attributeName must be at least 3 characters")
+            raise [[ entity_name|capitalize_first ]]ValueError(field="attributeName", detail="attributeName must be at least 3 characters")
 
         if self.attributeEmail and len(self.attributeEmail) > 500:
-            raise [[ entity_name.capitalize() ]]ValueError(field="attributeEmail", detail="attributeEmail must not exceed 500 characters")
+            raise [[ entity_name|capitalize_first ]]ValueError(field="attributeEmail", detail="attributeEmail must not exceed 500 characters")
 
         return self
         
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "[[ entity_name.capitalize() ]]Entity":
+    def from_dict(cls, data: Dict[str, Any]) -> "[[ entity_name|capitalize_first ]]Entity":
         """Crea una instancia desde un diccionario"""
         return cls(**data)
         

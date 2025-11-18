@@ -19,7 +19,14 @@ def create__init__files(path):
         path = os.path.dirname(path)
         if path == '' or path == '/':
             break
+        
+def capitalize_first(texto: str) -> str:
+    """Capitaliza la primera letra de un texto"""
+    return texto[:1].upper() + texto[1:] if texto else texto
 
+def decapitalize_first(texto: str) -> str:
+    """Convierte la primera letra de un texto a minúscula"""
+    return texto[:1].lower() + texto[1:]
 
 def renderTemplate(templateName: str, fileName: str, render_params: dict) -> str:
     """
@@ -44,6 +51,12 @@ def renderTemplate(templateName: str, fileName: str, render_params: dict) -> str
         variable_start_string='[[', # Delimitador de inicio de variable
         variable_end_string=']]'    # Delimitador de fin de variable
     )
+    
+    # Registrar filtro: capitalize_first
+    env.filters["capitalize_first"] = capitalize_first
+     
+    # Registrar filtro: decapitalize_first
+    env.filters["decapitalize_first"] = decapitalize_first    
 
     # Renderizar la plantilla usando el entorno personalizado
     template = env.from_string(template_content)

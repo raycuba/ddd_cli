@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from django.db import models
 from django.db.models import JSONField, ManyToManyField, ForeignKey
 
-from ..domain.exceptions import [[ entity_name.capitalize() ]]ValueError
+from ..domain.exceptions import [[ entity_name|capitalize_first ]]ValueError
 from ..domain.schemas import FileData
 
 T = TypeVar("T", bound=BaseModel)
@@ -112,7 +112,7 @@ class Mapper:
         Actualiza una instancia de modelo Django desde una entidad de dominio.
         
         :param instance: Instancia del modelo Django a actualizar.
-        :param entity: Entidad de dominio (Pydantic) con los nuevos datos.
+        :param entity: Entidad de dominio con los nuevos datos.
         :param excluded_fields: Lista de campos a excluir de la actualización.
         :return: Instancia del modelo Django actualizada y un dict con datos ManyToMany para actualizar luego.
         

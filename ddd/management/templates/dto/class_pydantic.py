@@ -1,6 +1,6 @@
-class [[ dto_name.capitalize() ]]Dto(BaseModel):
+class [[ dto_name|capitalize_first ]]Dto(BaseModel):
     """
-    Data Transfer Object para [[ dto_name.lower() ]].
+    Data Transfer Object para [[ dto_name|decapitalize_first ]].
 
     Este DTO se utiliza para transferir datos entre capas del sistema, 
     como entre la capa de dominio y la capa de infraestructura o vistas.
@@ -42,7 +42,7 @@ class [[ dto_name.capitalize() ]]Dto(BaseModel):
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "[[ dto_name.capitalize() ]]Dto":
+    def from_dict(cls, data: Dict[str, Any]) -> "[[ dto_name|capitalize_first ]]Dto":
         """Crea una instancia desde un diccionario"""
         return cls(**data)        
 

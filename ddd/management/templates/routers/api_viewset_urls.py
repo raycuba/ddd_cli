@@ -6,7 +6,7 @@ from . import [[ entity_name.lower() ]]_views
 router_[[ entity_name.lower() ]] = DefaultRouter()
 
 #definir rutas
-router_[[ entity_name.lower() ]].register(prefix='[[ entity_name.lower() ]]s', basename='[[ entity_name.lower() ]]s', viewset= [[ entity_name.lower() ]]_views.[[ entity_name.capitalize() ]]ViewSet)
+router_[[ entity_name.lower() ]].register(prefix='[[ entity_name.lower() ]]s', basename='[[ entity_name.lower() ]]s', viewset= [[ entity_name.lower() ]]_views.[[ entity_name|capitalize_first ]]ViewSet)
 
 urlpatterns = [
 

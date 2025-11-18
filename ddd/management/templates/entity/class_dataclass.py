@@ -1,10 +1,10 @@
 @dataclass
-class [[ entity_name.capitalize() ]]Entity:
+class [[ entity_name|capitalize_first ]]Entity:
     """
-    Entidad del dominio para [[ entity_name.lower() ]].
+    Entidad del dominio para [[ entity_name|decapitalize_first ]].
 
     Esta clase representa la lógica de negocio central y las reglas asociadas 
-    con [[ entity_name.lower() ]] en el sistema.
+    con [[ entity_name|decapitalize_first ]] en el sistema.
     """
     
     # Identificadores
@@ -33,10 +33,10 @@ class [[ entity_name.capitalize() ]]Entity:
         - Validaciones intrínsecas al momento de creación/modificación
         """
         if not self.attributeName or len(self.attributeName) < 3:
-            raise [[ entity_name.capitalize() ]]ValueError(field="attributeName", detail="attributeName must be at least 3 characters")
+            raise [[ entity_name|capitalize_first ]]ValueError(field="attributeName", detail="attributeName must be at least 3 characters")
 
         if self.attributeEmail and len(self.attributeEmail) > 500:
-            raise [[ entity_name.capitalize() ]]ValueError(field="attributeEmail", detail="attributeEmail must not exceed 500 characters")
+            raise [[ entity_name|capitalize_first ]]ValueError(field="attributeEmail", detail="attributeEmail must not exceed 500 characters")
 
     def update(self, data:dict, addMode:bool = False) -> None:
         """
@@ -44,7 +44,7 @@ class [[ entity_name.capitalize() ]]Entity:
         si addMode = True permite añadir campos nuevos
         :param data: Diccionario con los nuevos valores para los atributos.
         :param addMode: Si es True, permite añadir nuevos campos que no existan en la entidad.
-        :raises [[ entity_name.capitalize() ]]ValueError: Si hay un error de estructura en los datos.
+        :raises [[ entity_name|capitalize_first ]]ValueError: Si hay un error de estructura en los datos.
         """
         # Actualizar cada campo proporcionado en 'data'
         for key, value in data.items():
@@ -52,7 +52,7 @@ class [[ entity_name.capitalize() ]]Entity:
                 try:
                     setattr(self, key, value)             
                 except TypeError as e:
-                    raise [[ entity_name.capitalize() ]]ValueError(field=key, detail=f"Error in data structure: {str(e)}") from e
+                    raise [[ entity_name|capitalize_first ]]ValueError(field=key, detail=f"Error in data structure: {str(e)}") from e
 
         self.validate()    
 
@@ -63,7 +63,7 @@ class [[ entity_name.capitalize() ]]Entity:
         return {k: v for k, v in self.__dict__.items() if v is not None}
 
     @staticmethod
-    def from_dict(data: dict) -> "[[ entity_name.capitalize() ]]Entity":
+    def from_dict(data: dict) -> "[[ entity_name|capitalize_first ]]Entity":
         """
         Crea una instancia de la entidad a partir de un diccionario.
         """
@@ -71,9 +71,9 @@ class [[ entity_name.capitalize() ]]Entity:
 
         # construir la entidad
         try:
-            entity = [[ entity_name.capitalize() ]]Entity(**data)
+            entity = [[ entity_name|capitalize_first ]]Entity(**data)
         except TypeError as e:
-            raise [[ entity_name.capitalize() ]]ValueError("Error building entity:", str(e)) from e
+            raise [[ entity_name|capitalize_first ]]ValueError("Error building entity:", str(e)) from e
 
         return entity
         

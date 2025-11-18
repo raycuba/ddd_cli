@@ -12,7 +12,7 @@ from typing import Type, TypeVar, Any
 from django.db import models
 from django.db.models import JSONField, ManyToManyField, ForeignKey
 
-from ..domain.exceptions import [[ entity_name.capitalize() ]]ValueError
+from ..domain.exceptions import [[ entity_name|capitalize_first ]]ValueError
 
 T = TypeVar("T")
 
@@ -50,7 +50,7 @@ class Mapper:
         """Convierte modelo Django → entidad Dataclass con validación de tipos y manejo especial de campos."""
 
         if not model_instance:
-            raise [[ entity_name.capitalize() ]]ValueError("Model_instance_cannot_be_None_Cannot_convert_None_to_entity")
+            raise [[ entity_name|capitalize_first ]]ValueError("Model_instance_cannot_be_None_Cannot_convert_None_to_entity")
 
         entity_field_names = {f.name for f in fields(entity_class)}
 
@@ -115,7 +115,7 @@ class Mapper:
         Actualiza una instancia de modelo Django desde una entidad de dominio.
         
         :param instance: Instancia del modelo Django a actualizar.
-        :param entity: Entidad de dominio (Pydantic) con los nuevos datos.
+        :param entity: Entidad de dominio con los nuevos datos.
         :param excluded_fields: Lista de campos a excluir de la actualización.
         :return: Instancia del modelo Django actualizada y un dict con datos ManyToMany para actualizar luego.
         

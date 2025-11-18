@@ -10,9 +10,9 @@ from django.core.validators import (
 )
 
 
-class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
+class [[ entity_name|capitalize_first ]]BaseForm(forms.Form):
     """
-    Formulario base para la entidad [[ entity_name.lower() ]].
+    Formulario base para la entidad [[ entity_name|decapitalize_first ]].
     """
 
     # Campos del formulario no actualizables en la entidad
@@ -126,9 +126,9 @@ class [[ entity_name.capitalize() ]]BaseForm(forms.Form):
             raise forms.ValidationError("Passwords do not match")
 
 
-class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]BaseForm):
+class [[ entity_name|capitalize_first ]]CreateForm([[ entity_name|capitalize_first ]]BaseForm):
     """
-    Formulario para crear una nueva instancia de [[ entity_name.lower() ]]. Sin modificaciones adicionales.
+    Formulario para crear una nueva instancia de [[ entity_name|decapitalize_first ]]. Sin modificaciones adicionales.
     """
 
     def __init__(self, *args, **kwargs):
@@ -142,9 +142,9 @@ class [[ entity_name.capitalize() ]]CreateForm([[ entity_name.capitalize() ]]Bas
         # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
 
 
-class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]BaseForm):
+class [[ entity_name|capitalize_first ]]EditGetForm([[ entity_name|capitalize_first ]]BaseForm):
     """
-    Formulario para editar mediante GET una instancia de [[ entity_name.lower() ]]. 
+    Formulario para editar mediante GET una instancia de [[ entity_name|decapitalize_first ]]. 
     """
 
     def __init__(self, *args, **kwargs):
@@ -165,9 +165,9 @@ class [[ entity_name.capitalize() ]]EditGetForm([[ entity_name.capitalize() ]]Ba
         })
 
 
-class [[ entity_name.capitalize() ]]EditPostForm([[ entity_name.capitalize() ]]BaseForm):
+class [[ entity_name|capitalize_first ]]EditPostForm([[ entity_name|capitalize_first ]]BaseForm):
     """
-    Formulario para editar mediante POST una instancia de [[ entity_name.lower() ]]. 
+    Formulario para editar mediante POST una instancia de [[ entity_name|decapitalize_first ]]. 
     """
 
     def __init__(self, *args, **kwargs):
@@ -176,9 +176,9 @@ class [[ entity_name.capitalize() ]]EditPostForm([[ entity_name.capitalize() ]]B
         # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario 
 
 
-class [[ entity_name.capitalize() ]]ViewForm([[ entity_name.capitalize() ]]BaseForm):
+class [[ entity_name|capitalize_first ]]ViewForm([[ entity_name|capitalize_first ]]BaseForm):
     """
-    Formulario de solo lectura para Visualizar una instancia de [[ entity_name.lower() ]]
+    Formulario de solo lectura para Visualizar una instancia de [[ entity_name|decapitalize_first ]]
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
