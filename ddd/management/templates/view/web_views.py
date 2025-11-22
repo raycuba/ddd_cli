@@ -55,6 +55,28 @@ def [[ entity_name.lower() ]]_list(request):
     })
 
 
+def [[ entity_name.lower() ]]_count_all(request):
+    """
+    Vista genérica para contar todas las instancias de [[ entity_name|decapitalize_first ]].
+    """
+
+    count = 0
+
+    # Obtener el conteo del repositorio
+    try:
+        count = [[ entity_name|capitalize_first ]]Service().count_all()
+
+    except ([[ entity_name|capitalize_first ]]ValueError) as e:
+        messages.error(request,  str(e))
+    except (ConnectionDataBaseError, RepositoryError) as e:
+        messages.error(request, "There was an error accessing the database or repository: " + str(e))
+    except Exception as e:
+        messages.error(request, "An unexpected error occurred: " + str(e))
+
+    # Retornar el conteo como respuesta HTTP
+    return HttpResponse(f"Total [[ entity_name|decapitalize_first ]] count: {count}")
+
+
 def [[ entity_name.lower() ]]_create(request):
     """
     Vista genérica para crear una nueva instancia de [[ entity_name|decapitalize_first ]] utilizando un servicio.
