@@ -114,6 +114,8 @@ def [[ entity_name.lower() ]]_create(request):
                 messages.error(request, "An unexpected error occurred: " + str(e))
         else:
             messages.error(request, "There were errors in the form. Please correct them")
+
+    # request.method == "GET":
     else:
         # Formulario vacío para solicitudes GET
         form = [[ entity_name|capitalize_first ]]CreateForm()
