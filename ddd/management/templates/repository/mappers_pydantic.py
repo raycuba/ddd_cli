@@ -47,9 +47,9 @@ class Mapper:
     @staticmethod
     def model_to_entity(model_instance: models.Model, entity_class: Type[T]) -> T:
         """Convierte modelo Django → entidad Pydantic con validación y submodelos"""
-        
+
         if not model_instance:
-            raise PromotionValueError("Model_instance_cannot_be_None_Cannot_convert_None_to_entity")
+            raise [[ entity_name|capitalize_first ]]ValueError("Model_instance_cannot_be_None_Cannot_convert_None_to_entity")
 
         data = {}
 
