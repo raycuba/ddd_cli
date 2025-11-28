@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from .utils.filter_dict import clean_dict_of_keys
 
 # importa las excepciones personalizadas
-from .domain.exceptions import (
+from .domain.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValueError,
     [[ entity_name|capitalize_first ]]ValidationError,
     [[ entity_name|capitalize_first ]]AlreadyExistsError,

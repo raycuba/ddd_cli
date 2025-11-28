@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import [[ entity_name|capitalize_first ]]DTOSerializer
 
 # importa las excepciones personalizadas
-from .domain.exceptions import (
+from .domain.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValueError,
     [[ entity_name|capitalize_first ]]ValidationError,
     [[ entity_name|capitalize_first ]]AlreadyExistsError,

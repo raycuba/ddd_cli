@@ -5,20 +5,17 @@ class CreateSerializerCommand:
     def __init__(self, subparsers):
         parser = subparsers.add_parser('create-serializer', help='Create a new Serializer')
         parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
-        parser.add_argument('serializer_name', type=str, help='The name of the Serializer')
-        parser.add_argument(
-            '--split', action='store_true', help='Create a separate file for this Serializer'
-        )       
+        parser.add_argument('serializer_name', type=str, help='The name of the Serializer')     
         parser.add_argument("--simulate", action="store_true", help="Simulate the creation of this entity without writing files")         
         parser.set_defaults(func=self.execute) 
 
     def execute(self, args):
-        self.create_serializer(args.app_path, args.serializer_name, args.split, args.simulate)
+        self.create_serializer(args.app_path, args.serializer_name, args.simulate)
 
-    def create_serializer(self, app_path, serializer_name, split=False, simulate=False, **kwargs):
+    def create_serializer(self, app_path, serializer_name, simulate=False, **kwargs):
         """Crea un nuevo Serializer"""
-        serializers_dir = app_path if not split else os.path.join(app_path, 'serializers')
-        serializers_path = os.path.join(serializers_dir, 'serializers.py') if not split else os.path.join(serializers_dir, serializer_name.lower() + '_serializer.py')
+        serializers_dir = os.path.join(app_path, 'serializers')
+        serializers_path = os.path.join(serializers_dir, serializer_name.lower() + '_serializer.py')
 
         if not simulate:
             # Crear directorios si no existen
@@ -30,8 +27,8 @@ class CreateSerializerCommand:
                 print(Fore.RED + f"Failed to create directory '{serializers_dir}': {e}" + Style.RESET_ALL)
                 return
             
-            #si split y ya existe el archivo mostrar error
-            if split and os.path.exists(serializers_path):
+            #si ya existe el archivo mostrar error
+            if os.path.exists(serializers_path):
                 print(Fore.RED + f"File '{serializers_path}' already exists. Cannot create separate file" + Style.RESET_ALL)
                 return
 

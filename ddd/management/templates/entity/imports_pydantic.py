@@ -3,5 +3,5 @@ from typing import Optional, List, Dict, Any, ClassVar
 from typing_extensions import Self
 from uuid import UUID
 from datetime import datetime
-from .exceptions import *
-from .schemas import FileData, BaseEntity
+from .[[ entity_name.lower() ]]_exceptions import *
+from .[[ entity_name.lower() ]]_schemas import FileData, BaseEntity

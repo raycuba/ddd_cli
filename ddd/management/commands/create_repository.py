@@ -3,7 +3,7 @@ from colorama import Fore, Style
 
 class CreateRepositoryCommand:
     def __init__(self, subparsers):
-        parser = subparsers.add_parser("create-repository", help='Create a new repository')
+        parser = subparsers.add_parser("create-repository", help='Create a new repository  (BaseModel or Pydantic)')
         parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument('entity_name', type=str, help='The name of the entity')
         parser.add_argument("--pydantic", action="store_true", help="Create a Pydantic structure for this repository")

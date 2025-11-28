@@ -19,10 +19,10 @@ son utiles para:
 from typing import List, Optional
 
 # importa las entidades utilizadas aqui
-from ..domain.entities import [[ entity_name|capitalize_first ]]Entity
+from ..domain.[[ entity_name.lower() ]]_entity import [[ entity_name|capitalize_first ]]Entity
 
 # importa las excepciones utilizadas aqui
-from ..domain.exceptions import (
+from ..domain.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValueError,
     [[ entity_name|capitalize_first ]]ValidationError,
     [[ entity_name|capitalize_first ]]AlreadyExistsError,

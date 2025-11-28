@@ -10,10 +10,10 @@ from .mappers import Mapper
 from ..utils.filter_dict import clean_dict_of_keys
 from ..utils.is_integer import is_integer
 from ..utils.is_uuid import is_uuid
-from ..domain.entities import [[ entity_name|capitalize_first ]]Entity
+from ..domain.[[ entity_name.lower() ]]_entity import [[ entity_name|capitalize_first ]]Entity
 
 # importa las excepciones personalizadas
-from ..domain.exceptions import (
+from ..domain.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValueError,
     [[ entity_name|capitalize_first ]]ValidationError,
     [[ entity_name|capitalize_first ]]AlreadyExistsError,
@@ -141,7 +141,7 @@ class [[ entity_name|capitalize_first ]]Repository:
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
         
-        # Lista de campos en los que se permite verificar unicidad
+        # Lista de campos en los que se permite verificar existencia
         ALLOWED_FIELDS = ['id', 'uuid', 'nombre', 'email', 'ruc', 'codigo']  # define según tu entidad
         
         if field_name not in ALLOWED_FIELDS:

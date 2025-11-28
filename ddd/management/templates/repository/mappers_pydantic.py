@@ -10,8 +10,8 @@ from pydantic import BaseModel
 from django.db import models
 from django.db.models import JSONField, ManyToManyField, ForeignKey
 
-from ..domain.exceptions import [[ entity_name|capitalize_first ]]ValueError
-from ..domain.schemas import FileData
+from ..domain.[[ entity_name.lower() ]]_exceptions import [[ entity_name|capitalize_first ]]ValueError
+from ..domain.[[ entity_name.lower() ]]_schemas import FileData
 
 T = TypeVar("T", bound=BaseModel)
 

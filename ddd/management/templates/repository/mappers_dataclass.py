@@ -12,7 +12,7 @@ from typing import Type, TypeVar, Any
 from django.db import models
 from django.db.models import JSONField, ManyToManyField, ForeignKey
 
-from ..domain.exceptions import [[ entity_name|capitalize_first ]]ValueError
+from ..domain.[[ entity_name.lower() ]]_exceptions import [[ entity_name|capitalize_first ]]ValueError
 
 T = TypeVar("T")
 
