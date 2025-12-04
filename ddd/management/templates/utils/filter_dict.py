@@ -1,4 +1,4 @@
-def clean_dict_of_keys(data: dict, keys=(), exclude_none=True) -> dict:
+def clean_dict_of_keys(data: dict, keys=(), exclude_none=False) -> dict:
     """
     Limpia un diccionario eliminando claves específicas o valores None.
 
@@ -13,7 +13,7 @@ def clean_dict_of_keys(data: dict, keys=(), exclude_none=True) -> dict:
     return {k: v for k, v in data.items() if k not in keys and (v is not None or not exclude_none)}
 
 
-def filter_dict_by_keys(data: dict, keys: set, exclude_none=True) -> dict:
+def filter_dict_by_keys(data: dict, keys: set, exclude_none=False) -> dict:
     """
     Filtra un diccionario para incluir solo las claves especificadas y valores no None.
     
