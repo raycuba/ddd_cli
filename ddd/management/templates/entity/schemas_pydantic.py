@@ -19,37 +19,29 @@ class BaseEntity(BaseModel):
         """Valida reglas de negocio (puedes extender esto)"""
         return self
         
-    def update(self, data: Dict[str, Any],  add_mode: bool = False) -> None:
+    def update(self, data: Dict[str, Any], add_mode: bool = False, exclude_none: bool = False) -> None:
         """
         Actualiza la entidad con nuevos datos, respetando los campos permitidos.
-
-        :param data: Diccionario con los nuevos valores.
-        :param add_mode: Si es True, permite añadir campos nuevos no definidos en la entidad.
         """
-
         valid_data = {}
 
         for key, value in data.items():
-            # Verifica si el campo está permitido
-            is_updatable = (
-                hasattr(self, key) or add_mode
-            )
-
+            is_updatable = hasattr(self, key) or add_mode
             if is_updatable:
                 valid_data[key] = value
 
-        # Crear una copia actualizada (Pydantic valida automáticamente)
+        # Crear copia actualizada (Pydantic valida automáticamente)
         updated = self.model_copy(update=valid_data)
 
-        # Reemplazar los atributos actuales
-        for field, value in updated:
+        # Reemplazar atributos actuales con todos los valores, incluidos None
+        for field, value in updated.model_dump(exclude_none=exclude_none).items():
             setattr(self, field, value)
 
         self.validate()
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self, exclude_none: bool = False) -> Dict[str, Any]:
         """Convierte a diccionario (compatible con JSON)"""
-        return self.model_dump(exclude_none=True)
+        return self.model_dump(exclude_none=exclude_none)
 
     @classmethod    
     @abstractmethod
