@@ -75,15 +75,15 @@ class CreateViewCommand:
                 print(Fore.RED + f"The file '{web_detail_register_path}' already exists" + Style.RESET_ALL)
                 return          
 
-            #si ya existe el archivo web_form_errors mostrar error
-            if os.path.exists(web_form_errors_path):
-                print(Fore.RED + f"The file '{web_form_errors_path}' already exists" + Style.RESET_ALL)
-                return
+            # #si ya existe el archivo web_form_errors mostrar error
+            # if os.path.exists(web_form_errors_path):
+            #     print(Fore.RED + f"The file '{web_form_errors_path}' already exists" + Style.RESET_ALL)
+            #     return
 
-            #si ya existe el archivo web_global_errors mostrar error
-            if os.path.exists(web_global_errors_path):
-                print(Fore.RED + f"The file '{web_global_errors_path}' already exists" + Style.RESET_ALL)
-                return                            
+            # #si ya existe el archivo web_global_errors mostrar error
+            # if os.path.exists(web_global_errors_path):
+            #     print(Fore.RED + f"The file '{web_global_errors_path}' already exists" + Style.RESET_ALL)
+            #     return                            
 
         #renderizar views
         readWriteTemplate(
