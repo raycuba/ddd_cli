@@ -129,9 +129,9 @@ class CreateViewCommand:
         readWriteTemplate(templateName='templates', fileName='web_detail_register.html',  render_params={'app_route':app_route, 'entity_name':entity_name, 'relative_app_path':relative_app_path}, repository_path=web_detail_register_path, failIfError=True, simulate=simulate)
         # print(f"Template web_detail of Entity '{entity_name}' created at {web_detail_register_path}")
 
-        readWriteTemplate(templateName='templates', fileName='_web_form_errors.html',  render_params={}, repository_path=web_form_errors_path, failIfError=True, simulate=simulate)
+        readWriteTemplate(templateName='templates', fileName='_web_form_errors.html',  render_params={}, repository_path=web_form_errors_path, failIfError=False, simulate=simulate)
         # print(f"Template web_form_errors of Entity '{entity_name}' created at {web_form_errors_path}")
 
-        readWriteTemplate(templateName='templates', fileName='_web_global_errors.html',  render_params={}, repository_path=web_global_errors_path, failIfError=True, simulate=simulate)
+        readWriteTemplate(templateName='templates', fileName='_web_global_errors.html',  render_params={}, repository_path=web_global_errors_path, failIfError=False, simulate=simulate)
         # print(f"Template web_global_errors of Entity '{entity_name}' created at {web_global_errors_path}")
 
