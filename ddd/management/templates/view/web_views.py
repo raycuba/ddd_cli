@@ -31,7 +31,7 @@ from [[ app_name.lower() ]].[[ entity_name.lower() ]]_forms import (
 from [[ app_name.lower() ]].services.[[ entity_name.lower() ]]_service import [[ entity_name|capitalize_first ]]Service
 
 
-def [[ entity_name.lower() ]]_list(request):
+def list(request):
     """
     Vista genérica para mostrar una lista de todas las instancias de [[ entity_name|decapitalize_first ]].
     """
@@ -55,7 +55,7 @@ def [[ entity_name.lower() ]]_list(request):
     })
 
 
-def [[ entity_name.lower() ]]_count_all(request):
+def count_all(request):
     """
     Vista genérica para contar todas las instancias de [[ entity_name|decapitalize_first ]].
     """
@@ -77,7 +77,7 @@ def [[ entity_name.lower() ]]_count_all(request):
     return HttpResponse(f"Total [[ entity_name|decapitalize_first ]] count: {count}")
 
 
-def [[ entity_name.lower() ]]_create(request):
+def create(request):
     """
     Vista genérica para crear una nueva instancia de [[ entity_name|decapitalize_first ]] utilizando un servicio.
     """
@@ -124,7 +124,7 @@ def [[ entity_name.lower() ]]_create(request):
     return render(request, '[[ relative_app_path.lower() ]]/[[ entity_name.lower() ]]_web_create.html', {'form': form}) 
 
 
-def [[ entity_name.lower() ]]_edit(request, id=None):
+def edit(request, id=None):
     """
     Vista genérica para editar una instancia existente de [[ entity_name|decapitalize_first ]] utilizando un servicio.
     """
@@ -207,7 +207,7 @@ def [[ entity_name.lower() ]]_edit(request, id=None):
     return render(request, '[[ relative_app_path.lower() ]]/[[ entity_name.lower() ]]_web_edit.html', {'form': form})
 
 
-def [[ entity_name.lower() ]]_detail(request, id=None):
+def detail(request, id=None):
     """
     Vista genérica para mostrar los detalles de una instancia específica de [[ entity_name|decapitalize_first ]].
     """
@@ -240,7 +240,7 @@ def [[ entity_name.lower() ]]_detail(request, id=None):
     return render(request, '[[ relative_app_path.lower() ]]/[[ entity_name.lower() ]]_web_detail.html', {'form': form})
 
 
-def [[ entity_name.lower() ]]_delete(request, id=None):
+def delete(request, id=None):
     """
     Vista genérica para eliminar una instancia existente de [[ entity_name|decapitalize_first ]] utilizando un servicio.
     """
