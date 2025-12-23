@@ -71,13 +71,12 @@ class CreateEntityCommand:
             simulate=simulate
         )
         
-        if pydantic:
-            #renderizar schemas
-            readWriteTemplate(
-                templateName='entity',
-                fileName='schemas_dataclass.py' if not pydantic else 'schemas_pydantic.py',
-                render_params={},
-                repository_path=schemas_path,
-                failIfError=False,
-                simulate=simulate
-            )            
+        #renderizar schemas
+        readWriteTemplate(
+            templateName='entity',
+            fileName='schemas_dataclass.py' if not pydantic else 'schemas_pydantic.py',
+            render_params={},
+            repository_path=schemas_path,
+            failIfError=False,
+            simulate=simulate
+        )            
