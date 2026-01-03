@@ -1,11 +1,11 @@
 # utils/mappers.py
 import json
 import decimal
-from datetime import datetime, date, time
+import datetime
 from uuid import UUID
 from decimal import Decimal
 from enum import Enum
-from typing import Type, TypeVar, Any
+from typing import Type, TypeVar, Any, Union, get_origin, get_args, Annotated
 from pydantic import BaseModel
 from django.db import models
 from django.db.models import JSONField, ManyToManyField, ForeignKey
@@ -27,7 +27,7 @@ def make_json_safe(value):
         return {k: make_json_safe(v) for k, v in value.items()}
     elif isinstance(value, list):
         return [make_json_safe(v) for v in value]
-    elif isinstance(value, (datetime, date, time)):
+    elif isinstance(value, (datetime.datetime, datetime.date, datetime.time)):
         return value.isoformat()
     elif isinstance(value, UUID):
         return str(value)
@@ -41,6 +41,31 @@ def make_json_safe(value):
         return value.decode('utf-8', errors='ignore')
     else:
         return value        
+    
+def _unwrap(annotation):
+    """Desenvuelve Annotated, Optional, Union, etc."""
+    origin = get_origin(annotation)
+    if origin is None:
+        return annotation
+
+    args = get_args(annotation)
+
+    # Optional[T] → T
+    if origin is Union and len(args) == 2 and type(None) in args:
+        inner = args[0] if args[0] is not type(None) else args[1]
+        return _unwrap(inner)
+
+    # Annotated[T, ...] → T
+    if origin is Annotated:
+        return _unwrap(args[0])
+
+    return annotation
+    
+def _expects_date(annotation):
+    """True si el campo de la Entity es date o Optional[date]."""
+    ann = _unwrap(annotation)
+    return ann is datetime.date
+
 
 class Mapper:
 
@@ -49,7 +74,7 @@ class Mapper:
         """Convierte modelo Django → entidad Pydantic con validación y submodelos"""
 
         if not model_instance:
-            raise [[ entity_name|capitalize_first ]]ValueError("Model_instance_cannot_be_None_Cannot_convert_None_to_entity")
+            raise CompanyDailyMetricsValueError("Model_instance_cannot_be_None_Cannot_convert_None_to_entity")
 
         data = {}
 
@@ -70,14 +95,14 @@ class Mapper:
                 field_object = model_instance._meta.get_field(model_field_name)
             except Exception:
                 pass
+            
+            # Convertir datetime → date si el campo de la Entity es date
+            if isinstance(value, datetime.datetime) and _expects_date(field_info.annotation):
+                value = value.date()               
 
             # ManyToMany
             if isinstance(value, models.Manager):
                 value = list(value.values_list('pk', flat=True)) if value else []
-
-            # ForeignKey / OneToOne
-            elif hasattr(value, 'pk') and value is not None:
-                value = value.pk
 
             # Archivos e Imágenes
             elif field_object and isinstance(field_object, (models.FileField, models.ImageField)):
@@ -92,15 +117,19 @@ class Mapper:
                         value = None
                 except (ValueError, AttributeError):
                     value = None
+                    
+            # ForeignKey / OneToOne
+            elif hasattr(value, 'pk') and value is not None:
+                value = value.pk                    
 
             # Decimal → float
             elif isinstance(value, decimal.Decimal):
-                value = float(value)
+                value = float(value)                  
 
             # Submodelos Pydantic
             elif isinstance(field_info.annotation, type) and issubclass(field_info.annotation, BaseModel):
                 if isinstance(value, dict):
-                    value = field_info.annotation.model_validate(value)
+                    value = field_info.annotation.model_validate(value)               
 
             data[field_name] = value
 

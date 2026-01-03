@@ -55,3 +55,8 @@ htmlcov/
 *.old
 pip-wheel-metadata/
 
+# Environments
+.venv
+venv/
+ENV/
+

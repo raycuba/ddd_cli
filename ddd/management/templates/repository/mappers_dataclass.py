@@ -68,29 +68,31 @@ class Mapper:
             field_object = model_instance._meta.get_field(field_name)
 
             # Manejo especial para diferentes tipos de campo
+
+            # Para relaciones ManyToMany o reverse FK
             if isinstance(value, models.Manager):
-                # Para relaciones ManyToMany o reverse FK
                 value = list(value.values_list('pk', flat=True)) if value else []
 
+            # UUIDField
             elif isinstance(value, uuid.UUID):
                 # Dejar tal cual; que la entidad lo maneje
                 pass
 
-            elif isinstance(value, (datetime, date)):
+            # DateField / DateTimeField / TimeField
+            elif isinstance(value, (datetime, date, time)):
                 # Dejar tal cual; que la entidad lo maneje
                 pass
 
+            # Decimal
             elif isinstance(value, decimal.Decimal):
                 value = float(value)  # o dejar como Decimal si tu entidad lo acepta            
 
+            # JSONField
             elif isinstance(value, dict) or isinstance(value, list):
                 # JSONField ya devuelve dict/list, dejar intacto
                 pass
-
-            elif hasattr(value, 'pk'):
-                # Es una relación ForeignKey/OneToOne -> extraer ID
-                value = value.pk if value else None
                 
+            # FileField / ImageField
             elif isinstance(field_object, (models.FileField, models.ImageField)):
                 try:
                     if value and value.name and value.url:
@@ -99,9 +101,14 @@ class Mapper:
                         value = None
                 except ValueError:
                     value = None
-                    
+
+            # ForeignKey / OneToOne
+            elif hasattr(value, 'pk'):
+                # Es una relación ForeignKey/OneToOne -> extraer ID
+                value = value.pk if value else None
+
+            # Otros tipos (CharField, IntegerField, BooleanField, etc.) se dejan tal cual
             else:
-                # Otros tipos (CharField, IntegerField, BooleanField, etc.) se dejan tal cual
                 pass
 
             # Añadir al diccionario solo si es válido
