@@ -3,11 +3,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
 from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter
-from drf_spectacular.types import OpenApiTypes
 from rest_framework.permissions import IsAuthenticated
 
 # importar serializers
-from .serializers import [[ entity_name|capitalize_first ]]DTOSerializer
+from .serializers.[[ entity_name.lower() ]]_serializer import [[ entity_name|capitalize_first ]]DTOSerializer
 
 # importa las excepciones personalizadas
 from .domain.[[ entity_name.lower() ]]_exceptions import (

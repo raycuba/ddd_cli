@@ -40,7 +40,7 @@ class CreateViewApiViewSetCommand:
         app_name, last_app_name, app_route, relative_app_path = decodeAppPath(app_path)
 
         #renderizar urls
-        readWriteTemplate(templateName='routers', fileName='api_viewset_urls.py',  render_params={'entity_name':entity_name}, repository_path=urls_path, failIfError=True, simulate=simulate)  
+        readWriteTemplate(templateName='routers', fileName='api_viewset_urls.py',  render_params={'entity_name':entity_name, 'app_name': app_name}, repository_path=urls_path, failIfError=True, simulate=simulate)  
 
         # Crear serializer - llamar directamente al método sin crear nueva instancia
         serializer_command = CreateSerializerCommand.__new__(CreateSerializerCommand)
