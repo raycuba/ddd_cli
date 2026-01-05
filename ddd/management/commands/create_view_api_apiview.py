@@ -9,10 +9,7 @@ class CreateViewApiApiViewCommand:
         parser.add_argument('app_path', type=str, help='The relative path of the app within the project (for example, "apps/app1")')
         parser.add_argument('entity_name', type=str, help='The name of the entity')     
         parser.add_argument("--simulate", action="store_true", help="Simulate the creation of this entity without writing files")        
-        parser.set_defaults(func=self.execute)     
-
-        # guardar el subparser para usarlo en el comando
-        self.subparsers = subparsers
+        parser.set_defaults(func=self.execute)
 
     def execute(self, args):
         self.create_view_api_apiview(args.app_path, args.entity_name, args.simulate)
@@ -44,8 +41,8 @@ class CreateViewApiApiViewCommand:
         #renderizar urls
         readWriteTemplate(templateName='routers', fileName='api_apiview_urls.py',  render_params={'entity_name':entity_name}, repository_path=urls_path, failIfError=True, simulate=simulate)
 
-        # Crear serializer
-        serializer_command = CreateSerializerCommand(subparsers=self.subparsers)
+        # Crear serializer - llamar directamente al método sin crear nueva instancia
+        serializer_command = CreateSerializerCommand.__new__(CreateSerializerCommand)
         serializer_command.create_serializer(app_path=app_path, serializer_name=entity_name, simulate=simulate)
 
         readWriteTemplate(
