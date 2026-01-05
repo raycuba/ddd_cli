@@ -1,8 +1,8 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
+from rest_framework.decorators import action
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework.permissions import IsAuthenticated
 
 # importar serializers
@@ -44,15 +44,16 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
     # http_method_names = ['get', 'post', 'put', 'delete']
 
 
-    @swagger_auto_schema(
-        operation_summary="Retrieve a list or a specific [[ entity_name|decapitalize_first ]]",
-        operation_description="Retrieve a list of all [[ entity_name|decapitalize_first ]] or a specific one by ID",
+    @extend_schema(
+        operation_id="[[ entity_name|decapitalize_first ]]_list",
+        summary="Retrieve a list or a specific [[ entity_name|decapitalize_first ]]",
+        description="Retrieve a list of all [[ entity_name|decapitalize_first ]] or a specific one by ID",
         responses={
-            200: [[ entity_name|capitalize_first ]]DTOSerializer,
-            404: "Not Found",
-            400: "Bad Request"
+            200: [[ entity_name|capitalize_first ]]DTOSerializer(many=True),
+            404: OpenApiResponse(description="Not Found"),
+            400: OpenApiResponse(description="Bad Request")
         },
-        tags=["[[ entity_name|decapitalize_first ]]"]
+        tags=["[[ entity_name|decapitalize_first ]]s"]
     )
     def list(self, request):
         """
@@ -69,8 +70,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
             [[ entity_name|decapitalize_first ]]List = [[ entity_name|decapitalize_first ]]Service.list()
 
             # Serializar la lista de registros
-            response_serializer_list = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]]List, many=True)
-            response_serializer_list.is_valid(raise_exception=True)            
+            response_serializer_list = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]]List, many=True)       
 
             # Retornar los datos serializados con un estado HTTP 200 OK
             return Response(response_serializer_list.data, status=status.HTTP_200_OK)
@@ -86,15 +86,16 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
             return Response({"error": "Unexpected error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-    @swagger_auto_schema(
-        operation_summary="Retrieve a specific [[ entity_name|decapitalize_first ]] by ID",
-        operation_description="Retrieve a specific [[ entity_name|decapitalize_first ]] by its ID",
+    @extend_schema(
+        operation_id="[[ entity_name|decapitalize_first ]]_retrieve",
+        summary="Retrieve a specific [[ entity_name|decapitalize_first ]] by ID",
+        description="Retrieve a specific [[ entity_name|decapitalize_first ]] by its ID",
         responses={
             200: [[ entity_name|capitalize_first ]]DTOSerializer,
-            404: "Not Found",
-            400: "Bad Request"
+            404: OpenApiResponse(description="Not Found"),
+            400: OpenApiResponse(description="Bad Request")
         },
-        tags=["[[ entity_name|decapitalize_first ]]"]
+        tags=["[[ entity_name|decapitalize_first ]]s"]
     )
     def retrieve(self, request, pk=None):
         """
@@ -111,8 +112,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
             [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.retrieve(entity_id=pk)
 
             # Serializar el registro recuperado
-            response_serializer = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]])
-            response_serializer.is_valid(raise_exception=True)            
+            response_serializer = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]])        
 
             # Retornar el resultado con un estado HTTP 200 OK
             return Response(response_serializer.data, status=status.HTTP_200_OK)
@@ -131,15 +131,16 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
             return Response({"error": "Unexpected error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-    @swagger_auto_schema(
-        operation_summary="Create a new [[ entity_name|decapitalize_first ]]",
-        operation_description="Create a new [[ entity_name|decapitalize_first ]] with the provided data",
+    @extend_schema(
+        operation_id="[[ entity_name|decapitalize_first ]]_create",
+        summary="Create a new [[ entity_name|decapitalize_first ]]",
+        description="Create a new [[ entity_name|decapitalize_first ]] with the provided data",
         request_body=[[ entity_name|capitalize_first ]]DTOSerializer,
         responses={
             201: [[ entity_name|capitalize_first ]]DTOSerializer,
-            400: "Bad Request"
+            400: OpenApiResponse(description="Bad Request")
         },
-        tags=["[[ entity_name|decapitalize_first ]]"]
+        tags=["[[ entity_name|decapitalize_first ]]s"]
     )
     def create(self, request):
         """
@@ -168,8 +169,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
             [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.create(data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el nuevo registro creado
-            response_serializer = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]])
-            response_serializer.is_valid(raise_exception=True)            
+            response_serializer = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]])      
 
             # Retornar el resultado con un estado HTTP 201 CREATED
             return Response(response_serializer.data, status=status.HTTP_201_CREATED)
@@ -188,16 +188,17 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
             return Response({"error": "Unexpected error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-    @swagger_auto_schema(
-        operation_summary="Update an existing [[ entity_name|decapitalize_first ]]",
-        operation_description="Update an existing [[ entity_name|decapitalize_first ]] with the provided ID and data",
+    @extend_schema(
+        operation_id="[[ entity_name|decapitalize_first ]]_update",
+        summary="Update an existing [[ entity_name|decapitalize_first ]]",
+        description="Update an existing [[ entity_name|decapitalize_first ]] with the provided ID and data",
         request_body=[[ entity_name|capitalize_first ]]DTOSerializer,
         responses={
             200: [[ entity_name|capitalize_first ]]DTOSerializer,
-            400: "Bad Request",
-            404: "Not Found"
+            400: OpenApiResponse(description="Bad Request"),
+            404: OpenApiResponse(description="Not Found")
         },
-        tags=["[[ entity_name|decapitalize_first ]]"]
+        tags=["[[ entity_name|decapitalize_first ]]s"]
     )
     def update(self, request, pk=None):
         """
@@ -226,8 +227,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
             [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.update(entity_id=pk, data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el registro actualizado
-            response_serializer = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]])
-            response_serializer.is_valid(raise_exception=True)            
+            response_serializer = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]])          
 
             # Retornar el resultado con un estado HTTP 200 OK
             return Response(response_serializer.data, status=status.HTTP_200_OK)
@@ -246,15 +246,16 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
             return Response({"error": "Unexpected error: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-    @swagger_auto_schema(
-        operation_summary="Delete an existing [[ entity_name|decapitalize_first ]]",
-        operation_description="Delete an existing [[ entity_name|decapitalize_first ]] with the provided ID",
+    @extend_schema(
+        operation_id="[[ entity_name|decapitalize_first ]]_delete",
+        summary="Delete an existing [[ entity_name|decapitalize_first ]]",
+        description="Delete an existing [[ entity_name|decapitalize_first ]] with the provided ID",
         responses={
-            204: "No Content",
-            400: "Bad Request",
-            404: "Not Found"
+            204: OpenApiResponse(description="No Content"),
+            400: OpenApiResponse(description="Bad Request"),
+            404: OpenApiResponse(description="Not Found")
         },
-        tags=["[[ entity_name|decapitalize_first ]]"]
+        tags=["[[ entity_name|decapitalize_first ]]s"]
     )
     def destroy(self, request, pk=None):
         """

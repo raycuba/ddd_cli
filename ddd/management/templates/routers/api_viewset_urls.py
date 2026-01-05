@@ -1,15 +1,23 @@
+"""
+Router for [[ entity_name.lower() ]] API ViewSet.
+"""
+
+from django.conf import settings
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from rest_framework.routers import SimpleRouter
 
 from . import [[ entity_name.lower() ]]_views
 
-router_[[ entity_name.lower() ]] = DefaultRouter()
+app_name = '[[ entity_name.lower() ]]s'
 
-#definir rutas
-router_[[ entity_name.lower() ]].register(prefix='[[ entity_name.lower() ]]s', basename='[[ entity_name.lower() ]]s', viewset= [[ entity_name.lower() ]]_views.[[ entity_name|capitalize_first ]]ViewSet)
+router_[[ entity_name.lower() ]] = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
-urlpatterns = [
+# define routes
+router_[[ entity_name.lower() ]].register('', [[ entity_name.lower() ]]_views.[[ entity_name|capitalize_first ]]ViewSet, basename='[[ entity_name.lower() ]]s')
 
-    path('api/[[ entity_name.lower() ]]/', include(router_[[ entity_name.lower() ]].urls)),
-    
-]
+"""Dont forget to include this router in your project's main urls.py file.
+like this:
+
+    path('[[ entity_name.lower() ]]s/', include((router_[[ entity_name.lower() ]].urls, "[[ entity_name.lower() ]]s"), namespace="[[ entity_name.lower() ]]s")),
+"""
