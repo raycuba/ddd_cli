@@ -2,7 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
 from rest_framework.permissions import IsAuthenticated
 
 # importar serializers
@@ -35,6 +36,9 @@ class [[ entity_name|capitalize_first ]]APIView(APIView):
     - Repositorios que interactúan con la capa de persistencia.
     """
 
+    # Serializer por defecto para documentación
+    serializer_class = [[ entity_name|capitalize_first ]]DTOSerializer        
+
     # Definición de permisos y autenticación
     # permission_classes = [IsAuthenticated]
     # authentication_classes = [TokenAuthentication]
@@ -54,7 +58,7 @@ class [[ entity_name|capitalize_first ]]APIView(APIView):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def get(self, request, id=None):
+    def get(self, request, id: int = None):
         """
         Maneja solicitudes GET para recuperar uno o todos los registros.
 
@@ -178,7 +182,7 @@ class [[ entity_name|capitalize_first ]]APIView(APIView):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def put(self, request, id):
+    def put(self, request, id: int = None):
         """
         Maneja solicitudes PUT para actualizar un registro existente.
 
@@ -235,7 +239,7 @@ class [[ entity_name|capitalize_first ]]APIView(APIView):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def delete(self, request, id):
+    def delete(self, request, id: int = None):
         """
         Maneja solicitudes DELETE para eliminar un registro existente.
 

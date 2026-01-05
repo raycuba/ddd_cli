@@ -2,7 +2,8 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
 from rest_framework.permissions import IsAuthenticated
 
 # importar serializers
@@ -35,6 +36,9 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
     - Los servicios del dominio para manejar la lógica de negocio.
     - Los repositorios para acceder a la capa de persistencia.
     """
+
+    # Serializer por defecto para documentación
+    serializer_class = [[ entity_name|capitalize_first ]]DTOSerializer    
 
     # Definición de permisos y autenticación
     # permission_classes = [IsAuthenticated]
@@ -97,7 +101,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, pk: int = None):
         """
         Endpoint para obtener un [[ entity_name|decapitalize_first ]] específico por su ID (pk).
         
@@ -200,7 +204,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def update(self, request, pk=None):
+    def update(self, request, pk: int = None):
         """
         Endpoint para actualizar un [[ entity_name|decapitalize_first ]] existente.
         
@@ -257,7 +261,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def destroy(self, request, pk=None):
+    def destroy(self, request, pk: int = None):
         """
         Endpoint para eliminar un [[ entity_name|decapitalize_first ]] existente.
         
