@@ -18,7 +18,7 @@ urlpatterns = [
 ]
 
 """
-Include this URLconf in your project's main urls.py:
+📌 Include this URLconf in your project's main urls.py:
 
     from django.urls import path, include
     
@@ -44,4 +44,37 @@ Benefits of using DefaultRouter:
     ✅ Built-in API browsability
     ✅ Less code maintenance
     ✅ Standard DRF patterns
+
+⚠️  IMPORTANT: Custom Endpoints Recommendation
+===============================================
+
+If your ViewSet contains custom action methods (non-standard endpoints), 
+consider defining URLs manually to avoid drf-spectacular warnings and 
+for better OpenAPI documentation control.
+
+Example with custom endpoints:
+
+    from django.urls import path
+    from . import [[ entity_name.lower() ]]_views
+    
+    app_name = '[[ entity_name.lower() ]]s'
+    
+    # URLs manuales con tipos explícitos para evitar warnings de drf-spectacular
+    urlpatterns = [
+        # Standard CRUD endpoints
+        path('', [[ entity_name.lower() ]]_views.[[ entity_name|capitalize_first ]]ViewSet.as_view({'get': 'list', 'post': 'create'}), name='[[ entity_name.lower() ]]s-list'),
+        path('<int:pk>/', [[ entity_name.lower() ]]_views.[[ entity_name|capitalize_first ]]ViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), name='[[ entity_name.lower() ]]s-detail'),
+        
+        # Custom endpoints (examples)
+        path('favorites/', [[ entity_name.lower() ]]_views.[[ entity_name|capitalize_first ]]ViewSet.as_view({'get': 'list_favorites'}), name='[[ entity_name.lower() ]]s-list-favorites'),
+        path('<int:pk>/set-favorite/', [[ entity_name.lower() ]]_views.[[ entity_name|capitalize_first ]]ViewSet.as_view({'post': 'set_as_favorite'}), name='[[ entity_name.lower() ]]s-set-as-favorite'),  
+        path('<int:pk>/unset-favorite/', [[ entity_name.lower() ]]_views.[[ entity_name|capitalize_first ]]ViewSet.as_view({'delete': 'unset_as_favorite'}), name='[[ entity_name.lower() ]]s-unset-as-favorite'),
+    ]
+
+Use manual URLs when:
+    🎯 ViewSet has @action decorated methods
+    🎯 You need precise OpenAPI documentation
+    🎯 Custom URL patterns are required
+    🎯 Want to avoid drf-spectacular warnings
+    🎯 Need fine-grained control over endpoints
 """

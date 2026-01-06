@@ -29,7 +29,7 @@ urlpatterns = [
 ]
 
 """
-Incluye este URLconf in your project's main urls.py:
+📌 Include este URLconf in your project's main urls.py:
 
     from django.urls import path, include
     
