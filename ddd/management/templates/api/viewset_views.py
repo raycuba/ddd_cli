@@ -100,9 +100,9 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def retrieve(self, request, pk: int = None):
+    def retrieve(self, request, id: int = None):
         """
-        Endpoint para obtener un [[ entity_name|decapitalize_first ]] específico por su ID (pk).
+        Endpoint para obtener un [[ entity_name|decapitalize_first ]] específico por su ID (id).
         
         - Valida y adapta la solicitud al dominio.
         - Utiliza el servicio `retrieve_[[ entity_name|decapitalize_first ]]` para manejar la lógica.
@@ -112,7 +112,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
 
         try:
             # Llamar al servicio para recuperar un registro específico
-            [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.retrieve(entity_id=pk)
+            [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.retrieve(entity_id=id)
 
             # Serializar el registro recuperado
             response_serializer = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]])        
@@ -203,7 +203,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def update(self, request, pk: int = None):
+    def update(self, request, id: int = None):
         """
         Endpoint para actualizar un [[ entity_name|decapitalize_first ]] existente.
         
@@ -227,7 +227,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
 
         try:
             # Llamar al servicio para actualizar el registro
-            [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.update(entity_id=pk, data=serializer.validated_data, external_id=external_id, externals=externals)
+            [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.update(entity_id=id, data=serializer.validated_data, external_id=external_id, externals=externals)
 
             # Serializar el registro actualizado
             response_serializer = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]])          
@@ -260,7 +260,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def destroy(self, request, pk: int = None):
+    def destroy(self, request, id: int = None):
         """
         Endpoint para eliminar un [[ entity_name|decapitalize_first ]] existente.
         
@@ -272,7 +272,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
 
         try:
             # Llamar al servicio para eliminar el registro
-            [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.delete(entity_id=pk)
+            [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.delete(entity_id=id)
 
             # Retornar un estado HTTP 204 NO CONTENT para confirmar la eliminación
             return Response(status=status.HTTP_204_NO_CONTENT)
