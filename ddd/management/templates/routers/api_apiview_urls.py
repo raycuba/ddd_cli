@@ -5,7 +5,7 @@ Router para [[ entity_name.lower() ]] API APIView.
 from django.urls import path
 from . import [[ entity_name.lower() ]]_views
 
-app_name = '[[ entity_name.lower() ]]'
+app_name = '[[ entity_name.lower() ]]s'
 
 # API endpoints con URLs individuales para cada operación HTTP
 urlpatterns = [

@@ -6,7 +6,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import [[ entity_name.lower() ]]_views
 
-app_name = '[[ entity_name.lower() ]]'
+app_name = '[[ entity_name.lower() ]]s'
 
 # Crear router y registrar ViewSet
 router = DefaultRouter()
