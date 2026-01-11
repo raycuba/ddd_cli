@@ -4,4 +4,4 @@ from typing_extensions import Self
 from uuid import UUID
 from datetime import datetime
 from .[[ entity_name.lower() ]]_exceptions import *
-from .[[ entity_name.lower() ]]_schemas import FileData, BaseEntity
+from .[[ entity_name.lower() ]]_schemas import FileData, BaseEntity, DomainValueError

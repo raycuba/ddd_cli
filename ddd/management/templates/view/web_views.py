@@ -199,8 +199,8 @@ def edit(request, id=None):
         # Initialize the form with existing data
         form = [[ entity_name|capitalize_first ]]EditGetForm(initial={
             'id': [[ entity_name|decapitalize_first ]].get('id'),
-            'attributeName': [[ entity_name|decapitalize_first ]].get('attributeName'),
-            'attributeEmail': [[ entity_name|decapitalize_first ]].get('attributeEmail')
+            'name': [[ entity_name|decapitalize_first ]].get('name'),
+            'email': [[ entity_name|decapitalize_first ]].get('email')
         })
 
     # Renderizar la plantilla con el formulario
@@ -233,8 +233,8 @@ def detail(request, id=None):
 
     # Renderizar la plantilla con el formulario de vista
     form = [[ entity_name|capitalize_first ]]ViewForm(initial={
-        'attributeName': [[ entity_name|decapitalize_first ]].get('attributeName'),
-        'attributeEmail': [[ entity_name|decapitalize_first ]].get('attributeEmail')
+        'name': [[ entity_name|decapitalize_first ]].get('name'),
+        'email': [[ entity_name|decapitalize_first ]].get('email')
     })
 
     return render(request, '[[ relative_app_path.lower() ]]/[[ entity_name.lower() ]]_web_detail.html', {'form': form})

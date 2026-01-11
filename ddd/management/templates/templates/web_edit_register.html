@@ -39,14 +39,14 @@ Django form edit
         {% endfor %}
 
         <!-- ejemplo de como generar un campo especifico -->
-        <div id="div_{{ form.attributeName.id_for_label }}" class="mb-3">
-            <label for="{{ form.attributeName.id_for_label }}" class="form-label">
-                {{ form.attributeName.label }}
+        <div id="div_{{ form.name.id_for_label }}" class="mb-3">
+            <label for="{{ form.name.id_for_label }}" class="form-label">
+                {{ form.name.label }}
             </label>
-            {{ form.attributeName }}
-            {% if form.attributeName.errors %}
+            {{ form.name }}
+            {% if form.name.errors %}
                 <div class="text-danger">
-                    {% for error in form.attributeName.errors %}
+                    {% for error in form.name.errors %}
                         <p>{{ error }}</p>
                     {% endfor %}
                 </div>

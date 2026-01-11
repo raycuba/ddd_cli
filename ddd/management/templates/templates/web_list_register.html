@@ -13,10 +13,10 @@ Django form list
     <table class="table table-striped border datatable">
         <thead>
           <tr>       
-            <th>AttributeName</th>
-            <th>AttributeEmail</th>            
-            <th>AttributeRole</th>                       
-            <th>AttributeStatus</th>
+            <th>Name</th>
+            <th>Email</th>            
+            <th>Role</th>                       
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -24,18 +24,18 @@ Django form list
 
             {% for [[ entity_name|decapitalize_first ]] in [[ entity_name|decapitalize_first ]]_list %}
             <tr class="align-middle">              
-                <td>{{[[ entity_name|decapitalize_first ]].attributeName}}</td>                
-                <td>{{[[ entity_name|decapitalize_first ]].attributeEmail}}</td>
+                <td>{{[[ entity_name|decapitalize_first ]].name}}</td>                
+                <td>{{[[ entity_name|decapitalize_first ]].email}}</td>
                 <td>
-                    {% if [[ entity_name|decapitalize_first ]].attributeRole == 'adm' %} 
+                    {% if [[ entity_name|decapitalize_first ]].role == 'adm' %} 
                         Administrator 
-                    {% elif [[ entity_name|decapitalize_first ]].attributeRole == 'man' %} 
+                    {% elif [[ entity_name|decapitalize_first ]].role == 'man' %} 
                         Manager 
-                    {% elif [[ entity_name|decapitalize_first ]].attributeRole == 'emp' %} 
+                    {% elif [[ entity_name|decapitalize_first ]].role == 'emp' %} 
                         Employee 
                     {% endif %}
                 </td>
-                <td>{{[[ entity_name|decapitalize_first ]].attributeStatus}}</td>
+                <td>{{[[ entity_name|decapitalize_first ]].status}}</td>
                 <td>
                     <a class="btn btn-success" href="">Edit</a>
                     <a class="btn btn-success" href="">View</a>

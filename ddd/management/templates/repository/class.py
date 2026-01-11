@@ -39,12 +39,6 @@ class [[ entity_name|capitalize_first ]]Repository:
     - Métodos básicos.
     """
 
-    # Campos de la entidad no persistibles en el repositorio (para lógica de actualización)
-    # Los campos no persistibles son aquellos que tienen una forma especial de ser guardados como: photo, password, etc.
-    ENTITY_NOT_PERSISTIBLE_FIELDS = {
-        'photo', 'password'
-    }    
-
     @staticmethod
     def get_all(filters: Optional[dict] = None) -> List[ [[ entity_name|capitalize_first ]]Entity ]:
         """
@@ -216,7 +210,7 @@ class [[ entity_name|capitalize_first ]]Repository:
         try:
             # Crear el registro a partir de los campos presentes en la 'entity'
             instance = [[ entity_name|capitalize_first ]]()
-            Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Repository.ENTITY_NOT_PERSISTIBLE_FIELDS) 
+            Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Entity.Meta.readonly_fields) 
 
             with transaction.atomic():
                 # Asegurar que todas las operaciones se realicen en una transacción
@@ -248,7 +242,7 @@ class [[ entity_name|capitalize_first ]]Repository:
             raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error: {e.message_dict}") from e
         except IntegrityError as e:
             if 'duplicate' in str(e).lower() or 'unique constraint' in str(e).lower():
-                raise [[ entity_name|capitalize_first ]]AlreadyExistsError(field='attributeName', detail=instance.attributeName)  # Ajusta según el campo único
+                raise [[ entity_name|capitalize_first ]]AlreadyExistsError(field='name', detail=instance.name)  # Ajusta según el campo único
             # Otro error de integridad → regla de negocio?
             raise [[ entity_name|capitalize_first ]]ValidationError({"integrity": "Duplicated or inconsistent data"})            
         except DatabaseError as e:
@@ -306,7 +300,7 @@ class [[ entity_name|capitalize_first ]]Repository:
                 # Esto garantiza que si algo falla, no se guarden cambios parciales     
                 
                 # Actualizar cada campo de la entidad en el modelo
-                Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Repository.ENTITY_NOT_PERSISTIBLE_FIELDS)              
+                Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Entity.Meta.readonly_and_protected_fields)           
 
                 # Si se proporciona un ID de otra entidad, actualizarlo
                 if external_id is not None:

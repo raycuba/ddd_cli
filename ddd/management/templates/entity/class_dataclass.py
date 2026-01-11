@@ -1,19 +1,33 @@
+from dataclasses import dataclass
+from typing import Optional, List
+from uuid import UUID
+from .[[ entity_name.lower() ]]_exceptions import *
+from .[[ entity_name.lower() ]]_schemas import FileData, BaseEntity, DomainValueError
+
 @dataclass
-class [[ entity_name|capitalize_first ]]Entity:
+class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
     """
     Entidad del dominio para [[ entity_name|decapitalize_first ]].
 
     Esta clase representa la lógica de negocio central y las reglas asociadas 
     con [[ entity_name|decapitalize_first ]] en el sistema.
     """
+
+    class Meta:
+        required_fields = {"name", "external_id"} # Requeridos para la creación
+        readonly_fields = {"id", "uuid", "created_at", "updated_at"} # Prohibidos siempre en creacion/actualizaciones
+        protected_fields = {"external_id"} # Prohibidos en ciertas operaciones y actualizaciones
+        special_update_fields = {"externals", "photo"} # Prohibidos en actualizaciones normales, requieren manejo especial        
+        readonly_and_protected_fields = readonly_fields.union(protected_fields)        
     
     # Identificadores
     id: Optional[int] = None  # ID relacionado con la base de datos
     uuid: Optional[UUID] = None
 
     # Atributos principales
-    attributeName: Optional[str] = None  # Atributo opcional
-    attributeEmail: Optional[str] = None  # Atributo opcional
+    name: Optional[str] = None  # Atributo opcional
+    email: Optional[str] = None  # Atributo opcional
+    photo: Optional[dict] = None  # Atributo opcional
 
     # Relaciones
     external_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
@@ -23,60 +37,28 @@ class [[ entity_name|capitalize_first ]]Entity:
 
     # Descomentar si se quiere hacer una validacion estricta
     #def __post_init__(self):
-    #    self.validate()   
+    #    self._run_validation()
 
+    
     def validate(self) -> None:
         """
         Valida la entidad antes de guardar o procesar.
+
         Lanza excepciones si las reglas de negocio no se cumplen.
         - Consistencia interna de los atributos
         - Validaciones intrínsecas al momento de creación/modificación
         """
-        if not self.attributeName or len(self.attributeName) < 3:
-            raise [[ entity_name|capitalize_first ]]ValueError(field="attributeName", detail="attributeName must be at least 3 characters")
+        # Validaciones de ejemplo
+        if not self.name or len(self.name) < 3:
+            raise DomainValueError(field="name", detail="name must be at least 3 characters")
 
-        if self.attributeEmail and len(self.attributeEmail) > 500:
-            raise [[ entity_name|capitalize_first ]]ValueError(field="attributeEmail", detail="attributeEmail must not exceed 500 characters")
+        if self.email and len(self.email) > 500:
+            raise DomainValueError(field="email", detail="email must not exceed 500 characters")
 
-    def update(self, data:dict, addMode:bool = False) -> None:
-        """
-        Actualiza los atributos de la entidad con valores nuevos.
-        si addMode = True permite añadir campos nuevos
-        :param data: Diccionario con los nuevos valores para los atributos.
-        :param addMode: Si es True, permite añadir nuevos campos que no existan en la entidad.
-        :raises [[ entity_name|capitalize_first ]]ValueError: Si hay un error de estructura en los datos.
-        """
-        # Actualizar cada campo proporcionado en 'data'
-        for key, value in data.items():
-            if hasattr(self, key) or addMode:
-                try:
-                    setattr(self, key, value)             
-                except TypeError as e:
-                    raise [[ entity_name|capitalize_first ]]ValueError(field=key, detail=f"Error in data structure: {str(e)}") from e
+        if self.externals and not all(isinstance(x, int) for x in self.externals):
+            raise DomainValueError(field="externals", detail="externals must be a list of integers")            
+  
 
-        self.validate()    
-
-    def to_dict(self) -> dict:
-        """
-        Convierte la entidad a un diccionario, excluyendo los campos con valor None.
-        """
-        return {k: v for k, v in self.__dict__.items() if v is not None}
-
-    @staticmethod
-    def from_dict(data: dict) -> "[[ entity_name|capitalize_first ]]Entity":
-        """
-        Crea una instancia de la entidad a partir de un diccionario.
-        """
-        # aqui quitaremos de 'data' los campos no deseados para la entity
-
-        # construir la entidad
-        try:
-            entity = [[ entity_name|capitalize_first ]]Entity(**data)
-        except TypeError as e:
-            raise [[ entity_name|capitalize_first ]]ValueError("Error building entity:", str(e)) from e
-
-        return entity
-        
 
 '''
 Guía para añadir nuevos campos a entidades Dataclass:

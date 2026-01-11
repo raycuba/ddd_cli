@@ -11,8 +11,8 @@ class [[ dto_name|capitalize_first ]]Dto:
     id: Optional[int] = None  # ID es opcional al crear un nuevo objeto
 
     # Atributos principales
-    attributeName: str  # Atributo obligatorio
-    attributeEmail: Optional[str] = None  # Atributo opcional
+    name: str  # Atributo obligatorio
+    email: Optional[str] = None  # Atributo opcional
 
     # Relaciones
     external_id: Optional[int] = None  # ID de una entidad relacionada (opcional)

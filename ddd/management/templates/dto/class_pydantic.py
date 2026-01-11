@@ -10,8 +10,8 @@ class [[ dto_name|capitalize_first ]]Dto(BaseModel):
     id: Optional[int] = None  # ID es opcional al crear un nuevo objeto
 
     # Atributos principales
-    attributeName: str  # Atributo obligatorio
-    attributeEmail: Optional[str] = None  # Atributo opcional
+    name: str  # Atributo obligatorio
+    email: Optional[str] = None  # Atributo opcional
 
     # Relaciones
     external_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
@@ -101,11 +101,11 @@ Ejemplos:
 
     @model_validator(mode='after')
     def validate(self) -> self:
-        if not self.attributeName or len(self.attributeName) < 3:
-            raise ValueError("attributeName must be at least 3 characters")
+        if not self.name or len(self.name) < 3:
+            raise ValueError("name must be at least 3 characters")
         return self
 
-    @field_validator('attributeEmail')
+    @field_validator('email')
     def validate_email(cls, v: Optional[str]) -> Optional[str]:
         if v is not None and "@" not in v:
             raise ValueError("Invalid email address")

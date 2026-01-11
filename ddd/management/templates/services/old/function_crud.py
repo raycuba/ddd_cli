@@ -49,9 +49,9 @@ def create_[[ entity_name|decapitalize_first ]](repository: [[ entity_name|capit
     """
 
     # Validación de reglas de negocio (opcional)
-    if repository.exists_by_field(field_name="attributeName", value=data.get("attributeName")):
-        raise [[ entity_name|capitalize_first ]]ValueError(field="attributeName", detail="An instance with this attributeName already exists")
-
+    if repository.exists_by_field(field_name="name", value=data.get("name")):
+        raise [[ entity_name|capitalize_first ]]ValueError(field="name", detail="An instance with this name already exists")
+        
     #crear y validar la entidad
     entity = [[ entity_name|capitalize_first ]]Entity.from_dict(data)
     entity.validate()

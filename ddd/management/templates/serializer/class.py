@@ -11,8 +11,8 @@ class [[ serializer_name|capitalize_first ]]DTOSerializer(serializers.Serializer
     uuid = serializers.UUIDField(read_only=True, help_text="UUID relacionado con la entidad")
 
     # Atributos principales
-    attributeName = serializers.CharField(help_text="Nombre del atributo")
-    attributeEmail = serializers.EmailField(help_text="Email del atributo")
+    name = serializers.CharField(help_text="Nombre del atributo")
+    email = serializers.EmailField(help_text="Email del atributo")
 
     # Relaciones
     external_id = serializers.IntegerField(

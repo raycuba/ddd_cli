@@ -28,7 +28,7 @@ class [[ entity_name|capitalize_first ]]BaseForm(forms.Form):
 
         # Definimos los campos del formulario de manera dinámica
         # Campo de texto y numeros (Nombre)
-        self.fields['attributeName'] = forms.CharField(
+        self.fields['name'] = forms.CharField(
             label="Name",
             max_length=100,
             required=True,
@@ -48,7 +48,7 @@ class [[ entity_name|capitalize_first ]]BaseForm(forms.Form):
         )
 
         # Campo de correo electrónico
-        self.fields['attributeEmail'] = forms.EmailField(
+        self.fields['email'] = forms.EmailField(
             label="Email",
             required=True,
             widget=forms.EmailInput(attrs={
@@ -85,30 +85,30 @@ class [[ entity_name|capitalize_first ]]BaseForm(forms.Form):
         )   
 
 
-    def clean_attributeName(self):
+    def clean_name(self):
         '''
-        Esta validacion es solo para el campo 'attributeName'
+        Esta validacion es solo para el campo 'name'
 
         raises:
             forms.ValidationError: Si el nombre es menor a 3 caracteres.
         '''    
-        attributeName = self.cleaned_data.get('attributeName')
-        if len(attributeName) < 3:
+        name = self.cleaned_data.get('name')
+        if len(name) < 3:
             raise forms.ValidationError("The name must be at least 3 characters long")
-        return attributeName
+        return name
 
 
-    def clean_attributeEmail(self):
+    def clean_email(self):
         '''
-        Esta validacion es solo para el campo 'attributeEmail'
+        Esta validacion es solo para el campo 'email'
         
         raises:
             forms.ValidationError: Si el email no es válido.
         '''
-        attributeEmail = self.cleaned_data.get('attributeEmail')
-        if attributeEmail.endswith('@example.com'):
+        email = self.cleaned_data.get('email')
+        if email.endswith('@example.com'):
             raise forms.ValidationError("Emails from example.com are not allowed")
-        return attributeEmail
+        return email
 
         
     def clean(self):
@@ -134,8 +134,8 @@ class [[ entity_name|capitalize_first ]]CreateForm([[ entity_name|capitalize_fir
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)       
         
-        #Permitimos que el attributeEmail sea editable
-        self.fields['attributeEmail'].widget.attrs.update({
+        #Permitimos que el email sea editable
+        self.fields['email'].widget.attrs.update({
             'readonly': False,
         })
 
@@ -159,8 +159,8 @@ class [[ entity_name|capitalize_first ]]EditGetForm([[ entity_name|capitalize_fi
 
         # Aqui podemos agregar validaciones adicionales o modificar el comportamiento del formulario
 
-        #impedimos que el attributeEmail sea editable 
-        self.fields['attributeEmail'].widget.attrs.update({
+        #impedimos que el email sea editable 
+        self.fields['email'].widget.attrs.update({
             'readonly': 'True'
         })
 

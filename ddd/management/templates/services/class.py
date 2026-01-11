@@ -82,12 +82,11 @@ class [[ entity_name|capitalize_first ]]Service:
         """
 
         # Validación de reglas de negocio (opcional)
-        if self.repository.exists_by_field(field_name="attributeName", value=data.get("attributeName")):
-            raise [[ entity_name|capitalize_first ]]ValueError(field="attributeName", detail="An instance with this attributeName already exists")
+        if self.repository.exists_by_field(field_name="name", value=data.get("name")):
+            raise [[ entity_name|capitalize_first ]]ValueError(field="name", detail="An instance with this name already exists")
 
-        #crear y validar la entidad
-        entity = [[ entity_name|capitalize_first ]]Entity.from_dict(data)
-        entity.validate()       
+        #crear la entidad
+        entity = [[ entity_name|capitalize_first ]]Entity.from_dict(data)  
 
         # Guardar en el repositorio
         saved_entity = self.repository.create(entity=entity, external_id=external_id, externals=externals, adicionalData=adicionalData)
@@ -149,9 +148,8 @@ class [[ entity_name|capitalize_first ]]Service:
         if not entity:
             raise [[ entity_name|capitalize_first ]]NotFoundError(id=entity_id or entity_uuid)
 
-        # actualizar la instancia y validar
+        # actualizar la instancia
         entity.update(data)     
-        entity.validate()   
 
         # Guardar en el repositorio
         updated_entity = self.repository.update(entity=entity, external_id=external_id, externals=externals, adicionalData=adicionalData)
