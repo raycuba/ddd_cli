@@ -326,7 +326,7 @@ class [[ entity_name|capitalize_first ]]Repository:
         except [[ entity_name|capitalize_first ]].DoesNotExist as e:
             raise [[ entity_name|capitalize_first ]]NotFoundError(id=entity.id) from e
         except (TypeError, ValueError) as e:
-            raise [[ entity_name|capitalize_first ]]ValueError(field="data", detail=f"Error inthe data structure: {str(e)}") from e
+            raise [[ entity_name|capitalize_first ]]ValueError(field="data", detail=f"Error in the data structure: {str(e)}") from e
         except ValidationError as e:
             raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error: {e.message_dict}") from e
         except DatabaseError as e:
