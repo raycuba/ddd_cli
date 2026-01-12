@@ -60,7 +60,7 @@ class [[ entity_name|capitalize_first ]]Repository:
             # Aplicar filtros si se proporcionan
             if filters is not None:
                 if not isinstance(filters, dict):
-                    raise [[ entity_name|capitalize_first ]]ValueError(field="filters", detail="filters must be a dict or None")
+                    raise [[ entity_name|capitalize_first ]]ValueError(field="filters", detail="filters must be dict or None")
                 if "nombre" in filters and filters["nombre"].strip():
                     instance_list = instance_list.filter(nombre__icontains=filters["nombre"])      
                     
