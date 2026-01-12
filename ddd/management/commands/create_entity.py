@@ -38,18 +38,6 @@ class CreateEntityCommand:
                 print(Fore.RED + f"File '{entities_path}' already exists. Cannot create separate file" + Style.RESET_ALL)
                 return
 
-        # Escribir imports en el archivo 
-        # si no existe el archivo template_imports
-        # if not os.path.exists(entities_path) or simulate:
-        #     readWriteTemplate(
-        #         templateName='entity',
-        #         fileName='imports_dataclass.py' if not pydantic else 'imports_pydantic.py',
-        #         render_params={'entity_name': entity_name},
-        #         repository_path=entities_path,
-        #         failIfError=True,
-        #         simulate=simulate
-        #     )
-
         #renderizar class
         readWriteTemplate(
             templateName='entity',

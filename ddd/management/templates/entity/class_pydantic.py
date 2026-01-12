@@ -15,10 +15,10 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
     """
 
     class Meta:
-        required_fields = {"name", "external_id"} # Requeridos para la creación
+        required_fields = {"name", "email", "related_id"} # Requeridos para la creación
         readonly_fields = {"id", "uuid", "created_at", "updated_at"} # Prohibidos siempre en creacion/actualizaciones
-        protected_fields = {"external_id"} # Prohibidos en ciertas operaciones y actualizaciones
-        special_update_fields = {"externals", "photo"} # Prohibidos en actualizaciones normales, requieren manejo especial
+        protected_fields = {"related_id"} # Prohibidos en ciertas operaciones y actualizaciones
+        special_update_fields = {"relations", "photo"} # Prohibidos en actualizaciones normales, requieren manejo especial
         readonly_and_protected_fields = readonly_fields.union(protected_fields)
 
     # Identificadores
@@ -28,12 +28,15 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
     # Atributos principales
     name: Optional[str] = None  # Atributo opcional
     email: Optional[str] = None  # Atributo opcional
+    role: Optional[str] = None  # Atributo opcional
+    status: Optional[str] = None  # Atributo opcional    
+    photo: Optional[FileData] = None  # Atributo opcional
 
     # Relaciones
-    external_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
+    related_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
 
     # Relaciones Many-to-Many o Reverse FK
-    externals: Optional[List[int]] = None  # Lista de IDs de entidades relacionadas
+    relations: Optional[List[int]] = None  # Lista de IDs de entidades relacionadas
 
     # Descomentar si se quiere hacer una validacion estricta
     #def __post_init__(self):
@@ -54,8 +57,8 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
         if self.email and len(self.email) > 500:
             raise DomainValueError(field="email", detail="email must not exceed 500 characters")
 
-        if self.externals and not all(isinstance(x, int) for x in self.externals):
-            raise DomainValueError(field="externals", detail="externals must be a list of integers")  
+        if self.relations and not all(isinstance(x, int) for x in self.relations):
+            raise DomainValueError(field="relations", detail="relations must be a list of integers")  
 
         return self
 
@@ -94,12 +97,12 @@ Ejemplos:
     updated_at: Optional[datetime] = None
 
     # Relaciones (IDs)
-    external_id: Optional[int] = None # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
-    externals: Optional[List[int]] = None # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
+    related_id: Optional[int] = None # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
+    relations: Optional[List[int]] = None # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
     
     # Referencias UUID a otras entidades (solo son refencias)
     external_uuid: Optional[str] = None  # UUID externo (para relaciones 1-a-1)
-    externals_uuids: Optional[List[str]] = None  # Lista de UUIDs externos  (para relaciones 1-a-M o M-a-M)
+    relations_uuids: Optional[List[str]] = None  # Lista de UUIDs externos  (para relaciones 1-a-M o M-a-M)
 
     # Objetos complejos (mejor que dict)
     image: Optional[FileData] = None

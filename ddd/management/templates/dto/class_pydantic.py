@@ -14,10 +14,10 @@ class [[ dto_name|capitalize_first ]]Dto(BaseModel):
     email: Optional[str] = None  # Atributo opcional
 
     # Relaciones
-    external_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
+    related_id: Optional[int] = None  # ID de una entidad relacionada (opcional)
 
     # Relaciones Many-to-Many o Reverse FK
-    externals: Optional[List[int]] = None  # Lista de IDs de entidades relacionadas    
+    relations: Optional[List[int]] = None  # Lista de IDs de entidades relacionadas    
 
     model_config = ConfigDict(
         validate_assignment=True,
@@ -80,12 +80,12 @@ Ejemplos:
     updated_at: Optional[datetime] = None
 
     # Relaciones (IDs)
-    external_id: Optional[int] = None # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
-    externals: Optional[List[int]] = None # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
+    related_id: Optional[int] = None # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
+    relations: Optional[List[int]] = None # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
     
     # Referencias UUID a otras entidades (solo son refencias)
     external_uuid: Optional[str] = None  # UUID externo (para relaciones 1-a-1)
-    externals_uuids: Optional[List[str]] = None  # Lista de UUIDs externos  (para relaciones 1-a-M o M-a-M)
+    relations_uuids: Optional[List[str]] = None  # Lista de UUIDs externos  (para relaciones 1-a-M o M-a-M)
 
     # Objetos complejos (mejor que dict)
     image: Optional[FileData] = None

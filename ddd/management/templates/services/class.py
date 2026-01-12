@@ -62,14 +62,14 @@ class [[ entity_name|capitalize_first ]]Service:
         return self.repository.count_all(filters=filters)
 
 
-    def create(self, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None, adicionalData=None) -> dict:
+    def create(self, data, related_id: Optional[int]=None, relations: Optional[List[int]]=None, adicionalData=None) -> dict:
         """
         Crea una nueva instancia de [[ entity_name|decapitalize_first ]].
 
         params: 
             data: Diccionario o DTO con los datos necesarios para crear la instancia.
-            external_id: ID del padre si es necesario (opcional).
-            externals: Lista de IDs de entidades relacionadas (opcional).
+            related_id: ID del padre si es necesario (opcional).
+            relations: Lista de IDs de entidades relacionadas (opcional).
             adicionalData: Datos adicionales a incluir en la creación.
         return: 
             La entidad creada.
@@ -89,7 +89,7 @@ class [[ entity_name|capitalize_first ]]Service:
         entity = [[ entity_name|capitalize_first ]]Entity.from_dict(data)  
 
         # Guardar en el repositorio
-        saved_entity = self.repository.create(entity=entity, external_id=external_id, externals=externals, adicionalData=adicionalData)
+        saved_entity = self.repository.create(entity=entity, related_id=related_id, relations=relations, adicionalData=adicionalData)
 
         return saved_entity.to_dict()
 
@@ -115,7 +115,7 @@ class [[ entity_name|capitalize_first ]]Service:
         return entity.to_dict()
 
 
-    def update(self, entity_id: int = None, entity_uuid: str = None, data = None, external_id: Optional[int]=None, externals: Optional[List[int]]=None, adicionalData=None) -> dict:
+    def update(self, entity_id: int = None, entity_uuid: str = None, data = None, related_id: Optional[int]=None, relations: Optional[List[int]]=None, adicionalData=None) -> dict:
         """
         Actualiza una instancia existente de [[ entity_name|decapitalize_first ]].
 
@@ -123,8 +123,8 @@ class [[ entity_name|capitalize_first ]]Service:
             entity_id: ID de la instancia a actualizar.
             entity_uuid: UUID de la instancia a actualizar.
             data: Diccionario o DTO con los datos a actualizar.
-            external_id: ID del padre si es necesario (opcional).
-            externals: Lista de IDs de entidades relacionadas (opcional).
+            related_id: ID del padre si es necesario (opcional).
+            relations: Lista de IDs de entidades relacionadas (opcional).
             adicionalData: Datos adicionales a incluir en la actualización.
         return: 
             La entidad actualizada.
@@ -152,7 +152,7 @@ class [[ entity_name|capitalize_first ]]Service:
         entity.update(data)     
 
         # Guardar en el repositorio
-        updated_entity = self.repository.update(entity=entity, external_id=external_id, externals=externals, adicionalData=adicionalData)
+        updated_entity = self.repository.update(entity=entity, related_id=related_id, relations=relations, adicionalData=adicionalData)
 
         return updated_entity.to_dict()
 

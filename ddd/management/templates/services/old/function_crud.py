@@ -35,14 +35,14 @@ def count_all_[[ entity_name|decapitalize_first ]](repository: [[ entity_name|ca
     return repository.count_all(filters=filters)
 
 
-def create_[[ entity_name|decapitalize_first ]](repository: [[ entity_name|capitalize_first ]]Repository = [[ entity_name|capitalize_first ]]Repository(), data, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> dict:
+def create_[[ entity_name|decapitalize_first ]](repository: [[ entity_name|capitalize_first ]]Repository = [[ entity_name|capitalize_first ]]Repository(), data, related_id: Optional[int], relations: Optional[List[int]], adicionalData=None) -> dict:
     """
     Crea una nueva instancia de [[ entity_name|decapitalize_first ]].
 
     :param repository: Repositorio que maneja la persistencia de [[ entity_name|decapitalize_first ]].
     :param data: Diccionario o DTO con los datos necesarios para crear la instancia.
-    :param external_id: ID del padre si es necesario (opcional).
-    :param externals: Lista de IDs de entidades relacionadas (opcional).
+    :param related_id: ID del padre si es necesario (opcional).
+    :param relations: Lista de IDs de entidades relacionadas (opcional).
     :param adicionalData: Datos adicionales a incluir en la creación.
     :return: La entidad creada.
     :raises [[ entity_name|capitalize_first ]]ValueError: Si las reglas de negocio no se cumplen.
@@ -57,7 +57,7 @@ def create_[[ entity_name|decapitalize_first ]](repository: [[ entity_name|capit
     entity.validate()
 
     # Guardar en el repositorio
-    saved_entity = repository.create(entity=entity, external_id=external_id, externals=externals, adicionalData=adicionalData)
+    saved_entity = repository.create(entity=entity, related_id=related_id, relations=relations, adicionalData=adicionalData)
 
     return saved_entity.to_dict()
 
@@ -77,15 +77,15 @@ def retrieve_[[ entity_name|decapitalize_first ]](repository: [[ entity_name|cap
     return entity.to_dict()
 
 
-def update_[[ entity_name|decapitalize_first ]](repository: [[ entity_name|capitalize_first ]]Repository = [[ entity_name|capitalize_first ]]Repository(), entity_id: int, data, external_id: Optional[int]=None, externals: Optional[List[int]]=None, adicionalData=None) -> dict:
+def update_[[ entity_name|decapitalize_first ]](repository: [[ entity_name|capitalize_first ]]Repository = [[ entity_name|capitalize_first ]]Repository(), entity_id: int, data, related_id: Optional[int]=None, relations: Optional[List[int]]=None, adicionalData=None) -> dict:
     """
     Actualiza una instancia existente de [[ entity_name|decapitalize_first ]].
 
     :param repository: Repositorio que maneja la persistencia de [[ entity_name|decapitalize_first ]].
     :param entity_id: ID de la instancia a actualizar.
     :param data: Diccionario o DTO con los datos a actualizar.
-    :param external_id: ID del padre si es necesario (opcional).
-    :param externals: Lista de IDs de entidades relacionadas (opcional).
+    :param related_id: ID del padre si es necesario (opcional).
+    :param relations: Lista de IDs de entidades relacionadas (opcional).
     :param adicionalData: Datos adicionales a incluir en la actualización.
     :return: La entidad actualizada.
     :raises [[ entity_name|capitalize_first ]]NotFoundError: Si no se encuentra la instancia o las reglas de negocio no se cumplen.
@@ -99,7 +99,7 @@ def update_[[ entity_name|decapitalize_first ]](repository: [[ entity_name|capit
     entity.validate()   
 
     # Guardar en el repositorio
-    updated_entity = repository.update(entity=entity, external_id=external_id, externals=externals, adicionalData=adicionalData)
+    updated_entity = repository.update(entity=entity, related_id=related_id, relations=relations, adicionalData=adicionalData)
 
     return updated_entity.to_dict()
 

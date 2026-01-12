@@ -92,13 +92,13 @@ def create(request):
                 form_data = form.cleaned_data
 
                 # Obtener el ID de la entidad relacionada si existe
-                external_id = request.POST.get('external_id', None)
+                related_id = request.POST.get('related_id', None)
 
-                # Obtener la lista de ids de externals seleccionadas
-                externals_ids = form_data.get('externals', [])
+                # Obtener la lista de ids de relations seleccionadas
+                relations_ids = form_data.get('relations', [])
 
                 # LLamar al servicio de creación
-                [[ entity_name|capitalize_first ]]Service().create(data=form_data, external_id=external_id, externals=externals_ids)
+                [[ entity_name|capitalize_first ]]Service().create(data=form_data, related_id=related_id, relations=relations_ids)
 
                 # Mostrar mensaje de éxito y redirigir
                 messages.success(request, f"Successfully created [[ entity_name|decapitalize_first ]]")
@@ -165,16 +165,16 @@ def edit(request, id=None):
                 # y los enviamos como parametros al servicio de actualizacion
 
                 # Obtener el ID de la entidad relacionada si existe
-                external_id = request.POST.get('external_id', None)
+                related_id = request.POST.get('related_id', None)
 
-                # Obtener la lista de ids de externals seleccionadas
-                externals_ids = form_data.get('externals', [])         
+                # Obtener la lista de ids de relations seleccionadas
+                relations_ids = form_data.get('relations', [])         
                 
                 # Limpiar los campos no actualizables del diccionario de datos
                 form_data = clean_dict_of_keys(form_data, keys=[[ entity_name|capitalize_first ]]EditPostForm.ENTITY_NOT_UPDATABLE_FIELDS)
 
                 # LLamar al servicio de actualización
-                [[ entity_name|capitalize_first ]]Service().update(entity_id=id, data=form_data, external_id=external_id, externals=externals_ids)
+                [[ entity_name|capitalize_first ]]Service().update(entity_id=id, data=form_data, related_id=related_id, relations=relations_ids)
 
                 # Mostrar mensaje de éxito
                 messages.success(request, f"Successfully updated [[ entity_name|decapitalize_first ]]")

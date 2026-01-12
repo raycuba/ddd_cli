@@ -140,16 +140,16 @@ class [[ entity_name|capitalize_first ]]APIView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Obtener el ID de la entidad relacionada si existe
-        external_id = request.data.get('external_id', None)
+        related_id = request.data.get('related_id', None)
 
         # Si se proporcionan IDs de entidades relacionadas, agregarlos
-        externals = request.data.get('externals', None)
+        relations = request.data.get('relations', None)
 
         [[ entity_name|decapitalize_first ]]Service = [[ entity_name|capitalize_first ]]Service() # Instanciar el servicio        
 
         try:
             # Llamar al servicio de creación con los datos proporcionados
-            [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.create(data=serializer.validated_data, external_id=external_id, externals=externals)
+            [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.create(data=serializer.validated_data, related_id=related_id, relations=relations)
             # Serializar el nuevo registro creado
             response_serializer = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]])
             # Retornar la respuesta con un estado HTTP 201 CREATED
@@ -196,16 +196,16 @@ class [[ entity_name|capitalize_first ]]APIView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Obtener el ID de la entidad relacionada si existe
-        external_id = request.data.get('external_id', None)
+        related_id = request.data.get('related_id', None)
 
         # Si se proporcionan IDs de entidades relacionadas, agregarlos
-        externals = request.data.get('externals', None)       
+        relations = request.data.get('relations', None)       
         
         [[ entity_name|decapitalize_first ]]Service = [[ entity_name|capitalize_first ]]Service() # Instanciar el servicio        
 
         try:
             # Llamar al servicio de actualización con el ID y los nuevos datos
-            [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.update(entity_id=id, data=serializer.validated_data, external_id=external_id, externals=externals)
+            [[ entity_name|decapitalize_first ]] = [[ entity_name|decapitalize_first ]]Service.update(entity_id=id, data=serializer.validated_data, related_id=related_id, relations=relations)
 
             # Serializar el registro actualizado
             response_serializer = [[ entity_name|capitalize_first ]]DTOSerializer([[ entity_name|decapitalize_first ]])

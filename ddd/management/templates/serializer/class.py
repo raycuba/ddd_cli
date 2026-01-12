@@ -15,14 +15,14 @@ class [[ serializer_name|capitalize_first ]]DTOSerializer(serializers.Serializer
     email = serializers.EmailField(help_text="Email del atributo")
 
     # Relaciones
-    external_id = serializers.IntegerField(
+    related_id = serializers.IntegerField(
         required=False,
         allow_null=True,
         write_only=True, 
         help_text="ID de la entidad externa asociada"
     )
 
-    externals = serializers.ListField(
+    relations = serializers.ListField(
         required=False,
         allow_empty=True,
         allow_null=True,
@@ -121,7 +121,7 @@ class [[ serializer_name|capitalize_first ]]DTOSerializer(serializers.Serializer
     - Atributos de relación
 
         # Identificador externo (ideal para relaciones 1-a-1 con otras entidades o FK)
-        external_id = serializers.IntegerField(
+        related_id = serializers.IntegerField(
             required=False,
             allow_null=True,
             write_only=True, 
@@ -137,7 +137,7 @@ class [[ serializer_name|capitalize_first ]]DTOSerializer(serializers.Serializer
         )
 
         # Lista de identificadores externos (ideal para relaciones 1-a-M o M-a-M)
-        externals = serializers.ListField(
+        relations = serializers.ListField(
             required=False,
             allow_empty=True,
             allow_null=True,
@@ -147,7 +147,7 @@ class [[ serializer_name|capitalize_first ]]DTOSerializer(serializers.Serializer
         )
 
         # Lista de UUIDs externos
-        externals_uuids = serializers.ListField(
+        relations_uuids = serializers.ListField(
             required=False,
             allow_empty=True,
             allow_null=True,

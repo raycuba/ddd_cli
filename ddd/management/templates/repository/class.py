@@ -184,14 +184,14 @@ class [[ entity_name|capitalize_first ]]Repository:
 
 
     @staticmethod
-    def create(entity: [[ entity_name|capitalize_first ]]Entity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> [[ entity_name|capitalize_first ]]Entity:
+    def create(entity: [[ entity_name|capitalize_first ]]Entity, related_id: Optional[int], relations: Optional[List[int]], adicionalData=None) -> [[ entity_name|capitalize_first ]]Entity:
         """
         Crea un nuevo registro.
 
         params: 
             entity: Entidad con los datos necesarios para crear el registro.
-            external_id: ID del padre si es necesario (opcional).
-            externals: Lista de IDs de entidades relacionadas (opcional).
+            related_id: ID del padre si es necesario (opcional).
+            relations: Lista de IDs de entidades relacionadas (opcional).
             adicionalData: Datos adicionales a incluir en la creación.
         returns: 
             La entidad creada.
@@ -217,9 +217,9 @@ class [[ entity_name|capitalize_first ]]Repository:
                 # Esto garantiza que si algo falla, no se guarden cambios parciales               
 
                 # Si se proporciona un ID de otra entidad, actualizarlo
-                # django crea el campo 'external_id' automáticamente si la relación es ForeignKey => otherEntity
-                if external_id is not None:
-                    instance.external_id = external_id
+                # django crea el campo 'related_id' automáticamente si la relación es ForeignKey => otherEntity
+                if related_id is not None:
+                    instance.related_id = related_id
 
                 # Si adicionalData, agregar datos adicionales que no sean relaciones
                 if adicionalData:
@@ -232,9 +232,9 @@ class [[ entity_name|capitalize_first ]]Repository:
                 instance.save()
 
                 # Si se proporcionan IDs de entidades relacionadas, agregarlos
-                if externals is not None:
+                if relations is not None:
                     # Asignar directamente los IDs
-                    instance.externals.set(externals)                
+                    instance.relations.set(relations)                
 
         except (TypeError, ValueError) as e:
             raise [[ entity_name|capitalize_first ]]ValueError(field="data", detail=f"Error in the data structure: {str(e)}") from e
@@ -254,14 +254,14 @@ class [[ entity_name|capitalize_first ]]Repository:
 
 
     @staticmethod
-    def update(entity: [[ entity_name|capitalize_first ]]Entity, external_id: Optional[int], externals: Optional[List[int]], adicionalData=None) -> [[ entity_name|capitalize_first ]]Entity:
+    def update(entity: [[ entity_name|capitalize_first ]]Entity, related_id: Optional[int], relations: Optional[List[int]], adicionalData=None) -> [[ entity_name|capitalize_first ]]Entity:
         """
         Guarda los cambios en una entidad existente.
 
         params: 
             entity: Entidad con los datos a actualizar (debe traer el id en los campos).
-            external_id: ID del padre si es necesario (opcional).
-            externals: Lista de IDs de entidades relacionadas (opcional).
+            related_id: ID del padre si es necesario (opcional).
+            relations: Lista de IDs de entidades relacionadas (opcional).
             adicionalData: Datos adicionales a incluir en la actualización.
         returns:
             La entidad guardada.
@@ -303,8 +303,8 @@ class [[ entity_name|capitalize_first ]]Repository:
                 Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Entity.Meta.readonly_and_protected_fields)           
 
                 # Si se proporciona un ID de otra entidad, actualizarlo
-                if external_id is not None:
-                    instance.external_id = external_id
+                if related_id is not None:
+                    instance.related_id = related_id
 
                 # Si adicionalData, agregar datos adicionales que no sean relaciones
                 if adicionalData:
@@ -316,9 +316,9 @@ class [[ entity_name|capitalize_first ]]Repository:
                 instance.save() 
 
                 # Si se proporcionan IDs de entidades relacionadas, actualizarlos
-                if externals is not None:
+                if relations is not None:
                     # Asignar directamente los IDs
-                    instance.externals.set(externals)                
+                    instance.relations.set(relations)                
             
             # Convertir el modelo actualizado de vuelta a una entidad
             return Mapper.model_to_entity(instance, [[ entity_name|capitalize_first ]]Entity)
@@ -388,12 +388,12 @@ class [[ entity_name|capitalize_first ]]Repository:
 En Django ORM los campos de relación se definen como ForeignKey, ManyToManyField o OneToOneField.
 Para la traduccion de relaciones entre entidades, se pueden utilizar los siguientes campos:
 
-- `external_id`: 
+- `related_id`: 
     Para relaciones de clave externa (ForeignKey) o uno a uno (OneToOneField)
         ej: external = models.ForeignKey(OtherEntity, on_delete=models.CASCADE, related_name='related_entities')
         o    ej: external = models.OneToOneField(OtherEntity, on_delete=models.CASCADE, related_name='related_entity')
             
-    el model de Django crea automáticamente el campo `external_id` este campo es accesible como un atributo de la entidad.
+    el model de Django crea automáticamente el campo `related_id` este campo es accesible como un atributo de la entidad.
 
 - `external_uuid`: Para relaciones basadas en un UUID adicional aparte del ID.
         ej: external = models.UUIDField(default=uuid.uuid4, editable=False)
@@ -402,22 +402,22 @@ Para la traduccion de relaciones entre entidades, se pueden utilizar los siguien
     def external_uuid(self):
         return str(self.external.uuid) if self.external else None
 
-- `externals`: Para relaciones de muchos a muchos (ManyToManyField).
+- `relations`: Para relaciones de muchos a muchos (ManyToManyField).
     Para relaciones de muchos a muchos:
-        ej: externals = models.ManyToManyField(OtherEntity, related_name='related_entities')
+        ej: relations = models.ManyToManyField(OtherEntity, related_name='related_entities')
 
-- `externals_uuids`: Para relaciones de muchos a muchos basadas en UUID adicional aparte del ID.
-        ej: externals = models.ManyToManyField(OtherEntity, related_name='related_entities')
+- `relations_uuids`: Para relaciones de muchos a muchos basadas en UUID adicional aparte del ID.
+        ej: relations = models.ManyToManyField(OtherEntity, related_name='related_entities')
     es necesario definir en el model de Django una propiedad 'external_uuids' que retorne una lista de UUIDs relacionados.
     @property
-    def externals_uuids(self):
-        return list(self.externals.values_list('uuid', flat=True))
+    def relations_uuids(self):
+        return list(self.relations.values_list('uuid', flat=True))
 '''
 
 '''
 ### 💡 ¿Por qué ir más allá de los repositorios básicos?
 Este repositorio ya implementa una base sólida para DDD en Django: 
-mapeo de entidades, validaciones, manejo de relaciones (`external_id`, `externals`) y encapsulación del ORM.  
+mapeo de entidades, validaciones, manejo de relaciones (`related_id`, `relations`) y encapsulación del ORM.  
 Sin embargo, a medida que el dominio crezca, 
 métodos como `get_all()` o `create()` pueden volverse insuficientes o ineficientes.
 
@@ -447,7 +447,7 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
             def activos(self):
                 return self.filter(estado='activo')
             def con_relacion(self):
-                return self.select_related('external').prefetch_related('externals')
+                return self.select_related('external').prefetch_related('relations')
 
         class [[ entity_name|capitalize_first ]](models.Model):
             ...
@@ -509,10 +509,10 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
 
         from django.db.models import Count
         @staticmethod
-        def get_con_muchos_externals(min_relaciones=3):
+        def get_con_muchos_relations(min_relaciones=3):
             instances = [[ entity_name|capitalize_first ]].objects.annotate(
-                total_externals=Count('externals')
-            ).filter(total_externals__gt=min_relaciones)
+                total_relations=Count('relations')
+            ).filter(total_relations__gt=min_relaciones)
             return [Mapper.model_to_entity(inst, [[ entity_name|capitalize_first ]]Entity) for inst in instances]
 
     Así mantienes el mapeo y la coherencia del dominio.
@@ -522,7 +522,7 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
 
         @staticmethod
         def get_all_with_relations():
-            instance_list = [[ entity_name|capitalize_first ]].objects.select_related('external').prefetch_related('externals')
+            instance_list = [[ entity_name|capitalize_first ]].objects.select_related('external').prefetch_related('relations')
             if filters:
                 instance_list = instance_list.filter(nombre__icontains=filters["nombre"])
             return [Mapper.model_to_entity(inst, [[ entity_name|capitalize_first ]]Entity) for inst in instance_list]
@@ -576,12 +576,12 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
                 # Configuración inicial para las pruebas, si es necesario
                 pass
         
-            def test_create_con_external_y_externals(self):
+            def test_create_con_external_y_relations(self):
                 entity = [[ entity_name|capitalize_first ]]Entity(nombre="Test")
                 created = [[ entity_name|capitalize_first ]]Repository.create(
                     entity=entity,
-                    external_id=1,
-                    externals=[1, 2],
+                    related_id=1,
+                    relations=[1, 2],
                     adicionalData={"archivo": "file.pdf"}
                 )
                 self.assertIsNotNone(created.id)
@@ -589,10 +589,10 @@ Por eso, es valioso **enriquecerlo estratégicamente**, manteniendo la coherenci
 
                 # Verifica relaciones
                 instance = [[ entity_name|capitalize_first ]].objects.get(id=created.id)
-                self.assertEqual(instance.external_id, 1)
-                self.assertEqual(instance.externals.count(), 2)
+                self.assertEqual(instance.related_id, 1)
+                self.assertEqual(instance.relations.count(), 2)
 
-    Así aseguras que `external_id`, `externals` y `adicionalData` funcionen como esperas.
+    Así aseguras que `related_id`, `relations` y `adicionalData` funcionen como esperas.
 
 ### ✅ Conclusión
 Esta plantilla ya cumple con lo esencial para DDD en Django.  

@@ -28,6 +28,7 @@ class BaseEntity(BaseModel, ABC):
         readonly_fields: set = set() # Campos de solo lectura - No pueden ser modificados una vez establecidos (prohibidos siempre en creacion/actualizaciones)
         protected_fields: set = set() # Campos que no deben ser incluidos en actualizaciones (prohibidos en ciertas operaciones)
         special_update_fields: set = set() # Campos que requieren actualización especial - Necesitan validaciones o procesamiento especial aparte
+        readonly_and_protected_fields = readonly_fields.union(protected_fields) 
 
     model_config = ConfigDict(
         validate_assignment=True,
