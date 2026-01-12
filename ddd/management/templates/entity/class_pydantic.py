@@ -1,10 +1,12 @@
+# entity in pydantic format
+
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, List, Dict, Any, ClassVar
 from typing_extensions import Self
 from uuid import UUID
 from datetime import datetime
 from .[[ entity_name.lower() ]]_exceptions import *
-from .[[ entity_name.lower() ]]_schemas import FileData, BaseEntity, DomainValueError
+from .[[ entity_name.lower() ]]_schemas import FileData, BaseEntity
 
 class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
     """
@@ -13,6 +15,8 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
     Esta clase representa la lógica de negocio central y las reglas asociadas 
     con [[ entity_name|decapitalize_first ]] en el sistema.
     """
+
+    domain_value_error_class = [[ entity_name|capitalize_first ]]ValueError    
 
     class Meta:
         required_fields = {"name", "email", "related_id"} # Requeridos para la creación
@@ -52,13 +56,13 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
         """
         # Validaciones de ejemplo
         if not self.name or len(self.name) < 3:
-            raise DomainValueError(field="name", detail="name must be at least 3 characters")
+            raise self.domain_value_error_class(field="name", detail="name must be at least 3 characters")
 
         if self.email and len(self.email) > 500:
-            raise DomainValueError(field="email", detail="email must not exceed 500 characters")
+            raise self.domain_value_error_class(field="email", detail="email must not exceed 500 characters")
 
         if self.relations and not all(isinstance(x, int) for x in self.relations):
-            raise DomainValueError(field="relations", detail="relations must be a list of integers")  
+            raise self.domain_value_error_class(field="relations", detail="relations must be a list of integers")  
 
         return self
 
@@ -119,13 +123,13 @@ Ejemplos:
     @model_validator(mode='after')
     def validate(self) -> self:
         if not self.name or len(self.name) < 3:
-            raise ValueError("name must be at least 3 characters")
+            raise self.domain_value_error_class("name must be at least 3 characters")
         return self
 
     @field_validator('email')
     def validate_email(cls, v: Optional[str]) -> Optional[str]:
         if v is not None and "@" not in v:
-            raise ValueError("Invalid email address")
+            raise self.domain_value_error_class("Invalid email address")
         return v
 
 💡 Consejo:

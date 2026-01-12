@@ -1,8 +1,10 @@
+# entity in dataclass format
+
 from dataclasses import dataclass
 from typing import Optional, List
 from uuid import UUID
 from .[[ entity_name.lower() ]]_exceptions import *
-from .[[ entity_name.lower() ]]_schemas import FileData, BaseEntity, DomainValueError
+from .[[ entity_name.lower() ]]_schemas import FileData, BaseEntity
 
 @dataclass
 class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
@@ -12,6 +14,8 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
     Esta clase representa la lógica de negocio central y las reglas asociadas 
     con [[ entity_name|decapitalize_first ]] en el sistema.
     """
+
+    domain_value_error_class = [[ entity_name|capitalize_first ]]ValueError
 
     class Meta:
         required_fields = {"name", "email", "related_id"} # Requeridos para la creación (from_dict)
@@ -52,13 +56,13 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
         """
         # Validaciones de ejemplo
         if not self.name or len(self.name) < 3:
-            raise DomainValueError(field="name", detail="name must be at least 3 characters")
+            raise self.domain_value_error_class(field="name", detail="name must be at least 3 characters")
 
         if self.email and len(self.email) > 500:
-            raise DomainValueError(field="email", detail="email must not exceed 500 characters")
+            raise self.domain_value_error_class(field="email", detail="email must not exceed 500 characters")
 
         if self.relations and not all(isinstance(x, int) for x in self.relations):
-            raise DomainValueError(field="relations", detail="relations must be a list of integers")            
+            raise self.domain_value_error_class(field="relations", detail="relations must be a list of integers")            
   
 
 

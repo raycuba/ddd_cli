@@ -1,3 +1,5 @@
+# schemas in dataclass format
+
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any, Self
 from uuid import UUID, uuid4
@@ -8,9 +10,15 @@ class FileData:
     file_name: Optional[str] = None
     url: Optional[str] = None
 
-class DomainValueError(Exception):
-    def __init__(self, field: str, detail: str):
-        super().__init__(f"{field}: {detail}")
+class BaseDomainValueError(Exception):
+    """Error de valor en atributos de la entidad [[ entity_name|capitalize_first ]]."""
+    def __init__(self, detail: str, field: str = "value"):
+        self.field = field
+        self.detail = detail
+        if field == "value":
+            super().__init__(f"Value error: {detail}.")
+        else:
+            super().__init__(f"Field error in '{field}': {detail}.")        
     
 @dataclass
 class BaseEntity(ABC):
@@ -18,6 +26,8 @@ class BaseEntity(ABC):
     Clase de Entidad del dominio.
     Representa la lógica de negocio central y las reglas asociadas.
     """   
+
+    domain_value_error_class = BaseDomainValueError
 
     class Meta:
         """
@@ -41,7 +51,7 @@ class BaseEntity(ABC):
     def _run_validation(self) -> Self:
         """
         Valida la entidad después de la creación o actualización.
-            :raises DomainValueError: Si las reglas de negocio no se cumplen.
+            :raises BaseDomainValueError: Si las reglas de negocio no se cumplen.
         """
 
         missing_fields = [
@@ -49,7 +59,7 @@ class BaseEntity(ABC):
             if getattr(self, field, None) is None
         ]
         if missing_fields:
-            raise DomainValueError(",".join(missing_fields), "Missing required fields")
+            raise self.domain_value_error_class(",".join(missing_fields), "Missing required fields")
 
         self.validate()
         return self       
@@ -67,7 +77,7 @@ class BaseEntity(ABC):
 
         :param data: Diccionario con los nuevos valores para los atributos.
         :param addMode: Si es True, permite añadir nuevos campos que no existan en la entidad.
-        :raises DomainValueError: Si hay un error de estructura en los datos.
+        :raises BaseDomainValueError: Si hay un error de estructura en los datos.
         """
         exclude_fields = (
             self.Meta.readonly_fields
@@ -81,7 +91,7 @@ class BaseEntity(ABC):
                 try:
                     setattr(self, key, value)             
                 except TypeError as e:
-                    raise DomainValueError(field=key, detail=f"Error in data structure: {str(e)}") from e
+                    raise self.domain_value_error_class(field=key, detail=f"Error in data structure: {str(e)}") from e
 
         self._run_validation()     
 
@@ -121,6 +131,10 @@ class BaseEntity(ABC):
 
         excluyendo siempre los campos de solo lectura
         y validando que esten presentes los campos requeridos.
+
+        :param data: Diccionario con los atributos para crear la entidad.
+        :return: Instancia de la entidad creada.
+         :raises BaseDomainValueError: Si faltan campos requeridos o hay errores en la
         """
         data = data.copy()
 
@@ -130,6 +144,6 @@ class BaseEntity(ABC):
         try:
             entity = cls(**data)
         except TypeError as e:
-            raise DomainValueError("Error building entity", str(e))
+            raise cls.domain_value_error_class("Error building entity", str(e))
 
         return entity._run_validation()

@@ -1,4 +1,6 @@
 # utils/mappers.py
+# Mappers in Dataclass style with type validation and special field handling
+
 import uuid
 import json
 import decimal

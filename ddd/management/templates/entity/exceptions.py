@@ -1,11 +1,12 @@
 # domain/exceptions.py
 
+from .[[ entity_name.lower() ]]_schemas import BaseDomainValueError
+
 class [[ entity_name|capitalize_first ]]Error(Exception):
     """Excepción base para errores relacionados con el dominio [[ entity_name|capitalize_first ]]."""
     pass
 
-
-class [[ entity_name|capitalize_first ]]ValueError([[ entity_name|capitalize_first ]]Error):
+class [[ entity_name|capitalize_first ]]ValueError(BaseDomainValueError):
     """Error de valor en atributos de la entidad [[ entity_name|capitalize_first ]]."""
     def __init__(self, detail: str, field: str = "value"):
         self.field = field
@@ -14,7 +15,6 @@ class [[ entity_name|capitalize_first ]]ValueError([[ entity_name|capitalize_fir
             super().__init__(f"Value error: {detail}.")
         else:
             super().__init__(f"Field error in '{field}': {detail}.")
-
 
 class [[ entity_name|capitalize_first ]]ValidationError([[ entity_name|capitalize_first ]]Error):
     """Errores de validación de datos antes de guardar el modelo."""
@@ -39,7 +39,6 @@ class [[ entity_name|capitalize_first ]]OperationNotAllowedError([[ entity_name|
     """Cuando se intenta realizar una operación no permitida."""
     def __init__(self, operation_name: str):
         super().__init__(f"Operation '{operation_name}' not allowed in [[ entity_name|capitalize_first ]].")        
-
 
 class [[ entity_name|capitalize_first ]]PermissionError([[ entity_name|capitalize_first ]]Error):
     """Cuando el usuario no tiene permisos para modificar o acceder."""

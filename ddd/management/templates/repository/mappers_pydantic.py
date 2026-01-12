@@ -1,4 +1,6 @@
 # utils/mappers.py
+# Mappers in Pydantic style with type validation and special field handling
+
 import json
 import decimal
 import datetime
