@@ -157,7 +157,7 @@ class Mapper:
 
                 # JSONField
                 elif model_field and isinstance(model_field, JSONField):
-                    if isinstance(value, dict) and is_json_serializable(make_json_safe(value)):
+                    if isinstance(value, (dict, list)) and is_json_serializable(make_json_safe(value)):
                         setattr(instance, key, make_json_safe(value))
 
                 # ManyToMany (ej: branches, categories)
