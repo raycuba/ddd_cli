@@ -10,6 +10,7 @@ from .mappers import Mapper
 from ..utils.filter_dict import clean_dict_of_keys
 from ..utils.is_integer import is_integer
 from ..utils.is_uuid import is_uuid
+from ..utils.extract_validation_error import extract_validation_error
 from ..domain.[[ entity_name.lower() ]]_entity import [[ entity_name|capitalize_first ]]Entity
 
 # importa las excepciones personalizadas
@@ -239,7 +240,8 @@ class [[ entity_name|capitalize_first ]]Repository:
         except (TypeError, ValueError) as e:
             raise [[ entity_name|capitalize_first ]]ValueError(field="data", detail=f"Error in the data structure: {str(e)}") from e
         except ValidationError as e:
-            raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error: {e.message_dict}") from e
+            error_detail = extract_validation_error(e)
+            raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error: {error_detail}") from e
         except IntegrityError as e:
             if 'duplicate' in str(e).lower() or 'unique constraint' in str(e).lower():
                 raise [[ entity_name|capitalize_first ]]AlreadyExistsError(field='name', detail=instance.name)  # Ajusta según el campo único
@@ -328,7 +330,8 @@ class [[ entity_name|capitalize_first ]]Repository:
         except (TypeError, ValueError) as e:
             raise [[ entity_name|capitalize_first ]]ValueError(field="data", detail=f"Error in the data structure: {str(e)}") from e
         except ValidationError as e:
-            raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error: {e.message_dict}") from e
+            error_detail = extract_validation_error(e)
+            raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error: {error_detail}") from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Data base access error") from e            
         except Exception as e:
@@ -377,7 +380,8 @@ class [[ entity_name|capitalize_first ]]Repository:
         except [[ entity_name|capitalize_first ]].DoesNotExist as e:
             raise [[ entity_name|capitalize_first ]]NotFoundError(id=id) from e
         except ValidationError as e:
-            raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error occurred: {e.message_dict}") from e
+            error_detail = extract_validation_error(e)
+            raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error occurred: {error_detail}") from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Data base access error") from e            
         except Exception as e:
