@@ -299,4 +299,4 @@ python -m pytest
 
 ---
 
-**DDD CLI** - Simplificando el desarrollo Django con arquitectura DDD 🚀
+**DDD CLI** - Simplificando el desarrollo Django con arquitectura DDD 🚀 
