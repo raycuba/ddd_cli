@@ -4,5 +4,17 @@
     "jinja2.variableEnd": "]]",
     "jinja2.blockStart": "[%",
     "jinja2.blockEnd": "%]",
-    "workbench.views.timeline.enabled": false
+    "workbench.views.timeline.enabled": false,
+
+  // exclusiones para el "Watcher"
+    "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/__pycache__/**": true,
+    "**/*.pyc": true,
+    "**/.venv/**": true,
+    "**/env/**": true,
+    "**/.git/**": true
+  }     
 }
