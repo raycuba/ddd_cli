@@ -19,8 +19,8 @@ class [[ entity_name|capitalize_first ]]BaseForm(forms.Form):
     # Son aquellos que no son utiles para la logica del dominio o persistencia
     # o aquellos que se presentan mediante una estructura distinta a la que espera la entity (ej: imagenes o archivos)
     ENTITY_NOT_UPDATABLE_FIELDS = {
-        'attributePhoto',
-        'attributePassword',
+        'Photo',
+        'Password',
     }    
 
     def __init__(self, *_args, **kwargs):
@@ -61,7 +61,7 @@ class [[ entity_name|capitalize_first ]]BaseForm(forms.Form):
         )
 
         # Campo de contraseña
-        self.fields['attributePassword'] = forms.CharField(
+        self.fields['Password'] = forms.CharField(
             label="Password",
             required=True,
             widget=forms.PasswordInput(attrs={
@@ -74,7 +74,7 @@ class [[ entity_name|capitalize_first ]]BaseForm(forms.Form):
             ]
         )
 
-        self.fields['attributePhoto'] = forms.ImageField(
+        self.fields['Photo'] = forms.ImageField(
             label="Image",
             required=False,  # La photo no es obligatoria
             widget=forms.ClearableFileInput(attrs={
@@ -119,10 +119,10 @@ class [[ entity_name|capitalize_first ]]BaseForm(forms.Form):
             forms.ValidationError: Si hay errores de validación en los campos.
         '''
         cleaned_data = super().clean()
-        attributePassword = cleaned_data.get('attributePassword')
-        attributePassword_confirm = cleaned_data.get('attributePassword_confirm')
+        Password = cleaned_data.get('Password')
+        Password_confirm = cleaned_data.get('Password_confirm')
 
-        if attributePassword != attributePassword_confirm:
+        if Password != Password_confirm:
             raise forms.ValidationError("Passwords do not match")
 
 
@@ -315,7 +315,6 @@ class [[ entity_name|capitalize_first ]]ViewForm([[ entity_name|capitalize_first
         label=_("Correo electrónico"),
         required=True,
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
-        validators=[EmailValidator("Correo inválido")]
     )
 
     self.fields['url_field'] = forms.URLField(
@@ -385,7 +384,7 @@ class [[ entity_name|capitalize_first ]]ViewForm([[ entity_name|capitalize_first
     # === Ejemplos practicos de campos adicionales ===
 
     # Campo de solo texto sin números (Category)
-    self.fields['attributeCategory'] = forms.CharField(
+    self.fields['category'] = forms.CharField(
         label='Category',
         required=True,
         widget=forms.TextInput(attrs={
@@ -403,7 +402,7 @@ class [[ entity_name|capitalize_first ]]ViewForm([[ entity_name|capitalize_first
     ) 
 
     # Campo de contraseña
-    self.fields['attributePassword'] = forms.CharField(
+    self.fields['password'] = forms.CharField(
         label="Password",
         required=True,
         widget=forms.PasswordInput(attrs={
@@ -417,7 +416,7 @@ class [[ entity_name|capitalize_first ]]ViewForm([[ entity_name|capitalize_first
     )
 
     # Campo numérico
-    self.fields['attributeAge'] = forms.IntegerField(
+    self.fields['age'] = forms.IntegerField(
         label="Age",
         required=True,
         widget=forms.NumberInput(attrs={
@@ -433,7 +432,7 @@ class [[ entity_name|capitalize_first ]]ViewForm([[ entity_name|capitalize_first
     )
 
     # Campo de fecha
-    self.fields['attributeBirthDate'] = forms.DateField(
+    self.fields['birth_date'] = forms.DateField(
         label="Birth Date",
         required=True,
         widget=forms.DateInput(attrs={
@@ -443,7 +442,7 @@ class [[ entity_name|capitalize_first ]]ViewForm([[ entity_name|capitalize_first
     )
 
     # Selección desplegable
-    self.fields['attributeCountry'] = forms.ChoiceField(
+    self.fields['country'] = forms.ChoiceField(
         label="Country",
         required=True,
         choices=[
@@ -458,7 +457,7 @@ class [[ entity_name|capitalize_first ]]ViewForm([[ entity_name|capitalize_first
     )
 
     # Opciones de radio
-    self.fields['attributeGender'] = forms.ChoiceField(
+    self.fields['gender'] = forms.ChoiceField(
         label="Gender",
         required=True,
         choices=[
@@ -472,7 +471,7 @@ class [[ entity_name|capitalize_first ]]ViewForm([[ entity_name|capitalize_first
     )
 
     # Casillas de verificación
-    self.fields['attributeTerms'] = forms.BooleanField(
+    self.fields['terms'] = forms.BooleanField(
         label="I accept the terms and conditions",
         required=True,
         widget=forms.CheckboxInput(attrs={
@@ -553,4 +552,28 @@ sino que agrega el error al formulario, permitiendo que se maneje adecuadamente 
 Esto permite que el formulario se pueda volver a renderizar con los errores
 y que el usuario pueda corregir los datos ingresados.
 
+Nota: Es importante no sobrevalidar los campos de un formulario paar evitar mensajes de error redundantes o confusos.
+por ejemplo, si ya se ha validado que un campo es obligatorio con 'required=True', no es necesario volver a verificarlo en el método 'clean_<nombr_campo>'.
+si un campo esta clasicicafo como EmailField, no es necesario volver a validar su formato en 'clean_email' 
+o añadiendo un EmailValidator, a menos que se requiera una validación adicional específica.
+
 '''
+
+# ATENCIÓN:
+# No agregar el atributo 'data-coreui-i18n' a campos input/select en formularios Django
+# si no deseas que CoreUI JS traduzca dinámicamente el contenido del campo.
+# CoreUI puede eliminar el contenido de los <input> y <select> al aplicar traducción,
+# lo que puede causar que los campos aparezcan vacíos en el navegador.
+# Usar solo en elementos estáticos (labels, textos, etc) donde la traducción dinámica es deseada.
+
+"""
+Hay propiedades que puedes añadir a un campo para evitar que sea enviado en el posteo del formulario.
+Estas propiedades son:
+- disabled: Si se establece en True, el campo no será editable ni enviado en el formulario
+- readonly: Si se establece en True, el campo será de solo lectura y no editable, pero su valor será enviado en el formulario
+Sin embargo, ten en cuenta que los campos deshabilitados (disabled) no se envían en el formulario,
+por lo que si necesitas que el valor del campo sea enviado, utiliza 'readonly' en su lugar.
+Nota:
+'data-coreui-disabled': 'true' es una propiedad personalizada para CoreUI que indica que el campo está deshabilitado
+pero no afecta el comportamiento de Django Forms. 
+"""
