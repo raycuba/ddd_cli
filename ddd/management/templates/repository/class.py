@@ -16,12 +16,16 @@ from ..domain.[[ entity_name.lower() ]]_entity import [[ entity_name|capitalize_
 # importa las excepciones personalizadas
 from ..domain.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValueError,
+)
+
+from ..services.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValidationError,
     [[ entity_name|capitalize_first ]]AlreadyExistsError,
     [[ entity_name|capitalize_first ]]NotFoundError,
     [[ entity_name|capitalize_first ]]OperationNotAllowedError,
     [[ entity_name|capitalize_first ]]PermissionError
 )
+
 
 # importa las excepciones de repositorio
 from .exceptions import (

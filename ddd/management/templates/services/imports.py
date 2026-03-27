@@ -24,6 +24,8 @@ from ..domain.[[ entity_name.lower() ]]_entity import [[ entity_name|capitalize_
 # importa las excepciones utilizadas aqui
 from ..domain.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValueError,
+)
+from ..services.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValidationError,
     [[ entity_name|capitalize_first ]]AlreadyExistsError,
     [[ entity_name|capitalize_first ]]NotFoundError,

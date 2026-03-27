@@ -15,6 +15,7 @@ class CreateServiceCommand:
     def create_service(self, app_path, entity_name="Entity", simulate=False, **kwargs):
         """Crea un nuevo servicio"""
         services_dir = os.path.join(app_path, 'services')
+        exceptions_path = os.path.join(services_dir, entity_name.lower() + '_exceptions.py')  
         services_path = os.path.join(services_dir, entity_name.lower() + '_service.py')
 
         if not simulate:
@@ -55,3 +56,12 @@ class CreateServiceCommand:
             simulate=simulate
         )
        
+        #renderizar exceptions
+        readWriteTemplate(
+            templateName='services',
+            fileName='exceptions.py',
+            render_params={'entity_name': entity_name},
+            repository_path=exceptions_path,
+            failIfError=True,
+            simulate=simulate
+        )

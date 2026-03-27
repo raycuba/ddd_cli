@@ -11,12 +11,16 @@ from .serializers.[[ entity_name.lower() ]]_serializer import [[ entity_name|cap
 # importa las excepciones personalizadas
 from .domain.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValueError,
+)
+
+from .services.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValidationError,
     [[ entity_name|capitalize_first ]]AlreadyExistsError,
     [[ entity_name|capitalize_first ]]NotFoundError,
     [[ entity_name|capitalize_first ]]OperationNotAllowedError,
     [[ entity_name|capitalize_first ]]PermissionError
 )
+
 
 # importa las excepciones de repositorio
 from .infrastructure.exceptions import (

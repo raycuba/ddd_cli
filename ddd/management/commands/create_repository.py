@@ -23,6 +23,7 @@ class CreateRepositoryCommand:
             filter_dict_path = os.path.join(utils_dir, 'filter_dict.py')
             is_integer_path = os.path.join(utils_dir, 'is_integer.py')
             is_uuid_path = os.path.join(utils_dir, 'is_uuid.py')
+            extract_validation_error_path = os.path.join(utils_dir, 'extract_validation_error.py')
 
             # decodficar app_path
             app_name, last_app_name, app_route, relative_app_path = decodeAppPath(app_path)
@@ -91,6 +92,16 @@ class CreateRepositoryCommand:
                 fileName='is_uuid.py', 
                 render_params={}, 
                 repository_path=is_uuid_path, 
+                failIfError=False, 
+                simulate=simulate
+            )
+            
+            # Crear archivo extract_validation_error.py
+            readWriteTemplate(
+                templateName = 'utils', 
+                fileName='extract_validation_error.py', 
+                render_params={}, 
+                repository_path=extract_validation_error_path, 
                 failIfError=False, 
                 simulate=simulate
             )
