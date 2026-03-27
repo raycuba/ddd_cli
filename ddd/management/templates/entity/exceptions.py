@@ -1,5 +1,14 @@
 # domain/exceptions.py
 
+"""
+EXCEPCIONES DE DOMINIO:
+Servicio: Protegen la integridad del modelo de negocio. 
+Cuándo usarlas: Cuando una operación es técnicamente posible pero el negocio la prohíbe.
+Ejemplos: InsufficientFunds, CardAlreadyExpired, PromotionLimitReached.
+
+nota: se pueden importar desde otra aplicación
+"""
+
 from .[[ entity_name.lower() ]]_schemas import BaseDomainValueError
 
 class [[ entity_name|capitalize_first ]]ValueError(BaseDomainValueError):

@@ -39,7 +39,6 @@ class [[ entity_name|capitalize_first ]]Service:
             ConnectionDataBaseError: Si hay un error al conectar a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
-
         entity_list = self.repository.get_all(filters=filters)
 
         return [entity.to_dict() for entity in entity_list]      
@@ -89,7 +88,12 @@ class [[ entity_name|capitalize_first ]]Service:
         entity = [[ entity_name|capitalize_first ]]Entity.from_dict(data)  
 
         # Guardar en el repositorio
-        saved_entity = self.repository.create(entity=entity, related_id=related_id, relations=relations, adicionalData=adicionalData)
+        try:
+            saved_entity = self.repository.create(entity=entity, related_id=related_id, relations=relations, adicionalData=adicionalData)
+        except ValidationError as e:
+            raise [[ entity_name|capitalize_first ]]ValidationError(e.errors) from e
+        except AlreadyExistsError as e:
+            raise [[ entity_name|capitalize_first ]]AlreadyExistsError(field=e.field, detail=e.detail) from e
 
         return saved_entity.to_dict()
 
@@ -109,8 +113,10 @@ class [[ entity_name|capitalize_first ]]Service:
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
-
-        entity = self.repository.get_by_id(id=entity_id, uuid=entity_uuid)
+        try:
+            entity = self.repository.get_by_id(id=entity_id, uuid=entity_uuid)  
+        except NotFoundError as e:
+            raise [[ entity_name|capitalize_first ]]NotFoundError(id=entity_id or entity_uuid) from e
 
         return entity.to_dict()
 
@@ -129,9 +135,9 @@ class [[ entity_name|capitalize_first ]]Service:
         return: 
             La entidad actualizada.
         raises: 
-            [[ entity_name|capitalize_first ]]NotFoundError: Si no existe el registro con el ID dado.
             [[ entity_name|capitalize_first ]]ValueError: Si el valor de entrada no es válido.                 
-            [[ entity_name|capitalize_first ]]ValidationError: Si los datos no son válidos.            
+            [[ entity_name|capitalize_first ]]ValidationError: Si los datos no son válidos.   
+            [[ entity_name|capitalize_first ]]NotFoundError: Si no existe el registro con el ID dado.         
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
@@ -143,16 +149,21 @@ class [[ entity_name|capitalize_first ]]Service:
             raise [[ entity_name|capitalize_first ]]ValueError(field="data", detail="The data field is required")
 
         # Recuperar la entidad
-        entity = self.repository.get_by_id(id=entity_id, uuid=entity_uuid)
-
-        if not entity:
-            raise [[ entity_name|capitalize_first ]]NotFoundError(id=entity_id or entity_uuid)
+        try:
+            entity = self.repository.get_by_id(id=entity_id, uuid=entity_uuid)
+        except NotFoundError as e:
+            raise [[ entity_name|capitalize_first ]]NotFoundError(id=entity_id or entity_uuid) from e
 
         # actualizar la instancia
         entity.update(data)     
 
         # Guardar en el repositorio
-        updated_entity = self.repository.update(entity=entity, related_id=related_id, relations=relations, adicionalData=adicionalData)
+        try:
+            updated_entity = self.repository.update(entity=entity, related_id=related_id, relations=relations, adicionalData=adicionalData)
+        except NotFoundError as e:
+            raise [[ entity_name|capitalize_first ]]NotFoundError(id=entity_id or entity_uuid) from e
+        except ValidationError as e:
+            raise [[ entity_name|capitalize_first ]]ValidationError(e.errors) from e
 
         return updated_entity.to_dict()
 
@@ -178,6 +189,11 @@ class [[ entity_name|capitalize_first ]]Service:
             raise [[ entity_name|capitalize_first ]]ValueError(field="id/uuid", detail="The id or uuid field is required")
 
         # Eliminación en el repositorio
-        self.repository.delete(id=entity_id, uuid=entity_uuid)
+        try:
+            self.repository.delete(id=entity_id, uuid=entity_uuid)
+        except NotFoundError as e:
+            raise [[ entity_name|capitalize_first ]]NotFoundError(id=entity_id or entity_uuid) from e
+        except ValidationError as e:
+            raise [[ entity_name|capitalize_first ]]ValidationError(e.errors) from e
 
         return True

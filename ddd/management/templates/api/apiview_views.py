@@ -21,7 +21,6 @@ from .services.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]PermissionError
 )
 
-
 # importa las excepciones de repositorio
 from .infrastructure.exceptions import (
     ConnectionDataBaseError,

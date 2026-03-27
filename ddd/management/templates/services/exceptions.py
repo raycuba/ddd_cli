@@ -1,8 +1,25 @@
 # services/exceptions.py
 
-class [[ entity_name|capitalize_first ]]Error(Exception):
+"""
+EXCEPCIONES DE APLICACIÓN: 
+Servicio: Orquestan la comunicación y validan el flujo de entrada.
+Cuándo usarlas: Para errores de formato, falta de datos o traducción de errores técnicos.
+Ejemplos: InvalidServiceInput, ClientCardServiceUnavailable, MalformedIdentifierError.
+
+nota: se pueden importar desde otra aplicación, pero no desde el dominio. 
+"""
+
+class BaseApplicationException(Exception):
+    """Errores de flujo o técnicos controlados (Ej: Formato ID inválido)"""
+    def __init__(self, message="Error en la operación"):
+        self.message = message
+        super().__init__(self.message)
+
+class [[ entity_name|capitalize_first ]]Error(BaseApplicationException):
     """Excepción base para errores relacionados con los servicios [[ entity_name|capitalize_first ]]."""
-    pass
+    def __init__(self, message="Error en la operación de [[ entity_name|capitalize_first ]]"):
+        self.message = message
+        super().__init__(self.message)
 
 class [[ entity_name|capitalize_first ]]ValidationError([[ entity_name|capitalize_first ]]Error):
     """Errores de validación de datos antes de guardar el modelo."""

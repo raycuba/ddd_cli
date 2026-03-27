@@ -25,14 +25,24 @@ from ..domain.[[ entity_name.lower() ]]_entity import [[ entity_name|capitalize_
 from ..domain.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValueError,
 )
-from ..services.[[ entity_name.lower() ]]_exceptions import (
+
+from .[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValidationError,
     [[ entity_name|capitalize_first ]]AlreadyExistsError,
     [[ entity_name|capitalize_first ]]NotFoundError,
     [[ entity_name|capitalize_first ]]OperationNotAllowedError,
     [[ entity_name|capitalize_first ]]PermissionError
 )
-from ..infrastructure.exceptions import RepositoryError, ConnectionDataBaseError
+
+from ..infrastructure.exceptions import (
+    ValidationError,
+    AlreadyExistsError,
+    NotFoundError,
+    OperationNotAllowedError,
+    PermissionError,
+    RepositoryError, 
+    ConnectionDataBaseError
+)
 
 # importa los repositorios utilizados aqui
 from ..infrastructure.[[ entity_name.lower() ]]_repository import [[ entity_name|capitalize_first ]]Repository

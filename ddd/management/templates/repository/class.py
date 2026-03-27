@@ -13,22 +13,18 @@ from ..utils.is_uuid import is_uuid
 from ..utils.extract_validation_error import extract_validation_error
 from ..domain.[[ entity_name.lower() ]]_entity import [[ entity_name|capitalize_first ]]Entity
 
+
 # importa las excepciones personalizadas
 from ..domain.[[ entity_name.lower() ]]_exceptions import (
     [[ entity_name|capitalize_first ]]ValueError,
 )
 
-from ..services.[[ entity_name.lower() ]]_exceptions import (
-    [[ entity_name|capitalize_first ]]ValidationError,
-    [[ entity_name|capitalize_first ]]AlreadyExistsError,
-    [[ entity_name|capitalize_first ]]NotFoundError,
-    [[ entity_name|capitalize_first ]]OperationNotAllowedError,
-    [[ entity_name|capitalize_first ]]PermissionError
-)
-
-
-# importa las excepciones de repositorio
 from .exceptions import (
+    ValidationError,
+    AlreadyExistsError,
+    NotFoundError,
+    OperationNotAllowedError,
+    PermissionError,
     ConnectionDataBaseError,
     RepositoryError
 )
@@ -93,7 +89,7 @@ class [[ entity_name|capitalize_first ]]Repository:
             El entidad encontrada o None si no existe.
         raises:
             [[ entity_name|capitalize_first ]]ValueError: Si el valor de entrada no es válido.        
-            [[ entity_name|capitalize_first ]]NotFoundError: Si no existe el registro con el ID dado.
+            NotFoundError: Si no existe el registro con el ID dado.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.
             RepositoryError: Si ocurre un error inesperado (interno del sistema).
         """
@@ -117,7 +113,7 @@ class [[ entity_name|capitalize_first ]]Repository:
             return Mapper.model_to_entity(instance, [[ entity_name|capitalize_first ]]Entity)
 
         except [[ entity_name|capitalize_first ]].DoesNotExist as e:
-            raise [[ entity_name|capitalize_first ]]NotFoundError(id=id) from e
+            raise NotFoundError(id=id) from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Data base access error") from e    
         except Exception as e:
@@ -202,8 +198,8 @@ class [[ entity_name|capitalize_first ]]Repository:
             La entidad creada.
         raises:
             [[ entity_name|capitalize_first ]]ValueError:  Si el valor de entrada no es válido.
-            [[ entity_name|capitalize_first ]]ValidationError: Si los datos no son válidos.
-            [[ entity_name|capitalize_first ]]AlreadyExistsError: Si ya existe un registro con el mismo nombre.
+            ValidationError: Si los datos no son válidos.
+            AlreadyExistsError: Si ya existe un registro con el mismo nombre.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.   
             RepositoryError: Si ocurre un error inesperado (interno del sistema).     
         """
@@ -247,12 +243,12 @@ class [[ entity_name|capitalize_first ]]Repository:
             raise [[ entity_name|capitalize_first ]]ValueError(field="data", detail=f"Error in the data structure: {str(e)}") from e
         except ValidationError as e:
             error_detail = extract_validation_error(e)
-            raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error: {error_detail}") from e
+            raise ValidationError(f"Validation error: {error_detail}") from e
         except IntegrityError as e:
             if 'duplicate' in str(e).lower() or 'unique constraint' in str(e).lower():
-                raise [[ entity_name|capitalize_first ]]AlreadyExistsError(field='name', detail=instance.name)  # Ajusta según el campo único
+                raise AlreadyExistsError(field='name', detail=instance.name)  # Ajusta según el campo único
             # Otro error de integridad → regla de negocio?
-            raise [[ entity_name|capitalize_first ]]ValidationError({"integrity": "Duplicated or inconsistent data"})            
+            raise ValidationError({"integrity": "Duplicated or inconsistent data"})            
         except DatabaseError as e:
             raise ConnectionDataBaseError("Data base access error") from e
         except Exception as e:
@@ -274,9 +270,9 @@ class [[ entity_name|capitalize_first ]]Repository:
         returns:
             La entidad guardada.
         raises: 
-            [[ entity_name|capitalize_first ]]NotFoundError: Si no existe el registro con el ID dado.
             [[ entity_name|capitalize_first ]]ValueError:  Si el valor de entrada no es válido.
-            [[ entity_name|capitalize_first ]]ValidationError: Si los datos no son válidos.
+            NotFoundError: Si no existe el registro con el ID dado.
+            ValidationError: Si los datos no son válidos.
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.   
             RepositoryError: Si ocurre un error inesperado (interno del sistema).     
         """    
@@ -332,12 +328,12 @@ class [[ entity_name|capitalize_first ]]Repository:
             return Mapper.model_to_entity(instance, [[ entity_name|capitalize_first ]]Entity)
 
         except [[ entity_name|capitalize_first ]].DoesNotExist as e:
-            raise [[ entity_name|capitalize_first ]]NotFoundError(id=entity.id) from e
+            raise NotFoundError(id=entity.id) from e
         except (TypeError, ValueError) as e:
             raise [[ entity_name|capitalize_first ]]ValueError(field="data", detail=f"Error in the data structure: {str(e)}") from e
         except ValidationError as e:
             error_detail = extract_validation_error(e)
-            raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error: {error_detail}") from e
+            raise ValidationError(f"Validation error: {error_detail}") from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Data base access error") from e            
         except Exception as e:
@@ -353,9 +349,9 @@ class [[ entity_name|capitalize_first ]]Repository:
             id: ID del registro a eliminar.
             uuid: UUID del registro a eliminar.
         raises: 
-            [[ entity_name|capitalize_first ]]NotFoundError: Si no existe el registro con el ID dado.
             [[ entity_name|capitalize_first ]]ValueError:  Si el valor de entrada no es válido.
-            [[ entity_name|capitalize_first ]]ValidationError: Si los datos no son válidos
+            NotFoundError: Si no existe el registro con el ID dado.
+            ValidationError: Si los datos no son válidos
             ConnectionDataBaseError: Si ocurre un error al acceder a la base de datos.      
             RepositoryError: Si ocurre un error inesperado (interno del sistema).  
         returns: 
@@ -384,10 +380,10 @@ class [[ entity_name|capitalize_first ]]Repository:
             return True
 
         except [[ entity_name|capitalize_first ]].DoesNotExist as e:
-            raise [[ entity_name|capitalize_first ]]NotFoundError(id=id) from e
+            raise NotFoundError(id=id) from e
         except ValidationError as e:
             error_detail = extract_validation_error(e)
-            raise [[ entity_name|capitalize_first ]]ValidationError(f"Validation error occurred: {error_detail}") from e
+            raise ValidationError(f"Validation error occurred: {error_detail}") from e
         except DatabaseError as e:
             raise ConnectionDataBaseError("Data base access error") from e            
         except Exception as e:
