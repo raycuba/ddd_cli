@@ -30,6 +30,19 @@ from .infrastructure.exceptions import (
 # importar servicios específicos del dominio
 from [[ app_name.lower() ]].services.[[ entity_name.lower() ]]_service import [[ entity_name|capitalize_first ]]Service
 
+"""
+Códigos de estado HTTP a utilizar en las respuestas:
+- 200 OK: La solicitud se ha procesado correctamente y se devuelve la información solicitada.
+- 201 Created: La solicitud se ha procesado correctamente y se ha creado un nuevo recurso (no aplicable en estos endpoints, pero útil para futuras expansiones).
+- 204 No Content: La solicitud se ha procesado correctamente pero no hay contenido que devolver (no aplicable en estos endpoints, pero útil para futuras expansiones).
+- 400 Bad Request: La solicitud no se ha podido procesar debido a errores de validación o datos incorrectos. Se devuelve un mensaje de error detallado en el cuerpo de la respuesta.
+- 401 Unauthorized: El usuario no está autenticado. Se requiere autenticación para acceder a este recurso.
+- 403 Forbidden: El usuario está autenticado pero no tiene permisos para acceder a este recurso.
+- 404 Not Found: El recurso solicitado no se ha encontrado, como un client card o una promoción específica.
+- 409 Conflict: Se ha producido un conflicto al intentar procesar la solicitud, como intentar reclamar una tarjeta que ya ha sido reclamada.
+- 500 Internal Server Error: Se ha producido un error inesperado en el servidor al procesar la solicitud. Se devuelve un mensaje de error genérico.
+"""
+
 class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
     """
     ViewSet para manejar operaciones CRUD relacionadas con [[ entity_name|decapitalize_first ]].
