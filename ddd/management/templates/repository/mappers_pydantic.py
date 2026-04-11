@@ -34,7 +34,7 @@ def make_json_safe(value):
     elif isinstance(value, UUID):
         return str(value)
     elif isinstance(value, Decimal):
-        return float(value)
+        return str(value)
     elif isinstance(value, set):
         return list(value)
     elif isinstance(value, Enum):
@@ -122,11 +122,7 @@ class Mapper:
                     
             # ForeignKey / OneToOne
             elif hasattr(value, 'pk') and value is not None:
-                value = value.pk                    
-
-            # Decimal → float
-            elif isinstance(value, decimal.Decimal):
-                value = float(value)                  
+                value = value.pk                                     
 
             # Submodelos Pydantic
             elif isinstance(field_info.annotation, type) and issubclass(field_info.annotation, BaseModel):

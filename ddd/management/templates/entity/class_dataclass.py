@@ -81,13 +81,13 @@ Ejemplos:
     # Atributos simples opcionales
     name: Optional[str] = None
     email: Optional[str] = None
-    price: Optional[float] = None
+    price: Optional[Decimal] = None
     quantity: Optional[int] = None
     is_featured: Optional[bool] = None
 
     # Atributos con valor por defecto (no None)
     is_active: bool = True
-    rating: float = 0.0
+    rating: Decimal = Decimal("0.0")
 
     # Colecciones con valor por defecto (¡nunca asignes [] o {} directamente!)
     categories: List[str] = field(default_factory=list)

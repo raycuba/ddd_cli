@@ -35,7 +35,7 @@ def make_json_safe(value):
     elif isinstance(value, UUID):
         return str(value)
     elif isinstance(value, Decimal):
-        return float(value)
+        return str(value)
     elif isinstance(value, set):
         return list(value)
     elif isinstance(value, Enum):
@@ -83,11 +83,7 @@ class Mapper:
             # DateField / DateTimeField / TimeField
             elif isinstance(value, (datetime, date, time)):
                 # Dejar tal cual; que la entidad lo maneje
-                pass
-
-            # Decimal
-            elif isinstance(value, decimal.Decimal):
-                value = float(value)  # o dejar como Decimal si tu entidad lo acepta            
+                pass 
 
             # JSONField
             elif isinstance(value, dict) or isinstance(value, list):
