@@ -8,17 +8,31 @@ from abc import ABC, abstractmethod
 @dataclass
 class FileData:
     file_name: Optional[str] = None
-    url: Optional[str] = None
-
+    url: Optional[str] = None  
+        
 class BaseDomainValueError(Exception):
     """Error de valor en atributos de la entidad [[ entity_name|capitalize_first ]]."""
-    def __init__(self, detail: str, field: str = "value"):
+    def __init__(self, detail: str = None, field: str = "value", *args, **kwargs):
         self.field = field
         self.detail = detail
-        if field == "value":
-            super().__init__(f"Value error: {detail}.")
+        # Guardamos TODO lo que sobre en kwargs
+        self.kwargs = kwargs
+        
+        # Prioridad de construcción del mensaje
+        if field == "value" and detail:
+            msg = f"Value error: {detail}."
+        elif field and detail:
+            msg = f"Field error in '{field}': {detail}."
+        elif args:
+            msg = args[0]
+            # Si usamos el primer arg como mensaje, lo quitamos de la tupla 
+            # para no duplicarlo en la base si fuera necesario
         else:
-            super().__init__(f"Field error in '{field}': {detail}.")        
+            msg = "Domain value error."
+        
+        # Pasamos el mensaje construido Y cualquier otro argumento posicional extra
+        # que haya venido en *args (excepto el primero si ya lo usamos)
+        super().__init__(msg, *args[1:] if (args and msg == args[0]) else args)
     
 @dataclass
 class BaseEntity(ABC):
