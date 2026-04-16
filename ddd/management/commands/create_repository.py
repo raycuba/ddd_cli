@@ -60,7 +60,7 @@ class CreateRepositoryCommand:
             readWriteTemplate(
                 templateName = 'repository', 
                 fileName='exceptions.py', 
-                render_params={}, 
+                render_params={'entity_name':entity_name, 'app_name':app_name}, 
                 repository_path=exceptions_path, 
                 failIfError=False, 
                 simulate=simulate

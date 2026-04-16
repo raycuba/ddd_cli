@@ -9,46 +9,73 @@ Ejemplos: EntityNotFound, DatabaseConnectionError, UniqueConstraintViolation.
 nota: no se pueden importar desde otra aplicación.
 """
 
-class ValidationError(Exception):
-    """Excepción para errores de validación de datos."""
-    def __init__(self, errors):
-        self.errors = errors
-        super().__init__("Validation failed.")
-        
-class AlreadyExistsError(Exception):
-    """Excepción para cuando se intenta crear un recurso que ya existe."""
-    def __init__(self, detail: str, field: str = "value"):
-        self.field = field        
-        self.detail = detail
-        super().__init__("Resource already exists.")
-        
-class NotFoundError(Exception):
-    """Excepción para cuando no se encuentra un recurso."""
-    def __init__(self, id):
-        self.id = id
-        super().__init__(f"Resource with ID {id} not found.")
-        
-class OperationNotAllowedError(Exception):
-    """Excepción para cuando se intenta realizar una operación no permitida."""
-    def __init__(self, operation_name: str):
-        super().__init__(f"Operation '{operation_name}' not allowed.")
-        
-class PermissionError(Exception):
-    """Excepción para cuando el usuario no tiene permisos para modificar o acceder."""
-    def __init__(self):
-        super().__init__("Permission not allowed.")
-
 class InfraestructureError(Exception):
     """Excepción base para errores técnicos (base de datos, red, etc)."""
-    pass
+    def __init__(self, *args, **kwargs):
+        # Exception.__init__ acepta N argumentos posicionales y los guarda en .args
+        super().__init__(*args)
+        # Guardamos los kwargs para metadatos, trazas o lógica de respuesta
+        self.kwargs = kwargs
+
+    @property
+    def message(self):
+        # El primer argumento posicional suele ser el mensaje de error
+        return self.args[0] if self.args else ""
+
+
+# --- Errores de Lógica de Persistencia / Datos ---
+
+class ValidationError(InfraestructureError):
+    """Excepción para errores de validación de datos en la infraestructura."""
+    def __init__(self, errors=None, *args, **kwargs):
+        self.errors = errors
+        msg = args[0] if args else "Validation failed."
+        super().__init__(msg, **kwargs)
+
+
+class AlreadyExistsError(InfraestructureError):
+    """Excepción para cuando se intenta crear un recurso que ya existe."""
+    def __init__(self, detail=None, field="value", *args, **kwargs):
+        self.detail = detail
+        self.field = field
+        msg = args[0] if args else "Resource already exists."
+        super().__init__(msg, **kwargs)
+
+
+class NotFoundError(InfraestructureError):
+    """Excepción para cuando no se encuentra un recurso."""
+    def __init__(self, id=None, *args, **kwargs):
+        self.id = id
+        msg = args[0] if args else f"Resource with ID {id} not found."
+        super().__init__(msg, **kwargs)
+
+
+class OperationNotAllowedError(InfraestructureError):
+    """Excepción para cuando se intenta realizar una operación no permitida."""
+    def __init__(self, operation_name=None, *args, **kwargs):
+        self.operation_name = operation_name
+        msg = args[0] if args else f"Operation '{operation_name}' not allowed."
+        super().__init__(msg, **kwargs)
+
+
+class PermissionError(InfraestructureError):
+    """Excepción para cuando el repositorio detecta falta de permisos."""
+    def __init__(self, *args, **kwargs):
+        msg = args[0] if args else "Permission not allowed."
+        super().__init__(msg, **kwargs)
+
+
+# --- Errores Técnicos de Infraestructura ---
 
 class RepositoryError(InfraestructureError):
     """Error genérico del repositorio (fallo al leer/escribir)."""
     pass
 
+
 class ConnectionDataBaseError(InfraestructureError):
     """No se pudo conectar a la base de datos."""
     pass
+
 
 class TransactionError(InfraestructureError):
     """Error al manejar una transacción."""

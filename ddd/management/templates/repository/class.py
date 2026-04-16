@@ -2,7 +2,7 @@ from typing import List, Optional
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import DatabaseError, IntegrityError, transaction
 from django.db.models import Q
-from django.forms import ValidationError
+from django.forms import ValidationError as DjangoValidationError
 
 # importa las entidades utilizadas aqui
 from ..models import [[ entity_name|capitalize_first ]]
@@ -241,7 +241,7 @@ class [[ entity_name|capitalize_first ]]Repository:
 
         except (TypeError, ValueError) as e:
             raise [[ entity_name|capitalize_first ]]ValueError(field="data", detail=f"Error in the data structure: {str(e)}") from e
-        except ValidationError as e:
+        except DjangoValidationError as e:
             error_detail = extract_validation_error(e)
             raise ValidationError(f"Validation error: {error_detail}") from e
         except IntegrityError as e:
@@ -331,7 +331,7 @@ class [[ entity_name|capitalize_first ]]Repository:
             raise NotFoundError(id=entity.id) from e
         except (TypeError, ValueError) as e:
             raise [[ entity_name|capitalize_first ]]ValueError(field="data", detail=f"Error in the data structure: {str(e)}") from e
-        except ValidationError as e:
+        except DjangoValidationError as e:
             error_detail = extract_validation_error(e)
             raise ValidationError(f"Validation error: {error_detail}") from e
         except DatabaseError as e:
@@ -381,7 +381,7 @@ class [[ entity_name|capitalize_first ]]Repository:
 
         except [[ entity_name|capitalize_first ]].DoesNotExist as e:
             raise NotFoundError(id=id) from e
-        except ValidationError as e:
+        except DjangoValidationError as e:
             error_detail = extract_validation_error(e)
             raise ValidationError(f"Validation error occurred: {error_detail}") from e
         except DatabaseError as e:

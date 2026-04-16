@@ -3,49 +3,55 @@
 """
 EXCEPCIONES DE APLICACIÓN: 
 Servicio: Orquestan la comunicación y validan el flujo de entrada.
-Cuándo usarlas: Para errores de formato, falta de datos o traducción de errores técnicos.
-Ejemplos: InvalidServiceInput, ClientCardServiceUnavailable, MalformedIdentifierError.
-
-nota: se pueden importar desde otra aplicación, pero no desde el dominio. 
 """
 
 class BaseApplicationException(Exception):
-    """Errores de flujo o técnicos controlados (Ej: Formato ID inválido)"""
-    def __init__(self, message="Error en la operación"):
-        self.message = message
-        super().__init__(self.message)
+    """Errores de flujo o técnicos controlados."""
+    def __init__(self, *args, **kwargs):
+        # Si no se pasan argumentos, usamos un mensaje por defecto
+        if not args:
+            args = ("Error en la operación",)
+        super().__init__(*args)
+        self.kwargs = kwargs
 
 class [[ entity_name|capitalize_first ]]Error(BaseApplicationException):
     """Excepción base para errores relacionados con los servicios [[ entity_name|capitalize_first ]]."""
-    def __init__(self, message="Error en la operación de [[ entity_name|capitalize_first ]]"):
-        self.message = message
-        super().__init__(self.message)
+    def __init__(self, *args, **kwargs):
+        if not args:
+            args = ("Error en la operación de [[ entity_name|capitalize_first ]]",)
+        super().__init__(*args, **kwargs)
 
 class [[ entity_name|capitalize_first ]]ValidationError([[ entity_name|capitalize_first ]]Error):
     """Errores de validación de datos antes de guardar el modelo."""
-    def __init__(self, errors):
+    def __init__(self, errors=None, *args, **kwargs):
         self.errors = errors
-        super().__init__("Validation in [[ entity_name|capitalize_first ]] failed.")
+        msg = args[0] if args else f"Validation in [[ entity_name|capitalize_first ]] failed."
+        super().__init__(msg, **kwargs)
 
 class [[ entity_name|capitalize_first ]]AlreadyExistsError([[ entity_name|capitalize_first ]]Error):
     """Cuando se intenta crear una [[ entity_name|capitalize_first ]] que ya existe."""
-    def __init__(self, detail: str, field: str = "value"):
+    def __init__(self, detail=None, field="value", *args, **kwargs):
         self.field = field        
         self.detail = detail
-        super().__init__(f"[[ entity_name|capitalize_first ]] already exists.")
+        msg = args[0] if args else f"[[ entity_name|capitalize_first ]] already exists."
+        super().__init__(msg, **kwargs)
 
 class [[ entity_name|capitalize_first ]]NotFoundError([[ entity_name|capitalize_first ]]Error):
     """Cuando se intenta acceder a una [[ entity_name|capitalize_first ]] inexistente."""
-    def __init__(self, id):
+    def __init__(self, id=None, *args, **kwargs):
         self.id = id
-        super().__init__(f"[[ entity_name|capitalize_first ]] with ID {id} not found.")
+        msg = args[0] if args else f"[[ entity_name|capitalize_first ]] with ID {id} not found."
+        super().__init__(msg, **kwargs)
 
 class [[ entity_name|capitalize_first ]]OperationNotAllowedError([[ entity_name|capitalize_first ]]Error):
     """Cuando se intenta realizar una operación no permitida."""
-    def __init__(self, operation_name: str):
-        super().__init__(f"Operation '{operation_name}' not allowed in [[ entity_name|capitalize_first ]].")        
+    def __init__(self, operation_name=None, *args, **kwargs):
+        self.operation_name = operation_name
+        msg = args[0] if args else f"Operation '{operation_name}' not allowed in [[ entity_name|capitalize_first ]]."
+        super().__init__(msg, **kwargs)
 
 class [[ entity_name|capitalize_first ]]PermissionError([[ entity_name|capitalize_first ]]Error):
     """Cuando el usuario no tiene permisos para modificar o acceder."""
-    def __init__(self):
-        super().__init__("Permission not allowed in [[ entity_name|capitalize_first ]].")      
+    def __init__(self, *args, **kwargs):
+        msg = args[0] if args else "Permission not allowed in [[ entity_name|capitalize_first ]]."
+        super().__init__(msg, **kwargs)
