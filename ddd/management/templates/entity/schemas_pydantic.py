@@ -2,8 +2,7 @@
 
 from abc import ABC, abstractmethod
 from pydantic import BaseModel, ConfigDict, Field, validator, model_validator, field_validator
-from typing import Self, Dict, Any, Optional
-from typing import Dict, Any, Optional
+from typing import Self, Dict, Any, Optional, ClassVar
 from datetime import datetime
 from uuid import UUID
 
@@ -27,7 +26,7 @@ class BaseEntity(BaseModel, ABC):
     Representa la lógica de negocio central y las reglas asociadas.
     """   
 
-    domain_value_error_class = BaseDomainValueError    
+    domain_value_error_class: ClassVar[type] = BaseDomainValueError    
 
     class Meta:
         """
@@ -39,6 +38,7 @@ class BaseEntity(BaseModel, ABC):
         protected_fields: set = set() # Campos que no deben ser incluidos en actualizaciones (prohibidos en ciertas operaciones)
         special_update_fields: set = set() # Campos que requieren actualización especial - Necesitan validaciones o procesamiento especial aparte
         readonly_and_protected_fields = readonly_fields.union(protected_fields) 
+        special_readonly_and_protected_fields = special_update_fields.union(readonly_and_protected_fields)
 
     model_config = ConfigDict(
         validate_assignment=True,

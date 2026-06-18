@@ -16,7 +16,7 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
     con [[ entity_name|decapitalize_first ]] en el sistema.
     """
 
-    domain_value_error_class = [[ entity_name|capitalize_first ]]ValueError    
+    domain_value_error_class: ClassVar[type] = [[ entity_name|capitalize_first ]]ValueError    
 
     class Meta:
         required_fields = {"name", "email", "related_id"} # Requeridos para la creación
@@ -24,6 +24,7 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
         protected_fields = {"related_id"} # Prohibidos en ciertas operaciones y actualizaciones
         special_update_fields = {"relations", "photo"} # Prohibidos en actualizaciones normales, requieren manejo especial
         readonly_and_protected_fields = readonly_fields.union(protected_fields)
+        special_readonly_and_protected_fields = special_update_fields.union(readonly_and_protected_fields)
 
     # Identificadores
     id: Optional[int] = None  # ID relacionado con la base de datos

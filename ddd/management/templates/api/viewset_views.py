@@ -116,7 +116,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def retrieve(self, request, id: int = None):
+    def retrieve(self, request, pk: int = None):
         """
         Endpoint para obtener un [[ entity_name|decapitalize_first ]] específico por su ID (id).
         
@@ -154,7 +154,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         operation_id="[[ entity_name|decapitalize_first ]]_create",
         summary="Create a new [[ entity_name|decapitalize_first ]]",
         description="Create a new [[ entity_name|decapitalize_first ]] with the provided data",
-        request_body=[[ entity_name|capitalize_first ]]DTOSerializer,
+        request=[[ entity_name|capitalize_first ]]DTOSerializer,
         responses={
             201: [[ entity_name|capitalize_first ]]DTOSerializer,
             400: OpenApiResponse(description="Bad Request")
@@ -211,7 +211,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         operation_id="[[ entity_name|decapitalize_first ]]_update",
         summary="Update an existing [[ entity_name|decapitalize_first ]]",
         description="Update an existing [[ entity_name|decapitalize_first ]] with the provided ID and data",
-        request_body=[[ entity_name|capitalize_first ]]DTOSerializer,
+        request=[[ entity_name|capitalize_first ]]DTOSerializer,
         responses={
             200: [[ entity_name|capitalize_first ]]DTOSerializer,
             400: OpenApiResponse(description="Bad Request"),
@@ -219,7 +219,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def update(self, request, id: int = None):
+    def update(self, request, pk: int = None):
         """
         Endpoint para actualizar un [[ entity_name|decapitalize_first ]] existente.
         
@@ -276,7 +276,7 @@ class [[ entity_name|capitalize_first ]]ViewSet(ViewSet):
         },
         tags=["[[ entity_name|decapitalize_first ]]s"]
     )
-    def destroy(self, request, id: int = None):
+    def destroy(self, request, pk: int = None):
         """
         Endpoint para eliminar un [[ entity_name|decapitalize_first ]] existente.
         

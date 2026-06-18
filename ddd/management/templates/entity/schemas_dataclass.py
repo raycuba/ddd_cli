@@ -1,7 +1,7 @@
 # schemas in dataclass format
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Self
+from typing import Dict, List, Optional, Any, Self, ClassVar
 from uuid import UUID, uuid4
 from abc import ABC, abstractmethod
 
@@ -41,7 +41,7 @@ class BaseEntity(ABC):
     Representa la lógica de negocio central y las reglas asociadas.
     """   
 
-    domain_value_error_class = BaseDomainValueError
+    domain_value_error_class: ClassVar[type] = BaseDomainValueError
 
     class Meta:
         """
@@ -53,6 +53,7 @@ class BaseEntity(ABC):
         protected_fields: set = set() # Campos que no deben ser incluidos en actualizaciones (prohibidos en ciertas operaciones)
         special_update_fields: set = set() # Campos que requieren actualización especial - Necesitan validaciones o procesamiento especial aparte
         readonly_and_protected_fields = readonly_fields.union(protected_fields) 
+        special_readonly_and_protected_fields = special_update_fields.union(readonly_and_protected_fields)
 
     # -------------------------
     # VALIDACIÓN BASE

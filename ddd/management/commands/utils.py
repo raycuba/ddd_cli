@@ -128,6 +128,8 @@ def decodeAppPath(app_path: str) -> tuple:
 
     # Convertir app_path a app_name
     app_name = app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
+    if app_name.endswith('.'):
+        app_name = app_name[:-1]
     relative_app_name = relative_app_path.replace('/', '.').replace('\\', '.').replace('..', '.')
     
     # Obtener el último nombre de la aplicación

@@ -217,7 +217,7 @@ class [[ entity_name|capitalize_first ]]Repository:
                 # Esto garantiza que si algo falla, no se guarden cambios parciales    
                 
                 # Actualizar cada campo de la entidad en el modelo
-                Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Entity.Meta.readonly_fields)            
+                Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Entity.Meta.special_readonly_and_protected_fields)            
 
                 # Si se proporciona un ID de otra entidad, actualizarlo
                 # django crea el campo 'related_id' automáticamente si la relación es ForeignKey => otherEntity
@@ -304,7 +304,7 @@ class [[ entity_name|capitalize_first ]]Repository:
                 # Esto garantiza que si algo falla, no se guarden cambios parciales     
                 
                 # Actualizar cada campo de la entidad en el modelo
-                Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Entity.Meta.readonly_and_protected_fields)           
+                Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Entity.Meta.special_readonly_and_protected_fields)           
 
                 # Si se proporciona un ID de otra entidad, actualizarlo
                 if related_id is not None:

@@ -1,7 +1,7 @@
 # entity in dataclass format
 
 from dataclasses import dataclass
-from typing import Optional, List
+from typing import Optional, List, ClassVar
 from uuid import UUID
 from .[[ entity_name.lower() ]]_exceptions import *
 from .[[ entity_name.lower() ]]_schemas import FileData, BaseEntity
@@ -15,7 +15,7 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
     con [[ entity_name|decapitalize_first ]] en el sistema.
     """
 
-    domain_value_error_class = [[ entity_name|capitalize_first ]]ValueError
+    domain_value_error_class: ClassVar[type] = [[ entity_name|capitalize_first ]]ValueError
 
     class Meta:
         required_fields = {"name", "email", "related_id"} # Requeridos para la creación (from_dict)
@@ -23,6 +23,7 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
         protected_fields = {"related_id"} # Prohibidos en actualizaciones (update)
         special_update_fields = {"relations", "photo"} # Prohibidos en actualizaciones (update), requieren manejo especial externo
         readonly_and_protected_fields = readonly_fields.union(protected_fields)        
+        special_readonly_and_protected_fields = special_update_fields.union(readonly_and_protected_fields)
     
     # Identificadores
     id: Optional[int] = None  # ID relacionado con la base de datos
