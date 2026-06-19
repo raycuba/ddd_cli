@@ -185,13 +185,12 @@ class [[ entity_name|capitalize_first ]]Repository:
 
 
     @staticmethod
-    def create(entity: [[ entity_name|capitalize_first ]]Entity, related_id: Optional[int], relations: Optional[List[int]], adicionalData=None) -> [[ entity_name|capitalize_first ]]Entity:
+    def create(entity: [[ entity_name|capitalize_first ]]Entity, relations: Optional[List[int]], adicionalData=None) -> [[ entity_name|capitalize_first ]]Entity:
         """
         Crea un nuevo registro.
 
         params: 
             entity: Entidad con los datos necesarios para crear el registro.
-            related_id: ID del padre si es necesario (opcional).
             relations: Lista de IDs de entidades relacionadas (opcional).
             adicionalData: Datos adicionales a incluir en la creación.
         returns: 
@@ -217,12 +216,7 @@ class [[ entity_name|capitalize_first ]]Repository:
                 # Esto garantiza que si algo falla, no se guarden cambios parciales    
                 
                 # Actualizar cada campo de la entidad en el modelo
-                Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Entity.Meta.special_readonly_and_protected_fields)            
-
-                # Si se proporciona un ID de otra entidad, actualizarlo
-                # django crea el campo 'related_id' automáticamente si la relación es ForeignKey => otherEntity
-                if related_id is not None:
-                    instance.related_id = related_id
+                Mapper.update_model_from_entity_dict(instance, entity.to_orm_dict_for_create())           
 
                 # Si adicionalData, agregar datos adicionales que no sean relaciones
                 if adicionalData:
@@ -258,13 +252,12 @@ class [[ entity_name|capitalize_first ]]Repository:
 
 
     @staticmethod
-    def update(entity: [[ entity_name|capitalize_first ]]Entity, related_id: Optional[int], relations: Optional[List[int]], adicionalData=None) -> [[ entity_name|capitalize_first ]]Entity:
+    def update(entity: [[ entity_name|capitalize_first ]]Entity, relations: Optional[List[int]], adicionalData=None) -> [[ entity_name|capitalize_first ]]Entity:
         """
         Guarda los cambios en una entidad existente.
 
         params: 
             entity: Entidad con los datos a actualizar (debe traer el id en los campos).
-            related_id: ID del padre si es necesario (opcional).
             relations: Lista de IDs de entidades relacionadas (opcional).
             adicionalData: Datos adicionales a incluir en la actualización.
         returns:
@@ -304,11 +297,7 @@ class [[ entity_name|capitalize_first ]]Repository:
                 # Esto garantiza que si algo falla, no se guarden cambios parciales     
                 
                 # Actualizar cada campo de la entidad en el modelo
-                Mapper.update_model_from_entity(instance, entity, excluded_fields=[[ entity_name|capitalize_first ]]Entity.Meta.special_readonly_and_protected_fields)           
-
-                # Si se proporciona un ID de otra entidad, actualizarlo
-                if related_id is not None:
-                    instance.related_id = related_id
+                Mapper.update_model_from_entity_dict(instance, entity.to_orm_dict_for_update())          
 
                 # Si adicionalData, agregar datos adicionales que no sean relaciones
                 if adicionalData:

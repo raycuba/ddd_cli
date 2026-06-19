@@ -115,12 +115,12 @@ class Mapper:
         return entity_class(**data)
     
     @staticmethod
-    def update_model_from_entity(instance, entity, excluded_fields=None):
+    def update_model_from_entity_dict(instance, entity_dict, excluded_fields=None):
         """
         Actualiza una instancia de modelo Django desde una entidad de dominio.
         
         :param instance: Instancia del modelo Django a actualizar.
-        :param entity: Entidad de dominio con los nuevos datos.
+        :param entity_dict: Entidad de dominio con los nuevos datos (dict).
         :param excluded_fields: Lista de campos a excluir de la actualización.
         :return: Instancia del modelo Django actualizada y un dict con datos ManyToMany para actualizar luego.
         
@@ -135,7 +135,7 @@ class Mapper:
         model_fields = {field.name for field in instance._meta.get_fields()}
         many_to_many_data = {}
 
-        for key, value in entity.to_dict().items():
+        for key, value in entity_dict.items():
             if ((key is not None) and (key not in excluded_fields)):
                 
                 if key in model_fields:

@@ -46,14 +46,36 @@ class BaseEntity(ABC):
     class Meta:
         """
         Configuración de metadatos para la entidad.
-        Define el comportamiento especial de los campos.
-        """    
-        required_fields: set = set() # Campos requeridos para la creación
-        readonly_fields: set = set() # Campos de solo lectura - No pueden ser modificados una vez establecidos (prohibidos siempre en creacion/actualizaciones)
-        protected_fields: set = set() # Campos que no deben ser incluidos en actualizaciones (prohibidos en ciertas operaciones)
-        special_update_fields: set = set() # Campos que requieren actualización especial - Necesitan validaciones o procesamiento especial aparte
-        readonly_and_protected_fields = readonly_fields.union(protected_fields) 
-        special_readonly_and_protected_fields = special_update_fields.union(readonly_and_protected_fields)
+        Define qué campos pueden enviarse (o no) en cada operación: creación (from_dict) y actualización (update).
+        
+                                | from_dict (creación)  | update() normal  | vía especial
+        ------------------------|-----------------------|------------------|--------------
+        required_fields         | obligatorio           | n/a              | n/a
+        readonly_fields         | prohibido             | prohibido        | no existe
+        protected_fields        | permitido/obligatorio | prohibido        | no existe
+        special_update_fields   | permitido (depende)   | prohibido        | sí existe
+        """
+
+        required_fields: set = set()
+        # Obligatorios al CREAR la entity (entity=from_dict(data)). No aplica a update().
+        # Lanza una Excepcion si falta alguno al ejecutar el (entity=from_dict(data))
+
+        readonly_fields: set = set()
+        # Prohibidos SIEMPRE: en creación y en actualización.
+        # Se generan internamente (ej: id, created_at), el cliente nunca los proporciona.
+
+        protected_fields: set = set()
+        # Permitidos en creación, pero INMUTABLES después: prohibidos en update().
+        # Se fijan una vez y no se pueden modificar por la vía normal.
+
+        special_update_fields: set = set()
+        # Prohibidos en update() normal, pero SÍ modificables mediante un método dedicado
+        # (ej: regenerate_api_key(), change_password()) con su propia validación.
+
+        @classmethod
+        def readonly_and_protected_fields(cls):
+            # Unión de campos bloqueados en update(): inmutables (readonly) + fijados en creación (protected).
+            return cls.readonly_fields | cls.protected_fields
 
     # -------------------------
     # VALIDACIÓN BASE
@@ -114,26 +136,35 @@ class BaseEntity(ABC):
     # SERIALIZACIÓN
     # -------------------------
 
-    def to_dict(self, include_readonly_fields: bool = True, include_special_fields: bool = True) -> dict:
+    def to_dict(self, include_readonly_fields: bool = True, include_protected_fields: bool = True, include_special_update_fields: bool = True) -> dict:
         """
         Convierte la entidad a un diccionario, 
         excluyendo los campos con valor None, los de solo lectura y los que requieren actualización especial.
 
         :param include_readonly_fields: Si es True, incluye los campos de solo lectura.
-        :param include_special_fields: Si es True, incluye los campos que requieren actualización especial.
+        :param include_protected_fields: Si es True, incluye los campos protegidos
+        :param include_special_update_fields: Si es True, incluye los campos que requieren actualización especial.
         :return: Diccionario con los atributos de la entidad.
         """
         # Construir el diccionario excluyendo campos según los parámetros
         exclude_fields = set()
         if not include_readonly_fields:
             exclude_fields.update(self.Meta.readonly_fields)
-        if not include_special_fields:
+        if not include_protected_fields:
+            exclude_fields.update(self.Meta.protected_fields)
+        if not include_special_update_fields:
             exclude_fields.update(self.Meta.special_update_fields)
 
         return {
             k: v for k, v in vars(self).items() 
             if v is not None and k not in exclude_fields
         }    
+
+    def to_orm_dict_for_create(self) -> dict:
+        return self.to_dict(include_readonly_fields=False)
+    
+    def to_orm_dict_for_update(self) -> dict:
+        return self.to_dict(include_readonly_fields=False, include_protected_fields=False, include_special_update_fields=False)
 
     # -------------------------
     # FROM_DICT
@@ -153,6 +184,7 @@ class BaseEntity(ABC):
         """
         data = data.copy()
 
+        # Se excluyen los campos de solo lectura para evitar que se modifiquen al persistirlos en db
         for field in cls.Meta.readonly_fields:
             data.pop(field, None)
 
@@ -162,3 +194,29 @@ class BaseEntity(ABC):
             raise cls.domain_value_error_class("Error building entity", str(e))
 
         return entity._run_validation()
+
+    # -------------------------
+    # FROM_ORM_DICT
+    # -------------------------
+
+    @classmethod
+    def from_orm_dict(cls, data: dict) -> "BaseEntity":
+        """
+        Crea una entidad a partir de un modelo de persistencia (ORM).
+
+        A diferencia de `from_dict`, no excluye campos de solo lectura ni valida
+        `required_fields`, ya que los datos provienen de una fuente de confianza
+        (la base de datos) y no de un input externo/usuario.
+
+        :param model: Instancia del modelo ORM con los atributos de la entidad.
+        :return: La entidad reconstruida.
+        :raises BaseDomainValueError: Si hay un error reconstruyendo la entidad.
+        """
+        data = data.copy()
+
+        try:
+            entity = cls(**data)
+        except TypeError as e:
+            raise cls.domain_value_error_class("Error building entity from orm dict", str(e))
+
+        return entity

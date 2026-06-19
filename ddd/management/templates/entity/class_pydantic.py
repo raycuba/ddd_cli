@@ -19,12 +19,21 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
     domain_value_error_class: ClassVar[type] = [[ entity_name|capitalize_first ]]ValueError    
 
     class Meta:
-        required_fields = {"name", "email", "related_id"} # Requeridos para la creación
-        readonly_fields = {"id", "uuid", "created_at", "updated_at"} # Prohibidos siempre en creacion/actualizaciones
-        protected_fields = {"related_id"} # Prohibidos en ciertas operaciones y actualizaciones
-        special_update_fields = {"relations", "photo"} # Prohibidos en actualizaciones normales, requieren manejo especial
-        readonly_and_protected_fields = readonly_fields.union(protected_fields)
-        special_readonly_and_protected_fields = special_update_fields.union(readonly_and_protected_fields)
+        required_fields = {"name", "email", "related_id"} 
+        # Obligatorios al CREAR la entity (entity=from_dict(data)). No aplica a update().
+        # Lanza una Excepcion si falta alguno al ejecutar el (entity=from_dict(data))
+
+        readonly_fields = {"id", "uuid", "created_at", "updated_at"} 
+        # Prohibidos SIEMPRE: en creación y en actualización.
+        # Se generan internamente (ej: id, created_at), el cliente nunca los proporciona.
+
+        protected_fields = {"related_id"} 
+        # Permitidos en creación, pero INMUTABLES después: prohibidos en update().
+        # Se fijan una vez y no se pueden modificar por la vía normal.
+
+        special_update_fields = {"relations", "photo"} 
+        # Prohibidos en update() normal, pero SÍ modificables mediante un método dedicado
+        # (ej: regenerate_api_key(), change_password()) con su propia validación.
 
     # Identificadores
     id: Optional[int] = None  # ID relacionado con la base de datos

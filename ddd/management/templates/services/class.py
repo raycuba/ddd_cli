@@ -85,11 +85,12 @@ class [[ entity_name|capitalize_first ]]Service:
             raise [[ entity_name|capitalize_first ]]ValueError(field="name", detail="An instance with this name already exists")
 
         #crear la entidad
+        data['related_id'] = related_id
         entity = [[ entity_name|capitalize_first ]]Entity.from_dict(data)  
 
         # Guardar en el repositorio
         try:
-            saved_entity = self.repository.create(entity=entity, related_id=related_id, relations=relations, adicionalData=adicionalData)
+            saved_entity = self.repository.create(entity=entity, relations=relations, adicionalData=adicionalData)
         except ValidationError as e:
             raise [[ entity_name|capitalize_first ]]ValidationError(e.errors) from e
         except AlreadyExistsError as e:
@@ -155,11 +156,12 @@ class [[ entity_name|capitalize_first ]]Service:
             raise [[ entity_name|capitalize_first ]]NotFoundError(id=entity_id or entity_uuid) from e
 
         # actualizar la instancia
+        data['related_id'] = related_id
         entity.update(data)     
 
         # Guardar en el repositorio
         try:
-            updated_entity = self.repository.update(entity=entity, related_id=related_id, relations=relations, adicionalData=adicionalData)
+            updated_entity = self.repository.update(entity=entity, relations=relations, adicionalData=adicionalData)
         except NotFoundError as e:
             raise [[ entity_name|capitalize_first ]]NotFoundError(id=entity_id or entity_uuid) from e
         except ValidationError as e:
