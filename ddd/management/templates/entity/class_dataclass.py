@@ -17,7 +17,7 @@ class [[ entity_name|capitalize_first ]]Entity(BaseEntity):
 
     domain_value_error_class: ClassVar[type] = [[ entity_name|capitalize_first ]]ValueError
 
-    class Meta:
+    class Meta(BaseEntity.Meta):
         required_fields = {"name", "email", "related_id"} 
         # Obligatorios al CREAR la entity (entity=from_dict(data)). No aplica a update().
         # Lanza una Excepcion si falta alguno al ejecutar el (entity=from_dict(data))
